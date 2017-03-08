@@ -4,10 +4,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageItemInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +20,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.itternet.OpenTDbResponse;
 import com.itternet.interfaces.OpenTriviaDataBaseAPI;
 import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
-
 
 import java.util.ArrayList;
 
@@ -31,15 +35,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.R.attr.data;
+
+
 public class MainActivity extends AppCompatActivity {
 
-
-    public static final int RESPONSE_CODE_SUCCESS = 0; // Returned results successfully.
-    public static final int RESPONSE_CODE_NO_RESULTS = 1; // Could not return results. The API doesn't have enough questions for your query. (Ex. Asking for 50 Questions in a Category that only has 20.)
-    public static final int RESPONSE_CODE_INVALID_PARAM = 2; //Contains an invalid parameter. Arguments passed in aren't valid. (Ex. Amount = Five)
-    public static final int RESPONSE_CODE_TOKEN_NOT_FOUND = 3; // Session Token does not exist.
-    public static final int RESPONSE_CODE_TOKEN_EMPTY = 4; // Session Token has returned all possible questions for the specified query. Resetting the Token is necessary.
-
+    private String apiBaseURL;
     private int currentQuestion = 0;
     private int lastQuestion = 0;
     private String correctAnswer;
@@ -57,10 +58,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar ab = getSupportActionBar();
-        ab.setLogo(R.mipmap.ic_launcher);
-        ab.setDisplayUseLogoEnabled(true);
-        ab.setDisplayShowHomeEnabled(true);
+        readMetaData();
+        showActionBarIcon();
         setContentView(R.layout.activity_main);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
         //mainText = (TextView) findViewById(R.id.main_text);
@@ -76,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private void initialize() {
         Gson gson = new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_base_url))
+                .baseUrl(apiBaseURL)
+                //.baseUrl(getResources().getString(R.string.api_base_url))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
@@ -88,8 +88,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void readMetaData()
+    {
+        try {
+            PackageItemInfo info = getPackageManager().getActivityInfo(new ComponentName(this, MainActivity.class),PackageManager.GET_META_DATA);
+            apiBaseURL = info.metaData.getString("baseUrl");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    private void showActionBarIcon()
+    {
+        ActionBar ab = getSupportActionBar();
+        ab.setLogo(R.mipmap.ic_launcher);
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
+    }
     /**
-     * Get a set of MultipleChoiceFragment from the Model
+     * Get a set of Questions and Answers from the Model
      * Create a new Instance of MultipleChoiceFragment Fragment which accepts Data,
      * Inject question and options
      * Replace FragmentContainer content with newly created Fragment
@@ -156,9 +174,9 @@ public class MainActivity extends AppCompatActivity {
                     pDialog.dismiss();
 
                 if (response.code() == 200) { //Server responded with "everything cool"
-                    if (response.body().getResponseCode() == RESPONSE_CODE_SUCCESS) {
+                    if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         sessionToken = response.body().getToken();
-                        Log.v("token", sessionToken);
+                        //Log.v("token", sessionToken);
                         loadQuizQuestions();
                     }
                 }
@@ -178,26 +196,26 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<QuestionsListData> call, Response<QuestionsListData> response) {
                 if (response.code() == 200) { //Server responded with "everything cool"
                     qListData = response.body();
-                    if (qListData.getResponseCode() == RESPONSE_CODE_SUCCESS) {
+                    if (qListData.getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         //All good here
                         //mainText.setText(qListData.getResultAtIndex(0).getCategory());
                         if (qListData != null)
                             lastQuestion = qListData.getResults().size() - 1;
                     } else {
                         switch (qListData.getResponseCode()) {
-                            case RESPONSE_CODE_NO_RESULTS:
+                            case OpenTDbResponse.RESPONSE_CODE_NO_RESULTS:
                                 //Not enough questions for requested amount in category
                                 break;
 
-                            case RESPONSE_CODE_INVALID_PARAM:
+                            case OpenTDbResponse.RESPONSE_CODE_INVALID_PARAM:
                                 break;
 
-                            case RESPONSE_CODE_TOKEN_NOT_FOUND:
+                            case OpenTDbResponse.RESPONSE_CODE_TOKEN_NOT_FOUND:
                                 //Request a Token
                                 loadQuizSessionToken();
                                 break;
 
-                            case RESPONSE_CODE_TOKEN_EMPTY:
+                            case OpenTDbResponse.RESPONSE_CODE_TOKEN_EMPTY:
                                 //No more questions in Session
                                 // todo request Token Reset and start over
                                 loadQuizSessionToken();
