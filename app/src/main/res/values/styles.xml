@@ -1,0 +1,72 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:icon">@mipmap/ic_launcher</item>
+    </style>
+    <!--ProgressBar Styles-->
+    <style name="ProgressBar.Horizontal" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:visibility">visible</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+    <style name="logo">
+        <item name="android:layout_width">170dp</item>
+        <item name="android:layout_height">150dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+    <style name="mainLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+   </style>
+    <style name="buttons">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+       <!-- <item name="android:background">@drawable/buttonlol</item>-->
+        <!--<item name="android:layout_weight">1</item>-->
+        <item name="android:textColor">@color/buttonText</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <!--<item name="android:layout_margin">@dimen/maring5</item>-->
+    </style>
+
+    <style name="questionBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="radio_group1">
+        <!--<item name="android:layout_marginTop">@dimen/radioGrpTopMargin</item>-->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="multiple_choice_radio_buttons">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/buttonText</item>
+        <item name="android:textSize">@dimen/radioButtonTextSize</item>
+        <item name="android:checked">false</item>
+        <!--<item name="android:layout_gravity">center_vertical</item>-->
+        <!--<item name="android:layout_margin">@dimen/maring5</item>-->
+    </style>
+    <style name="fragment_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="multiple_choice_portrait">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/fragmentPadding</item>
+        <!--<item name="android:background">@android:color/holo_blue_bright</item>-->
+    </style>
+
+</resources>

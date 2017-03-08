@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_multiple_choice"
+    style="@style/multiple_choice_portrait">
+
+    <TextView
+        android:id="@+id/questionBox"
+        style="@style/questionBox"
+        android:text="@string/blank_question" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        style="@style/radio_group1"
+        android:layout_below="@+id/questionBox">
+        <!--<RadioButton
+            android:id="@+id/radioButton1"
+            style="@style/multiple_choice_radio_buttons"
+            android:text="@string/blank_radio_option" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            style="@style/multiple_choice_radio_buttons"
+            android:text="@string/blank_radio_option" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            style="@style/multiple_choice_radio_buttons"
+            android:text="@string/blank_radio_option" />
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            style="@style/multiple_choice_radio_buttons"
+            android:text="@string/blank_radio_option" />-->
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        style="@style/buttons"
+        android:layout_alignParentBottom="true"
+        android:text="@string/submit" />
+</RelativeLayout>

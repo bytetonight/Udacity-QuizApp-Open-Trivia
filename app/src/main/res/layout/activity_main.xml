@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!-- ConstraintLayout can be used with API Level 9 and above -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    style="@style/mainLayout"
+    tools:context="android.example.com.quizapp.MainActivity">
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/ProgressBar.Horizontal"/>
+
+    <Button
+        android:id="@+id/button1"
+        style="@style/buttons"
+        android:onClick="switchFragment"
+        android:text="@string/btnDisplayMcFragment" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        style="@style/fragment_container"></FrameLayout>
+</LinearLayout>
+
+    <!--http://www.softicons.com/game-icons/brain-games-icons-by-quizanswers/quiz-games-icon-->
