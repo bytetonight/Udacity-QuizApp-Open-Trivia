@@ -5,7 +5,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
-import android.content.pm.ApplicationInfo;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -24,18 +25,21 @@ import com.itternet.OpenTDbResponse;
 import com.itternet.interfaces.OpenTriviaDataBaseAPI;
 import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
+import com.itternet.models.QuizSessionTokenReset;
 
 import java.util.ArrayList;
 
 import de.vogella.algorithms.shuffle.ShuffleArray;
 import layout.FragmentMultipleChoice;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.R.attr.data;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -45,12 +49,14 @@ public class MainActivity extends AppCompatActivity {
     private int lastQuestion = 0;
     private String correctAnswer;
 
-    private int amountOfQuestions = 20;
+    private int amountOfQuestions = 10;
+    private String difficulty = null;//"any";
+    private String questionType = null;//"any";
     private ProgressBar progBar;
     private int progBarStatus = 0;
     private ProgressDialog pDialog;
     //todo set sessionToken to null in release
-    private String sessionToken = "0304ddc8b67fd80a526ce64a0bd2fe752f2708db9374e31b7555ce1e9ee79c9a";//null;
+    private String sessionToken = null;//"0304ddc8b67fd80a526ce64a0bd2fe752f2708db9374e31b7555ce1e9ee79c9a";//null;
     private OpenTriviaDataBaseAPI openTDbAPI = null;
     private QuestionsListData qListData = null; //The Model holding the list of questions
 
@@ -58,13 +64,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionToken = readStringFromPreferences("sessionToken");
+        Log.v("OnCreate", "readStringFromPreferences -> "+sessionToken);
         readMetaData();
+
+
         showActionBarIcon();
         setContentView(R.layout.activity_main);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
         //mainText = (TextView) findViewById(R.id.main_text);
         //todo : If questions are not loading -> before you take the code apart totally, just uncomment line below
-        //initialize();
+        initialize();
     }
 
     @Override
@@ -74,10 +84,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialize() {
         Gson gson = new GsonBuilder().create();
+
+        OkHttpClient.Builder okHTTPClientBuilder =  new OkHttpClient.Builder();
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+        okHTTPClientBuilder.addInterceptor(loggingInterceptor);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(apiBaseURL)
                 //.baseUrl(getResources().getString(R.string.api_base_url))
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHTTPClientBuilder.build())
                 .build();
 
         openTDbAPI = retrofit.create(OpenTriviaDataBaseAPI.class);
@@ -96,9 +114,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
+
+    private void writeStringToPreferences(String key, String value)
+    {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    private String readStringFromPreferences(String key)
+    {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        return sharedPref.getString(key, null);
+    }
+
     private void showActionBarIcon()
     {
         ActionBar ab = getSupportActionBar();
@@ -157,8 +188,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void resetToken()
+    {
+        Log.v("entered function","resetToken");
+        //https://opentdb.com/api_token.php?command=reset&token=e283af58893a13155d45c5700d3144d27f1969ad45428bb9c493f39d511d3b13
+        Call<QuizSessionTokenReset> qTokenCall = openTDbAPI.resetToken(sessionToken);
+        //enqueue for async calls, execute for synced calls
+        qTokenCall.enqueue(new Callback<QuizSessionTokenReset>() {
+            @Override
+            public void onResponse(Call<QuizSessionTokenReset> call, Response<QuizSessionTokenReset> response) {
+
+                if (null != pDialog && pDialog.isShowing())
+                    pDialog.dismiss();
+                Log.v("resetToken()", "HTTP-Response: "+response.code());
+                if (response.code() == 200) { //Server responded with "everything cool"
+                    if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
+                        loadQuizQuestions();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QuizSessionTokenReset> call, Throwable t) {
+
+            }
+        });
+    }
 
     private void loadQuizSessionToken() {
+        Log.v("entered function","loadQuizSessionToken");
         pDialog = new ProgressDialog(MainActivity.this);
         pDialog.setMessage(getResources().getString(R.string.req_sess_token));
         pDialog.setCancelable(false);
@@ -176,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() == 200) { //Server responded with "everything cool"
                     if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         sessionToken = response.body().getToken();
+                        writeStringToPreferences("sessionToken", sessionToken);
                         //Log.v("token", sessionToken);
                         loadQuizQuestions();
                     }
@@ -190,12 +249,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadQuizQuestions() {
-        Call<QuestionsListData> qlistDataCall = openTDbAPI.getQuizQuestions(amountOfQuestions, sessionToken);
+        Log.v("entered function","loadQuizQuestions");
+        Call<QuestionsListData> qlistDataCall;
+        qlistDataCall = openTDbAPI.getQuizQuestions(amountOfQuestions, sessionToken, difficulty, questionType);
         qlistDataCall.enqueue(new Callback<QuestionsListData>() {
             @Override
             public void onResponse(Call<QuestionsListData> call, Response<QuestionsListData> response) {
+                Log.v("HTTP Response", ""+response.code());
                 if (response.code() == 200) { //Server responded with "everything cool"
                     qListData = response.body();
+                    Log.v("loadQuizQuestions","quiz response :"+qListData.getResponseCode());
                     if (qListData.getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         //All good here
                         //mainText.setText(qListData.getResultAtIndex(0).getCategory());
@@ -218,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                             case OpenTDbResponse.RESPONSE_CODE_TOKEN_EMPTY:
                                 //No more questions in Session
                                 // todo request Token Reset and start over
-                                loadQuizSessionToken();
+                                resetToken();
                                 break;
                         }
                     }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Open Trivia</string>
+    <string name="sessionToken">sessionToken</string>
     <string name="api_base_url">https://www.opentdb.com/</string>
     <string name="req_sess_token">Requesting Session Token</string>
     <string name="btnDisplayMcFragment">Display Multiple Choice Fragment</string>
