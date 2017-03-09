@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- ConstraintLayout can be used with API Level 9 and above -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,4 +20,4 @@
         style="@style/fragment_container"></FrameLayout>
 </LinearLayout>
 
-    <!--http://www.softicons.com/game-icons/brain-games-icons-by-quizanswers/quiz-games-icon-->
+<!--http://www.softicons.com/game-icons/brain-games-icons-by-quizanswers/quiz-games-icon-->

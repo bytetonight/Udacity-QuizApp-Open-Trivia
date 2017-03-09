@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -24,6 +23,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.itternet.OpenTDbResponse;
+import com.itternet.QuizConfig;
 import com.itternet.interfaces.OpenTriviaDataBaseAPI;
 import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
@@ -41,25 +41,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.R.id.message;
+
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private int playerScore = 0;
     private Toast toaster;
-    private String apiBaseURL;
-    private int currentQuestion = 0;
-    private int lastQuestion = 0;
-    private String correctAnswer;
-
-    private int amountOfQuestions = 10;
-    private String difficulty = null;//"any";
-    private String questionType = null;//"any";
     private ProgressBar progBar;
-    private int progBarStatus = 0;
     private ProgressDialog pDialog;
-
-    private String sessionToken = null;
     private OpenTriviaDataBaseAPI openTDbAPI = null;
     private QuestionsListData qListData = null; //The Model holding the list of questions
 
@@ -67,12 +57,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionToken = readStringFromPreferences("sessionToken");
-        Log.v("OnCreate", "readStringFromPreferences -> "+sessionToken);
+
+        QuizConfig.setSessionToken(readStringFromPreferences("sessionToken"));
+        Log.v("OnCreate", "readStringFromPreferences -> "+QuizConfig.getSessionToken());
         readMetaData();
 
 
-        showActionBarIcon();
+        //showActionBarIcon();
         setContentView(R.layout.activity_main);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
         //mainText = (TextView) findViewById(R.id.main_text);
@@ -95,14 +86,14 @@ public class MainActivity extends AppCompatActivity {
         okHTTPClientBuilder.addInterceptor(loggingInterceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(apiBaseURL)
+                .baseUrl(QuizConfig.getApiBaseURL())
                 //.baseUrl(getResources().getString(R.string.api_base_url))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHTTPClientBuilder.build())
                 .build();
 
         openTDbAPI = retrofit.create(OpenTriviaDataBaseAPI.class);
-        if (null == sessionToken) {
+        if (null == QuizConfig.getSessionToken()) {
             loadQuizSessionToken();
         } else {
             loadQuizQuestions();
@@ -113,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     {
         try {
             PackageItemInfo info = getPackageManager().getActivityInfo(new ComponentName(this, MainActivity.class),PackageManager.GET_META_DATA);
-            apiBaseURL = info.metaData.getString("baseUrl");
+            QuizConfig.setApiBaseURL(info.metaData.getString("baseUrl"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -158,15 +149,15 @@ public class MainActivity extends AppCompatActivity {
         //Check if there are questions at all
         if (qListData != null && qListData.getResults().size() > 0) {
 
-            if (currentQuestion <= lastQuestion) {
+            if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex()) {
 
-                progBarStatus = (currentQuestion + 1) * 100 / amountOfQuestions;
+                int progBarStatus = (QuizConfig.getCurrentQuestionIndex() + 1) * 100 / QuizConfig.getAmountOfQuestions();
                 progBar.setProgress(progBarStatus);
-                question = qListData.getResultAtIndex(currentQuestion).getQuestion();
-                correctAnswer = qListData.getResultAtIndex(currentQuestion).getCorrectAnswer();
-                choices.add(correctAnswer);
+                question = qListData.getResultAtIndex(QuizConfig.getCurrentQuestionIndex()).getQuestion();
+                QuizConfig.setCorrectAnswer(qListData.getResultAtIndex(QuizConfig.getCurrentQuestionIndex()).getCorrectAnswer());
+                choices.add(QuizConfig.getCorrectAnswer());
 
-                for (String answer : qListData.getResultAtIndex(currentQuestion).getIncorrectAnswers()) {
+                for (String answer : qListData.getResultAtIndex(QuizConfig.getCurrentQuestionIndex()).getIncorrectAnswers()) {
                     choices.add(answer);
 
                 }
@@ -179,11 +170,12 @@ public class MainActivity extends AppCompatActivity {
                             .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);;*/
                 ft.replace(R.id.fragment_container, f);
                 ft.commit();
-                ++currentQuestion;
+
+                QuizConfig.setNextQuestionIndex();
 
             } else {
-                //The End
-                currentQuestion = 0;
+
+                QuizConfig.ResetCurrentQuestionIndex();
             }
 
         }
@@ -195,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Log.v("entered function","resetToken");
         //https://opentdb.com/api_token.php?command=reset&token=e283af58893a13155d45c5700d3144d27f1969ad45428bb9c493f39d511d3b13
-        Call<QuizSessionTokenReset> qTokenCall = openTDbAPI.resetToken(sessionToken);
+        Call<QuizSessionTokenReset> qTokenCall = openTDbAPI.resetToken(QuizConfig.getSessionToken());
         //enqueue for async calls, execute for synced calls
         qTokenCall.enqueue(new Callback<QuizSessionTokenReset>() {
             @Override
@@ -236,8 +228,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (response.code() == 200) { //Server responded with "everything cool"
                     if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
-                        sessionToken = response.body().getToken();
-                        writeStringToPreferences("sessionToken", sessionToken);
+                        QuizConfig.setSessionToken(response.body().getToken());
+                        writeStringToPreferences("sessionToken", QuizConfig.getSessionToken());
                         //Log.v("token", sessionToken);
                         loadQuizQuestions();
                     }
@@ -254,7 +246,11 @@ public class MainActivity extends AppCompatActivity {
     private void loadQuizQuestions() {
         Log.v("entered function","loadQuizQuestions");
         Call<QuestionsListData> qlistDataCall;
-        qlistDataCall = openTDbAPI.getQuizQuestions(amountOfQuestions, sessionToken, difficulty, questionType);
+        qlistDataCall = openTDbAPI.getQuizQuestions(
+                QuizConfig.getAmountOfQuestions(),
+                QuizConfig.getSessionToken(),
+                QuizConfig.getDifficulty(),
+                QuizConfig.getQuestionType());
         qlistDataCall.enqueue(new Callback<QuestionsListData>() {
             @Override
             public void onResponse(Call<QuestionsListData> call, Response<QuestionsListData> response) {
@@ -264,9 +260,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.v("loadQuizQuestions","quiz response :"+qListData.getResponseCode());
                     if (qListData.getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         //All good here
-                        //mainText.setText(qListData.getResultAtIndex(0).getCategory());
-                        if (qListData != null)
-                            lastQuestion = qListData.getResults().size() - 1;
+                        if (qListData.getResults() != null )
+                            QuizConfig.setLastQuestionIndex(qListData.getResults().size() - 1);
                     } else {
                         switch (qListData.getResponseCode()) {
                             case OpenTDbResponse.RESPONSE_CODE_NO_RESULTS:
@@ -274,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_INVALID_PARAM:
+                                //Now that Retrofit is configured, this shouldn't actually happen
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_TOKEN_NOT_FOUND:
@@ -299,9 +295,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fragmentSubmit(String data) {
-        String htmlifiedanswer = Html.fromHtml(correctAnswer).toString();
+        String htmlifiedAnswer = Html.fromHtml(QuizConfig.getCorrectAnswer()).toString();
 
-        if (data.equals(htmlifiedanswer)) {
+        if (data.equals(htmlifiedAnswer)) {
+            ++playerScore;
             playSound(R.raw.right);
             //todo: update score and progress, get next question etc. Winner Winner Chicken Dinner
             switchFragment(null);
@@ -309,10 +306,8 @@ public class MainActivity extends AppCompatActivity {
                 toaster.cancel();
         } else {
             playSound(R.raw.wrong);
-            String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(correctAnswer));
+            String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(QuizConfig.getCorrectAnswer()));
            prepareToast(message);
-            /* toaster = Toast.makeText(this, message, Toast.LENGTH_LONG);
-            toaster.show();*/
         }
     }
 

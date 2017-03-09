@@ -12,25 +12,7 @@
         android:id="@+id/radioGroup"
         style="@style/radio_group1"
         android:layout_below="@+id/questionBox">
-        <!--<RadioButton
-            android:id="@+id/radioButton1"
-            style="@style/multiple_choice_radio_buttons"
-            android:text="@string/blank_radio_option" />
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            style="@style/multiple_choice_radio_buttons"
-            android:text="@string/blank_radio_option" />
-
-        <RadioButton
-            android:id="@+id/radioButton3"
-            style="@style/multiple_choice_radio_buttons"
-            android:text="@string/blank_radio_option" />
-
-        <RadioButton
-            android:id="@+id/radioButton4"
-            style="@style/multiple_choice_radio_buttons"
-            android:text="@string/blank_radio_option" />-->
     </RadioGroup>
 
     <Button
