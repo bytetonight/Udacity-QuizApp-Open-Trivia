@@ -81,7 +81,10 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
             String radiovalue = rb.getText().toString();
             ((MainActivity) getActivity()).fragmentSubmit(radiovalue);
         } else {
-            Toast.makeText(this.getActivity(), getResources().getText(R.string.no_selection), Toast.LENGTH_LONG).show();
+            ((MainActivity) getActivity()).playSound(R.raw.no_selection);
+
+            ((MainActivity) getActivity()).prepareToast(getResources().getText(R.string.no_selection).toString());
+            //Toast.makeText(this.getActivity(), getResources().getText(R.string.no_selection), Toast.LENGTH_LONG).show();
         }
     }
 }

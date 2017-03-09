@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,11 +41,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
+import static android.R.id.message;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private Toast toaster;
     private String apiBaseURL;
     private int currentQuestion = 0;
     private int lastQuestion = 0;
@@ -55,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progBar;
     private int progBarStatus = 0;
     private ProgressDialog pDialog;
-    //todo set sessionToken to null in release
-    private String sessionToken = null;//"0304ddc8b67fd80a526ce64a0bd2fe752f2708db9374e31b7555ce1e9ee79c9a";//null;
+
+    private String sessionToken = null;
     private OpenTriviaDataBaseAPI openTDbAPI = null;
     private QuestionsListData qListData = null; //The Model holding the list of questions
 
@@ -297,13 +300,35 @@ public class MainActivity extends AppCompatActivity {
 
     public void fragmentSubmit(String data) {
         String htmlifiedanswer = Html.fromHtml(correctAnswer).toString();
+
         if (data.equals(htmlifiedanswer)) {
+            playSound(R.raw.right);
             //todo: update score and progress, get next question etc. Winner Winner Chicken Dinner
             switchFragment(null);
+            if (toaster != null)
+                toaster.cancel();
         } else {
+            playSound(R.raw.wrong);
             String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(correctAnswer));
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+           prepareToast(message);
+            /* toaster = Toast.makeText(this, message, Toast.LENGTH_LONG);
+            toaster.show();*/
         }
     }
 
+    public void prepareToast(String msg)
+    {
+        if (toaster != null)
+            toaster.cancel();
+        toaster = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+        toaster.show();
+    }
+
+    public void playSound(int resource)
+    {
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, resource);
+        mediaPlayer.start();
+        /*mediaPlayer.release();
+        mediaPlayer = null;*/
+    }
 }
