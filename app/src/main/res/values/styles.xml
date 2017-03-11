@@ -1,5 +1,8 @@
 <resources>
-
+    <!--
+    Some of the styles in this file, partially inherit from other styles almost like CSS.
+    If some base styles are not suitable, they can be overridden where needed
+    -->
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -10,6 +13,19 @@
     <style name="ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:icon">@mipmap/ic_launcher</item>
     </style>
+
+    <!-- Inheritable Commons -->
+    <style name="FullWidthFullHeight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <!-- Inheritable Commons -->
+    <style name="FullWidthWrapHeight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <!--ProgressBar Styles-->
     <style name="ProgressBar.Horizontal" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
         <item name="android:layout_width">match_parent</item>
@@ -17,56 +33,73 @@
         <item name="android:visibility">visible</item>
         <item name="android:background">@color/colorAccent</item>
     </style>
+
     <style name="logo">
         <item name="android:layout_width">170dp</item>
         <item name="android:layout_height">150dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
-    <style name="mainLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+
+    <style name="mainLayout" parent="@style/FullWidthFullHeight">
         <item name="android:orientation">vertical</item>
-   </style>
-    <style name="buttons">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-       <!-- <item name="android:background">@drawable/buttonlol</item>-->
-        <!--<item name="android:layout_weight">1</item>-->
+    </style>
+
+    <style name="buttons" parent="@style/FullWidthWrapHeight">
+       <!-- <item name="android:background">@drawable/someImage</item>-->
         <item name="android:textColor">@color/buttonText</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <!--<item name="android:layout_margin">@dimen/maring5</item>-->
+        <item name="android:layout_margin">@dimen/btnLayoutMargin</item>
     </style>
 
-    <style name="questionBox">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <!-- submitButton inherits from buttons and defines an extra property -->
+    <style name="submitButton" parent="@style/buttons">
+        <item name="android:layout_alignParentBottom">true</item>
+        <!--<item name="android:layout_height">match_parent</item>-->
+    </style>
+    <style name="questionBox" parent="@style/FullWidthWrapHeight">
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="radio_group1">
-        <!--<item name="android:layout_marginTop">@dimen/radioGrpTopMargin</item>-->
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="answer_container_vertical" parent="@style/FullWidthWrapHeight">
+        <item name="android:layout_below">@id/questionBox</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginTop">@dimen/answerContainerTopMargin</item>
     </style>
 
-    <style name="multiple_choice_radio_buttons">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="answer_container_horizontal" parent="@style/FullWidthWrapHeight">
+        <item name="android:layout_below">@+id/questionBox</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginTop">@dimen/answerContainerTopMargin</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <!--<item name="android:layout_alignParentStart">true</item>-->
+       <item name="android:baselineAligned">false</item>
+        <item name="android:weightSum">2</item>
+    </style>
+    <style name="radio_button_answer" parent="@style/FullWidthWrapHeight">
         <item name="android:textColor">@color/buttonText</item>
         <item name="android:textSize">@dimen/radioButtonTextSize</item>
         <item name="android:checked">false</item>
         <!--<item name="android:layout_gravity">center_vertical</item>-->
         <!--<item name="android:layout_margin">@dimen/maring5</item>-->
     </style>
-    <style name="fragment_container">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+    <style name="fragment_container" parent="@style/FullWidthFullHeight">
+
     </style>
-    <style name="multiple_choice_portrait">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+    <style name="answer_column">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="fragment_multiple_choice_portrait" parent="@style/FullWidthFullHeight">
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/fragmentPadding</item>
         <!--<item name="android:background">@android:color/holo_blue_bright</item>-->
     </style>
-
+    <style name="fragment_multiple_choice_land" parent="@style/FullWidthFullHeight">
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/fragmentPadding</item>
+        <!--<item name="android:background">@android:color/holo_blue_bright</item>-->
+    </style>
 </resources>

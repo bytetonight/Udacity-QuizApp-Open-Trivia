@@ -1,5 +1,6 @@
 package layout;
 
+import android.content.res.Configuration;
 import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
@@ -13,57 +14,139 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import static android.R.attr.id;
+import static android.example.com.quizapp.R.layout.fragment_fragment_multiple_choice;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentMultipleChoice extends Fragment implements View.OnClickListener {
+public class FragmentMultipleChoice extends Fragment implements View.OnClickListener
+{
 
+    private  View rootView;
+    private int checkedRadioID = -1;
+    private String realIDstring;
+    private int myLayout;
     private String question;
     private ArrayList<String> choices;
     private RadioGroup radioChoices;
-    private View rootView;
+    private Button submitButton;
+
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null)
+        {
+            realIDstring = savedInstanceState.getString("realIDstring",null);
+            //Code below can only be executed one the Layout has been pumped up
+            /*if (realIDstring != null)
+            {
+                setRadioSelectionByRealID(realIDstring);
+                radioContainerHasSelection = true;
+            }*/
+        }
         // Get back arguments
         Bundle b = this.getArguments();
-        question = b.getString("question", "");
-        if (b.getSerializable("choices") != null)
-            choices = b.getStringArrayList("choices");
+        if (b != null)
+        {
+            question = b.getString("question", "");
+            if (b.getSerializable("choices") != null)
+                choices = b.getStringArrayList("choices");
+
+        }
+
+    }
+
+
+   @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putInt("checkedGroup", checkedGroup);
+        //outState.putInt("checkedRadioID", checkedRadioID);
+        outState.putString("realIDstring", realIDstring);
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+    }
+
+
+
+    /**
+     * When using orientation-based Layouts AND doing so in the recommended way
+     * by having your portrait-Layout abc.xml in the layout folder
+     * and your Landscape Layouts in the layout-land folder with the same filename abc.xml
+     * Android will automatically "source-in" your alternative layout.
+     *
+     * You then do not have to check the current orientation yourself
+     *
+     * @param inflater : the pump
+     * @param container : the Fragment root
+     * @param savedInstanceState : null or the data bundle that you saved prior to orientation-change
+     * @return
+     */
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
 
         inflater = getActivity().getLayoutInflater();
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment with the correct layout.xml
+        //(R.layout.fragment_fragment_multiple_choice) is automatically replaced with the layout
+        //matching the current orientation. See comments for this function.
         rootView = inflater.inflate(R.layout.fragment_fragment_multiple_choice, container, false);
         //Once inflated, search the Fragment for desired components
         //and set them
-        Button btn = (Button) rootView.findViewById(R.id.btnSubmit);
-        btn.setOnClickListener(this);
+        submitButton = (Button) rootView.findViewById(R.id.btnSubmit);
+        submitButton.setOnClickListener(this);
         TextView questionBox = (TextView) rootView.findViewById(R.id.questionBox);
-        radioChoices = (RadioGroup) rootView.findViewById(R.id.radioGroup);
+        questionBox.setText(Html.fromHtml(question));
 
-        for (String item : choices) {
-            //http://belencruz.com/2013/04/set-styles-programmatically-in-android/
-            RadioButton rb = (RadioButton) inflater.inflate(R.layout.template_radiobutton, null);
+        String packageName = getActivity().getPackageName();
+
+        int counter = 1;
+        for (String item : choices)
+        {
+            RadioButton rb = (RadioButton) rootView.findViewById(getResources()
+                    .getIdentifier("radioBtn" + counter, "id", packageName));
+            if (realIDstring != null)
+            {
+                setRadioSelectionByRealID(realIDstring);
+
+            }
             rb.setText(Html.fromHtml(item));
-            radioChoices.addView(rb);
+            rb.setOnClickListener(this);
+            ++counter;
         }
 
-        questionBox.setText(Html.fromHtml(question));
+        //Yet Another Interesting Find :
+        //View States are saved/restored internally by Android  BUT ...
+        //If these RadioButtons have no id, the selected state will not
+        //survive orientation changes
+        /*int counter = 1;
+        for (String item : choices)
+        {
+            //http://belencruz.com/2013/04/set-styles-programmatically-in-android/
+            RadioButton rb = (RadioButton) inflater.inflate(R.layout.template_radiobutton, null);
+            rb.setId(100 + counter);
+            rb.setText(Html.fromHtml(item));
+            radioChoices.addView(rb);
+            ++counter;
+        }*/
         return rootView;
     }
 
-    public static FragmentMultipleChoice newInstance(String question, ArrayList<String> options) {
+    public static FragmentMultipleChoice newInstance(String question, ArrayList<String> options)
+    {
         FragmentMultipleChoice fmc = new FragmentMultipleChoice();
         Bundle args = new Bundle();
         args.putString("question", question);
@@ -73,18 +156,56 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(View view)
+    {
+        if (view instanceof RadioButton)
+        {
+            if (checkedRadioID != -1)
+            {
+                RadioButton rb = (RadioButton) rootView.findViewById(checkedRadioID);
+                if (rb != null)
+                    rb.setChecked(false);
+            }
+            checkedRadioID = view.getId();
+            realIDstring = getResources().getResourceName(checkedRadioID);
+            ((MainActivity) getActivity()).prepareToast(realIDstring);
+            return;
+        }
 
-        int selectedId = radioChoices.getCheckedRadioButtonId();
-        RadioButton rb = (RadioButton) rootView.findViewById(selectedId);
-        if (null != rb) {
-            String radiovalue = rb.getText().toString();
+        //A click on the Non-RadioButton submitButton lead us here
+        //Check if a RadioButton was previously selected
+        if (checkedRadioID != -1)
+        {
+            //Disable button after a successful submission to prevent multiple
+            // submissions from click-happy-users
+            submitButton.setEnabled(false);
+            String radiovalue = getCheckedText();
+
+            //Call fragmentSubmit method in MainActivity
             ((MainActivity) getActivity()).fragmentSubmit(radiovalue);
-        } else {
+        }
+        else
+        {
             ((MainActivity) getActivity()).playSound(R.raw.no_selection);
-
             ((MainActivity) getActivity()).prepareToast(getResources().getText(R.string.no_selection).toString());
             //Toast.makeText(this.getActivity(), getResources().getText(R.string.no_selection), Toast.LENGTH_LONG).show();
         }
     }
+
+    private void setRadioSelectionByRealID(String idString)
+    {
+        RadioButton rb = (RadioButton) rootView.findViewById(getResources()
+                .getIdentifier(idString, "id", getActivity().getPackageName()));
+        rb.setSelected(true);
+        checkedRadioID = rb.getId();
+    }
+
+    private String getCheckedText()
+    {
+        RadioButton rb = (RadioButton) rootView.findViewById(checkedRadioID);
+        if (rb != null)
+            return rb.getText().toString();
+        return "";
+    }
+
 }

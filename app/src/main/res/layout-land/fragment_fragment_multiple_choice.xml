@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/fragment_multiple_choice"
+                style="@style/fragment_multiple_choice_land">
+
+    <TextView
+        android:id="@+id/questionBox"
+        style="@style/questionBox"
+        android:text="@string/blank_question"/>
+
+
+    <LinearLayout
+        android:id="@+id/answer_container"
+        style="@style/answer_container_horizontal">
+
+        <LinearLayout
+            android:id="@+id/fragment_container_radios_l"
+            style="@style/answer_column">
+
+            <RadioButton
+                android:id="@+id/radioBtn1"
+                style="@style/radio_button_answer"
+                android:text="Option 1 asda sasda sdasd asasdasdas"/>
+
+            <RadioButton
+                android:id="@+id/radioBtn3"
+                style="@style/radio_button_answer"
+                android:text="Option 2"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_container_radios_2"
+            style="@style/answer_column">
+
+            <RadioButton
+                android:id="@+id/radioBtn2"
+                style="@style/radio_button_answer"
+                android:text="Option 3 asdasd asdasdasda sdasda sdaasdasdasdasd"/>
+
+            <RadioButton
+                android:id="@+id/radioBtn4"
+                style="@style/radio_button_answer"
+                android:text="Option 4"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnSubmit"
+        style="@style/submitButton"
+        android:text="@string/submit"/>
+</RelativeLayout>

@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Open Trivia</string>
     <string name="sessionToken">sessionToken</string>
-    <string name="api_base_url">https://www.opentdb.com/</string>
     <string name="req_sess_token">Requesting Session Token</string>
     <string name="btnDisplayMcFragment">Display Multiple Choice Fragment</string>
     <string name="blank_question">This Fragment is displaying a blank question ?</string>
     <string name="blank_radio_option">Option</string>
     <string name="submit">Submit</string>
-    <string name="incorrectMessage">The correct answer would have been\n%s</string>
+    <string name="incorrectMessage">The correct answer would have been:\n<b>%1$s</b></string>
+    <string name="scoreMessage">You answered %1$d out of %2$d questions <b>correctly</b>.</string>
     <string name="no_selection">Please select an Option</string>
 </resources>

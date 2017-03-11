@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioButton style="@style/multiple_choice_radio_buttons" />
+<RadioButton style="@style/radio_button_answer" />

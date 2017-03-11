@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="btnLayoutMargin">0dp</dimen>
     <dimen name="fragmentPadding">8dp</dimen>
     <dimen name="radioButtonTextSize">12sp</dimen>
-    <dimen name="radioGrpTopMargin">58dp</dimen>
+    <dimen name="answerContainerTopMargin">20dp</dimen>
 </resources>

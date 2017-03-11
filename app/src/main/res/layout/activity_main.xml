@@ -5,19 +5,33 @@
     android:id="@+id/main_layout"
     style="@style/mainLayout"
     tools:context="android.example.com.quizapp.MainActivity">
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@style/ProgressBar.Horizontal"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button1"
-        style="@style/buttons"
-        android:onClick="switchFragment"
-        android:text="@string/btnDisplayMcFragment" />
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        style="@style/fragment_container"></FrameLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/ProgressBar.Horizontal"/>
+
+        <Button
+            android:id="@+id/button1"
+            style="@style/buttons"
+            android:onClick="switchFragment"
+            android:text="@string/btnDisplayMcFragment"/>
+
+        <!--<TextView
+            android:id="@+id/currQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />-->
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            style="@style/fragment_container"></FrameLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
 
 <!--http://www.softicons.com/game-icons/brain-games-icons-by-quizanswers/quiz-games-icon-->

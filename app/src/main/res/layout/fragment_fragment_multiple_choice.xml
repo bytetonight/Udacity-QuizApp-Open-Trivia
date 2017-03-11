@@ -1,23 +1,46 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_multiple_choice"
-    style="@style/multiple_choice_portrait">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/fragment_multiple_choice"
+                style="@style/fragment_multiple_choice_portrait">
 
     <TextView
         android:id="@+id/questionBox"
         style="@style/questionBox"
-        android:text="@string/blank_question" />
+        android:text="@string/blank_question"/>
 
-    <RadioGroup
+    <!--
+        Bye Bye useless RadioGroup
+        <RadioGroup
         android:id="@+id/radioGroup"
-        style="@style/radio_group1"
-        android:layout_below="@+id/questionBox">
+        style="@style/radio_group1">-->
+    <LinearLayout
+        android:id="@+id/answer_container"
+        style="@style/answer_container_vertical">
+        <RadioButton
+            android:id="@+id/radioBtn1"
+            style="@style/radio_button_answer"
+            android:text="Option 1"/>
 
-    </RadioGroup>
+        <RadioButton
+            android:id="@+id/radioBtn2"
+            style="@style/radio_button_answer"
+            android:text="Option 2"/>
+
+        <RadioButton
+            android:id="@+id/radioBtn3"
+            style="@style/radio_button_answer"
+            android:text="Option 3"/>
+
+        <RadioButton
+            android:id="@+id/radioBtn4"
+            style="@style/radio_button_answer"
+            android:text="Option 4"/>
+</LinearLayout>
+   <!-- </RadioGroup>-->
+
 
     <Button
         android:id="@+id/btnSubmit"
-        style="@style/buttons"
-        android:layout_alignParentBottom="true"
-        android:text="@string/submit" />
+        style="@style/submitButton"
+          android:text="@string/submit"/>
 </RelativeLayout>

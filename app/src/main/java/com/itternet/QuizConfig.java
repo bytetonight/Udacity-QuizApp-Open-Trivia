@@ -1,7 +1,10 @@
 package com.itternet;
 
 /**
- * Created by dns on 09.03.2017.
+ * This class is simply a wrapper or convenience to avoid have loads of Class globals in MainActivity.
+ * Only static members are being used and will apparently therefore not go to void
+ * when orientation changes. Apart from that static is usually faster because it does not require
+ * instantiation.
  */
 
 public class QuizConfig {
