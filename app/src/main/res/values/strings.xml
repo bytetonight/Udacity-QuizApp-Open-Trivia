@@ -2,6 +2,7 @@
     <string name="app_name">Open Trivia</string>
     <string name="sessionToken">sessionToken</string>
     <string name="req_sess_token">Requesting Session Token</string>
+    <string name="req_questions">Loading Questions...</string>
     <string name="btnDisplayMcFragment">Display Multiple Choice Fragment</string>
     <string name="blank_question">This Fragment is displaying a blank question ?</string>
     <string name="blank_radio_option">Option</string>

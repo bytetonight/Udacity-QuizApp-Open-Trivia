@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="questionTextSize">16sp</dimen>
     <dimen name="btnLayoutMargin">0dp</dimen>
+    <dimen name="gradBtnPadding">0dp</dimen>
     <dimen name="fragmentPadding">8dp</dimen>
-    <dimen name="radioButtonTextSize">12sp</dimen>
+    <dimen name="radioButtonTextSize">16sp</dimen>
     <dimen name="answerContainerTopMargin">20dp</dimen>
+    <dimen name="animDuration">400</dimen>
 </resources>

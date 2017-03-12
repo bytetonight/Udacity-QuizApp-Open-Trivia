@@ -12,6 +12,7 @@
     </style>
     <style name="ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:icon">@mipmap/ic_launcher</item>
+       <!-- <item name="background">@drawable/action_bar</item>-->
     </style>
 
     <!-- Inheritable Commons -->
@@ -52,12 +53,30 @@
     </style>
 
     <!-- submitButton inherits from buttons and defines an extra property -->
-    <style name="submitButton" parent="@style/buttons">
+    <style name="submitButton" parent="@style/gradientButtonText">
         <item name="android:layout_alignParentBottom">true</item>
+
         <!--<item name="android:layout_height">match_parent</item>-->
     </style>
+
+    <style name="gradientButtonText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:textSize">@dimen/radioButtonTextSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <!--<item name="android:drawableLeft">@android:drawable/ic_menu_send</item>-->
+    </style>
+
     <style name="questionBox" parent="@style/FullWidthWrapHeight">
         <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textSize">@dimen/questionTextSize</item>
         <item name="android:textStyle">bold</item>
     </style>
 

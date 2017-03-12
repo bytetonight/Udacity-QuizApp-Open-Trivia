@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/fragment_multiple_choice"
+                android:id="@+id/fragment_true_false"
                 style="@style/fragment_multiple_choice_portrait">
 
     <TextView
@@ -26,15 +26,7 @@
             style="@style/radio_button_answer"
             android:text="Option 2"/>
 
-        <RadioButton
-            android:id="@+id/radioBtn3"
-            style="@style/radio_button_answer"
-            android:text="Option 3"/>
 
-        <RadioButton
-            android:id="@+id/radioBtn4"
-            style="@style/radio_button_answer"
-            android:text="Option 4"/>
 </LinearLayout>
    <!-- </RadioGroup>-->
 

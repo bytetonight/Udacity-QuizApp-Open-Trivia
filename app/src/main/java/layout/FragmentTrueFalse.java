@@ -1,35 +1,37 @@
 package layout;
 
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
-//import android.support.v4.app.Fragment;
-import android.app.Fragment; //It seems that Fragments must import and extend this and not the above !!
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
+//import android.support.v4.app.Fragment;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentMultipleChoice extends Fragment implements View.OnClickListener
+public class FragmentTrueFalse extends Fragment implements View.OnClickListener
 {
 
-    private View rootView;
+    private  View rootView;
     private int checkedRadioID = -1;
     private String realIDstring;
+    private int myLayout;
     private String question;
     private ArrayList<String> choices;
+    private RadioGroup radioChoices;
     private Button submitButton;
 
 
@@ -41,6 +43,12 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
         if (savedInstanceState != null)
         {
             realIDstring = savedInstanceState.getString("realIDstring",null);
+            //Code below can only be executed one the Layout has been pumped up
+            /*if (realIDstring != null)
+            {
+                setRadioSelectionByRealID(realIDstring);
+                radioContainerHasSelection = true;
+            }*/
         }
         // Get back arguments
         Bundle b = this.getArguments();
@@ -58,9 +66,10 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //outState.putInt("checkedGroup", checkedGroup);
+        //outState.putInt("checkedRadioID", checkedRadioID);
         outState.putString("realIDstring", realIDstring);
     }
-
 
 
     /**
@@ -85,7 +94,7 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
         // Inflate the layout for this fragment with the correct layout.xml
         //(R.layout.fragment_fragment_multiple_choice) is automatically replaced with the layout
         //matching the current orientation. See comments for this function.
-        rootView = inflater.inflate(R.layout.fragment_fragment_multiple_choice, container, false);
+        rootView = inflater.inflate(R.layout.fragment_fragment_true_false, container, false);
         //Once inflated, search the Fragment for desired components
         //and set them
         submitButton = (Button) rootView.findViewById(R.id.btnSubmit);
@@ -127,9 +136,9 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
         return rootView;
     }
 
-    public static FragmentMultipleChoice newInstance(String question, ArrayList<String> options)
+    public static FragmentTrueFalse newInstance(String question, ArrayList<String> options)
     {
-        FragmentMultipleChoice fmc = new FragmentMultipleChoice();
+        FragmentTrueFalse fmc = new FragmentTrueFalse();
         Bundle args = new Bundle();
         args.putString("question", question);
         args.putStringArrayList("choices", options);

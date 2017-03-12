@@ -26,17 +26,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.itternet.OpenTDbResponse;
 import com.itternet.QuizConfig;
+import com.itternet.QuizQuestionFragmentFactory;
 import com.itternet.interfaces.OpenTriviaDataBaseAPI;
 import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
 import com.itternet.models.QuizSessionTokenReset;
+import com.itternet.models.Result;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+//import java.util.logging.Handler;
 
 import de.vogella.algorithms.shuffle.ShuffleArray;
 import layout.FragmentMultipleChoice;
+import layout.FragmentTrueFalse;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -54,14 +58,14 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog pDialog;
     private OpenTriviaDataBaseAPI openTDbAPI = null; //Instantiated on demand. No more eager loading
     private QuestionsListData qListData = null; //The Model holding the list of questions
-
+    private TextView scoreField;
+    //private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         //Read session token from shared preferences, perhaps there is one stored
-        //whether that token is valid or not, is handled elsewhere
         if (QuizConfig.getApiBaseURL() == null)
             QuizConfig.setSessionToken(readStringFromPreferences("sessionToken"));
 
@@ -73,11 +77,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        //mHandler = new Handler(Looper.getMainLooper());
 
         if (savedInstanceState != null)
         {
             playerScore = savedInstanceState.getInt("playerScore");
             qListData = savedInstanceState.getParcelable("qListData");
+            displayPlayerScore();
         }
         else
         {
@@ -94,8 +100,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     /*
-    onRestoreInstanceState seems a redundant callback, at least according to Google it's
-    OPTIONAL
+    onRestoreInstanceState seems a redundant callback,
+    according to Google it's OPTIONAL
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -196,37 +202,38 @@ public class MainActivity extends AppCompatActivity
         //Check if there are questions at all
         if (qListData != null && !qListData.getResults().isEmpty())
         {
-            /*//wow ... displaying currQuestion from here causes app crash
-            String bla = ""+QuizConfig.getCurrentQuestionIndex();
-            currQuestion.setText(bla);*/
             if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex())
             {
 
                 int cIndex = QuizConfig.getCurrentQuestionIndex();
                 progBar.setProgress((cIndex + 1) * 100 / QuizConfig.getAmountOfQuestions());
-                question = qListData.getResultAtIndex(cIndex).getQuestion();
-                QuizConfig.setCorrectAnswer(qListData.getResultAtIndex(cIndex).getCorrectAnswer());
+                //The current Record or DataSet is a type of Result Model
+                Result currentRecord = qListData.getResultAtIndex(cIndex);
+                question = currentRecord.getQuestion();
+                String typeOfQuestion = currentRecord.getType();
+                QuizConfig.setCorrectAnswer(currentRecord.getCorrectAnswer());
                 choices.add(QuizConfig.getCorrectAnswer());
 
-                for (String answer : qListData.getResultAtIndex(cIndex).getIncorrectAnswers())
+                for (String answer : currentRecord.getIncorrectAnswers())
                 {
                     choices.add(answer);
                 }
-                //Randomize Array to not have the correct answer in the first radio button
+                //Randomize Array to not always have the correct answer in the first radio button
                 ShuffleArray.shuffleList(choices);
-                //switch() I was going to implement a Fragment for
-                // Multiple-Choice and one for True-False
-                // all nicely abstracted but .... hey
-                //Android : Why make things easy if you can have them difficult
-                f = FragmentMultipleChoice.newInstance(question, choices);
-                FragmentManager fm = getFragmentManager();
 
-                FragmentTransaction ft = fm.beginTransaction();/*
-                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);;*/
-                ft.replace(R.id.fragment_container, f);
-                ft.commit();
+                f = QuizQuestionFragmentFactory.create(typeOfQuestion, question, choices);
 
-                QuizConfig.setNextQuestionIndex();
+                if (f != null)
+                {
+                    FragmentManager fm = getFragmentManager();
+
+                    FragmentTransaction ft = fm.beginTransaction();
+                            /*.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);*/
+                    ft.replace(R.id.fragment_container, f);
+                    ft.commit();
+
+                    QuizConfig.setNextQuestionIndex();
+                }
             }
             else
             {
@@ -295,10 +302,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<QuizSessionToken> call, Response<QuizSessionToken> response)
             {
-
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-
                 if (response.code() == 200)
                 {
                     //Server responded with "everything cool"
@@ -327,6 +330,15 @@ public class MainActivity extends AppCompatActivity
 
         Log.v("entered function", "loadQuizQuestions");
 
+
+        if (pDialog != null && pDialog.isShowing())
+            pDialog.dismiss();
+        pDialog = new ProgressDialog(MainActivity.this);
+        pDialog.setMessage(getResources().getString(R.string.req_questions));
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+
         Call<QuestionsListData> qlistDataCall;
         qlistDataCall = openTDbAPI.getQuizQuestions(
                 QuizConfig.getAmountOfQuestions(),
@@ -340,6 +352,10 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<QuestionsListData> call, Response<QuestionsListData> response)
             {
                 Log.v("HTTP Response", "" + response.code());
+
+                if (pDialog != null && pDialog.isShowing())
+                    pDialog.dismiss();
+
                 if (response.code() == 200)
                 {
                     qListData = response.body();
@@ -384,16 +400,20 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void fragmentSubmit(String data)
+    public void fragmentSubmit(String answer)
     {
-        String htmlifiedAnswer = Html.fromHtml(QuizConfig.getCorrectAnswer()).toString();
 
-        if (data.equals(htmlifiedAnswer))
+
+        if (isCorrectAnswer(answer))
         {
             ++playerScore;
+
+            displayPlayerScore();
+
             playSound(R.raw.right);
 
             switchFragment(null);
+
             if (toaster != null)
                 toaster.cancel();
         }
@@ -428,6 +448,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void displayPlayerScore()
+    {
+        /*if (scoreField == null)
+            scoreField = (TextView)findViewById(R.id.score);
+        scoreField.setText(""+playerScore);*/
+        /*runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //Update Score TextView
+                    scoreField.setText(""+playerScore);
+                }
+            });*/
+    }
+
     public void prepareToast(String msg)
     {
         if (toaster != null)
@@ -453,6 +487,11 @@ public class MainActivity extends AppCompatActivity
                 });
         mediaPlayer.start();*/
 
+    }
+
+    private boolean isCorrectAnswer(String a)
+    {
+        return Html.fromHtml(QuizConfig.getCorrectAnswer()).toString().equals(a);
     }
 
     private class AsyncDelaySwitchFragement extends AsyncTask<Void, Void, Void>

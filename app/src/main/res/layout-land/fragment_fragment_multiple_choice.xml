@@ -51,5 +51,6 @@
     <Button
         android:id="@+id/btnSubmit"
         style="@style/submitButton"
+        android:background="@drawable/gradient_button"
         android:text="@string/submit"/>
 </RelativeLayout>
