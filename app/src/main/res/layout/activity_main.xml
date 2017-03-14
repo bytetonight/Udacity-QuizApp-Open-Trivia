@@ -23,7 +23,7 @@
         <Button
             android:id="@+id/button1"
             style="@style/buttons"
-            android:onClick="switchFragment"
+            android:onClick="switchQuizFragment"
             android:text="@string/btnDisplayMcFragment"/>
 
         <!--<TextView

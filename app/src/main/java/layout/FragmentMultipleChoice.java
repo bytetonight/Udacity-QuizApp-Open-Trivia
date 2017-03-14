@@ -1,6 +1,5 @@
 package layout;
 
-import android.content.res.Configuration;
 import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
@@ -14,15 +13,19 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.itternet.interfaces.Questionable;
+
 import java.util.ArrayList;
 
-
+import static com.itternet.interfaces.Questionable.KEY_CHOICES;
+import static com.itternet.interfaces.Questionable.KEY_QUESTION;
+import static com.itternet.interfaces.Questionable.KEY_REAL_ID_STRING;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentMultipleChoice extends Fragment implements View.OnClickListener
+public class FragmentMultipleChoice extends Fragment implements View.OnClickListener, Questionable
 {
 
     private View rootView;
@@ -40,15 +43,15 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
 
         if (savedInstanceState != null)
         {
-            realIDstring = savedInstanceState.getString("realIDstring",null);
+            realIDstring = savedInstanceState.getString(KEY_REAL_ID_STRING, null);
         }
         // Get back arguments
         Bundle b = this.getArguments();
         if (b != null)
         {
-            question = b.getString("question", "");
-            if (b.getSerializable("choices") != null)
-                choices = b.getStringArrayList("choices");
+            question = b.getString(KEY_QUESTION, getResources().getString(R.string.blank_question));
+            if (b.getSerializable(KEY_CHOICES) != null)
+                choices = b.getStringArrayList(KEY_CHOICES);
 
         }
 
@@ -56,9 +59,10 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
 
 
    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
-        outState.putString("realIDstring", realIDstring);
+        outState.putString(KEY_REAL_ID_STRING, realIDstring);
     }
 
 
@@ -131,8 +135,8 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
     {
         FragmentMultipleChoice fmc = new FragmentMultipleChoice();
         Bundle args = new Bundle();
-        args.putString("question", question);
-        args.putStringArrayList("choices", options);
+        args.putString(KEY_QUESTION, question);
+        args.putStringArrayList(KEY_CHOICES, options);
         fmc.setArguments(args);
         return fmc;
     }

@@ -14,6 +14,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.itternet.interfaces.Questionable;
+
 import java.util.ArrayList;
 
 //import android.support.v4.app.Fragment;
@@ -22,16 +24,14 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentTrueFalse extends Fragment implements View.OnClickListener
+public class FragmentTrueFalse extends Fragment implements View.OnClickListener, Questionable
 {
 
     private  View rootView;
     private int checkedRadioID = -1;
     private String realIDstring;
-    private int myLayout;
     private String question;
     private ArrayList<String> choices;
-    private RadioGroup radioChoices;
     private Button submitButton;
 
 
@@ -42,33 +42,26 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener
 
         if (savedInstanceState != null)
         {
-            realIDstring = savedInstanceState.getString("realIDstring",null);
-            //Code below can only be executed one the Layout has been pumped up
-            /*if (realIDstring != null)
-            {
-                setRadioSelectionByRealID(realIDstring);
-                radioContainerHasSelection = true;
-            }*/
+            realIDstring = savedInstanceState.getString(KEY_REAL_ID_STRING, null);
         }
         // Get back arguments
         Bundle b = this.getArguments();
         if (b != null)
         {
-            question = b.getString("question", "");
-            if (b.getSerializable("choices") != null)
-                choices = b.getStringArrayList("choices");
+            question = b.getString(KEY_QUESTION, getResources().getString(R.string.blank_question));
+            if (b.getSerializable(KEY_CHOICES) != null)
+                choices = b.getStringArrayList(KEY_CHOICES);
 
         }
 
     }
 
 
-   @Override
-    public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
-        //outState.putInt("checkedGroup", checkedGroup);
-        //outState.putInt("checkedRadioID", checkedRadioID);
-        outState.putString("realIDstring", realIDstring);
+        outState.putString(KEY_REAL_ID_STRING, realIDstring);
     }
 
 
@@ -140,8 +133,8 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener
     {
         FragmentTrueFalse fmc = new FragmentTrueFalse();
         Bundle args = new Bundle();
-        args.putString("question", question);
-        args.putStringArrayList("choices", options);
+        args.putString(KEY_QUESTION, question);
+        args.putStringArrayList(KEY_CHOICES, options);
         fmc.setArguments(args);
         return fmc;
     }

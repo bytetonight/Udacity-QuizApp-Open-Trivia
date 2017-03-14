@@ -39,8 +39,6 @@ import java.util.TimerTask;
 //import java.util.logging.Handler;
 
 import de.vogella.algorithms.shuffle.ShuffleArray;
-import layout.FragmentMultipleChoice;
-import layout.FragmentTrueFalse;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -131,6 +129,7 @@ public class MainActivity extends AppCompatActivity
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+
         okHTTPClientBuilder.addInterceptor(loggingInterceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -183,6 +182,7 @@ public class MainActivity extends AppCompatActivity
         ab.setDisplayShowHomeEnabled(true);
     }
 
+
     /**
      * Get a set of Questions and Answers from the Model previously populated by Retrofit
      * Create a new Instance of MultipleChoiceFragment Fragment which accepts Data,
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity
      *
      * @param v : the view
      */
-    public void switchFragment(View v)
+    public void switchQuizFragment(View v)
     {
         Fragment f;
 
@@ -290,6 +290,9 @@ public class MainActivity extends AppCompatActivity
     private void loadQuizSessionToken()
     {
         Log.v("entered function", "loadQuizSessionToken");
+        if (null == openTDbAPI)
+            initializeQuizAPI();
+
         pDialog = new ProgressDialog(MainActivity.this);
         pDialog.setMessage(getResources().getString(R.string.req_sess_token));
         pDialog.setCancelable(false);
@@ -412,7 +415,7 @@ public class MainActivity extends AppCompatActivity
 
             playSound(R.raw.right);
 
-            switchFragment(null);
+            switchQuizFragment(null);
 
             if (toaster != null)
                 toaster.cancel();
@@ -431,7 +434,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void run()
                         {
-                            switchFragment(null);
+                            switchQuizFragment(null);
                         }
                     }, 2000
             );
@@ -513,7 +516,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         protected void onPostExecute(Void...params) {
-            switchFragment(null);
+            switchQuizFragment(null);
         }
 
     }

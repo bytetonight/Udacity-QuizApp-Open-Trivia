@@ -1,13 +1,17 @@
 <resources>
     <string name="app_name">Open Trivia</string>
     <string name="sessionToken">sessionToken</string>
+    <string name="select_a_category">Select a Category</string>
     <string name="req_sess_token">Requesting Session Token</string>
     <string name="req_questions">Loading Questions...</string>
     <string name="btnDisplayMcFragment">Display Multiple Choice Fragment</string>
-    <string name="blank_question">This Fragment is displaying a blank question ?</string>
+    <string name="blank_question">### Question not loaded ###</string>
     <string name="blank_radio_option">Option</string>
     <string name="submit">Submit</string>
     <string name="incorrectMessage">The correct answer would have been:\n<b>%1$s</b></string>
     <string name="scoreMessage">You answered %1$d out of %2$d questions <b>correctly</b>.</string>
     <string name="no_selection">Please select an Option</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

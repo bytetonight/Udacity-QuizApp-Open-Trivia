@@ -52,16 +52,14 @@
         <item name="android:layout_margin">@dimen/btnLayoutMargin</item>
     </style>
 
-    <!-- submitButton inherits from buttons and defines an extra property -->
+
     <style name="submitButton" parent="@style/gradientButtonText">
         <item name="android:layout_alignParentBottom">true</item>
-
+        <item name="android:background">@drawable/gradient_button</item>
         <!--<item name="android:layout_height">match_parent</item>-->
     </style>
 
-    <style name="gradientButtonText">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="gradientButtonText" parent="@style/FullWidthWrapHeight">
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_margin">0dp</item>

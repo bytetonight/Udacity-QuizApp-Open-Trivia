@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/FullWidthFullHeight"
+    android:padding="@dimen/fragmentPadding"
+    android:orientation="vertical"
+    tools:context="android.example.com.quizapp.CategorySelection">
+
+
+    <TextView
+        android:id="@+id/bla"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_a_category"/>
+
+    <ListView
+        android:id="@+id/category_ListView"
+        style="@style/FullWidthWrapHeight"></ListView>
+
+</LinearLayout>
