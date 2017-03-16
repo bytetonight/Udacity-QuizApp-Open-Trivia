@@ -1,6 +1,7 @@
 package layout;
 
-import android.app.Fragment;
+//import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.res.Configuration;
 import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;

@@ -3,8 +3,7 @@ package layout;
 import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
-//import android.support.v4.app.Fragment;
-import android.app.Fragment; //It seems that Fragments must import and extend this and not the above !!
+import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,7 @@ import com.itternet.interfaces.Questionable;
 
 import java.util.ArrayList;
 
-import static com.itternet.interfaces.Questionable.KEY_CHOICES;
-import static com.itternet.interfaces.Questionable.KEY_QUESTION;
-import static com.itternet.interfaces.Questionable.KEY_REAL_ID_STRING;
+
 
 
 /**

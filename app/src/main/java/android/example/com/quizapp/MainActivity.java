@@ -1,8 +1,10 @@
 package android.example.com.quizapp;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Dialog;
+//import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,12 +13,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -50,6 +57,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
 {
+    //Toolbar mToolbar;
     private int playerScore = 0;
     private Toast toaster;
     private ProgressBar progBar;
@@ -116,8 +124,21 @@ public class MainActivity extends AppCompatActivity
         super.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Just to say that If your older device has a menu-button, the overflow-icon won't show, on the newer phones the overflow button will show.
+     * Duh ?!?!? I was wondering and wondering why on Earth my "3 dots" were not appearing in the action bar
+     * @param menu : the Menu instance passed to this event
+     * @return : ideally true
+     */
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater mnuPump = getMenuInflater();
+        mnuPump.inflate(R.menu.navigation_menu, menu);
+        //return true;
+        return super.onCreateOptionsMenu(menu);
+    }
 
     private void initializeQuizAPI()
     {
@@ -225,8 +246,8 @@ public class MainActivity extends AppCompatActivity
 
                 if (f != null)
                 {
-                    FragmentManager fm = getFragmentManager();
-
+                    //FragmentManager fm = getFragmentManager();
+                    FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                             /*.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);*/
                     ft.replace(R.id.fragment_container, f);
@@ -425,6 +446,8 @@ public class MainActivity extends AppCompatActivity
 
             playSound(R.raw.wrong);
             String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(QuizConfig.getCorrectAnswer()));
+
+
             prepareToast(message);
 
             //new AsyncDelaySwitchFragement().execute(null, null, null);
@@ -475,8 +498,8 @@ public class MainActivity extends AppCompatActivity
 
     public void playSound(int resource)
     {
-        return;
-        /*MediaPlayer mediaPlayer = MediaPlayer.create(this, resource);
+
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, resource);
         mediaPlayer.setOnCompletionListener(
                 new MediaPlayer.OnCompletionListener()
                 {
@@ -488,13 +511,35 @@ public class MainActivity extends AppCompatActivity
                         mp = null;
                     }
                 });
-        mediaPlayer.start();*/
+        mediaPlayer.start();
 
     }
 
     private boolean isCorrectAnswer(String a)
     {
         return Html.fromHtml(QuizConfig.getCorrectAnswer()).toString().equals(a);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        //prepareToast(item.getTitle().toString());
+        Intent targetIntent;
+        //Bundle passData = new Bundle();
+        //passData.putInt("score", playerScore);
+        //passData.putInt("questions", QuizConfig.getAmountOfQuestions());
+        //targetIntent.putExtras(passData);
+
+        switch(item.getItemId())
+        {
+            case R.id.nav_categories:
+                targetIntent = new Intent(MainActivity.this, CategorySelection.class);
+                startActivity(targetIntent);
+                finish(); //Finishes the current Activity but I should better reset than finish
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class AsyncDelaySwitchFragement extends AsyncTask<Void, Void, Void>
