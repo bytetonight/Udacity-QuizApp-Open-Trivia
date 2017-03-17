@@ -4,12 +4,9 @@ package com.itternet;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
 
-import layout.FragmentMultipleChoice;
-import layout.FragmentTrueFalse;
+import android.example.com.quizapp.fragments.FragmentMultipleChoice;
+import android.example.com.quizapp.fragments.FragmentTrueFalse;
 
 /**
  * Created by dns on 11.03.2017.

@@ -1,4 +1,4 @@
-package layout;
+package android.example.com.quizapp.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,12 +13,12 @@ import android.example.com.quizapp.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link StartUpOptions.OnFragmentInteractionListener} interface
+ * {@link FragmentStartUpOptions.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link StartUpOptions#newInstance} factory method to
+ * Use the {@link FragmentStartUpOptions#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StartUpOptions extends Fragment
+public class FragmentStartUpOptions extends Fragment
 {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +31,7 @@ public class StartUpOptions extends Fragment
 
     private OnFragmentInteractionListener mListener;
 
-    public StartUpOptions()
+    public FragmentStartUpOptions()
     {
         // Required empty public constructor
     }
@@ -42,12 +42,12 @@ public class StartUpOptions extends Fragment
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment StartUpOptions.
+     * @return A new instance of fragment FragmentStartUpOptions.
      */
     // TODO: Rename and change types and number of parameters
-    public static StartUpOptions newInstance(String param1, String param2)
+    public static FragmentStartUpOptions newInstance(String param1, String param2)
     {
-        StartUpOptions fragment = new StartUpOptions();
+        FragmentStartUpOptions fragment = new FragmentStartUpOptions();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

@@ -8,6 +8,7 @@
     <string name="blank_question">### Question not loaded ###</string>
     <string name="blank_radio_option">Option</string>
     <string name="submit">Submit</string>
+    <string name="correctAnswerTitle">The correct answer is:</string>
     <string name="incorrectMessage">The correct answer would have been:\n<b>%1$s</b></string>
     <string name="scoreMessage">You answered %1$d out of %2$d questions <b>correctly</b>.</string>
     <string name="no_selection">Please select an Option</string>

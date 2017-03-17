@@ -1,4 +1,4 @@
-package layout;
+package android.example.com.quizapp.fragments;
 
 import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
@@ -151,7 +151,7 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
             }
             checkedRadioID = view.getId();
             realIDstring = getResources().getResourceName(checkedRadioID);
-            ((MainActivity) getActivity()).prepareToast(realIDstring);
+            //((MainActivity) getActivity()).prepareToast(realIDstring);
             return;
         }
 

@@ -1,8 +1,7 @@
-package layout;
+package android.example.com.quizapp.fragments;
 
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
-import android.content.res.Configuration;
 import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.itternet.interfaces.Questionable;
@@ -153,7 +151,7 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
             }
             checkedRadioID = view.getId();
             realIDstring = getResources().getResourceName(checkedRadioID);
-            ((MainActivity) getActivity()).prepareToast(realIDstring);
+            //((MainActivity) getActivity()).prepareToast(realIDstring);
             return;
         }
 

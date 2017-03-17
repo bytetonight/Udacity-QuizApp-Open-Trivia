@@ -2,6 +2,8 @@ package android.example.com.quizapp;
 
 import android.app.Dialog;
 //import android.app.Fragment;
+import android.example.com.quizapp.fragments.FragmentCorrectAnswer;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,9 +58,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements FragmentCorrectAnswer.Communicator
 {
     //Toolbar mToolbar;
+    public static final String CORRECT_ANSWER_DIALOG_TAG = "CADTag";
     private int playerScore = 0;
     private Toast toaster;
     private ProgressBar progBar;
@@ -138,6 +142,14 @@ public class MainActivity extends AppCompatActivity
         mnuPump.inflate(R.menu.navigation_menu, menu);
         //return true;
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onDialogMessage(String msg)
+    {
+        //prepareToast(msg);
+        if (msg.equals("OK"))
+            switchQuizFragment(null);
     }
 
     private void initializeQuizAPI()
@@ -249,7 +261,7 @@ public class MainActivity extends AppCompatActivity
                     //FragmentManager fm = getFragmentManager();
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
-                            /*.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);*/
+                    ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                     ft.replace(R.id.fragment_container, f);
                     ft.commit();
 
@@ -444,14 +456,16 @@ public class MainActivity extends AppCompatActivity
         else
         {
 
+
+            //String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(QuizConfig.getCorrectAnswer()));
+
+
+            displayCorrectAnswerDialog(Html.fromHtml(QuizConfig.getCorrectAnswer()).toString());
             playSound(R.raw.wrong);
-            String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(QuizConfig.getCorrectAnswer()));
-
-
-            prepareToast(message);
+            //prepareToast(message);
 
             //new AsyncDelaySwitchFragement().execute(null, null, null);
-            new Timer().schedule(
+            /*new Timer().schedule(
                     new TimerTask()
                     {
                         @Override
@@ -460,7 +474,7 @@ public class MainActivity extends AppCompatActivity
                             switchQuizFragment(null);
                         }
                     }, 2000
-            );
+            );*/
         }
 
         if (QuizConfig.getCurrentQuestionIndex() > QuizConfig.getLastQuestionIndex())
@@ -486,6 +500,14 @@ public class MainActivity extends AppCompatActivity
                     scoreField.setText(""+playerScore);
                 }
             });*/
+    }
+
+
+    public void displayCorrectAnswerDialog(String msg)
+    {
+        DialogFragment fca = FragmentCorrectAnswer.newInstance(msg);
+        fca.setCancelable(false);
+        fca.show(getSupportFragmentManager(), CORRECT_ANSWER_DIALOG_TAG);
     }
 
     public void prepareToast(String msg)
