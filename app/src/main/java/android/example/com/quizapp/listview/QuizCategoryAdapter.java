@@ -65,7 +65,7 @@ public class QuizCategoryAdapter extends ArrayAdapter
 
         categoryMain.setText(qcList.get(position).getMainCategory());
         categorySub.setText(qcList.get(position).getSubCategory());
-        //categoryImage.set
+        categoryImage.setImageResource(qcList.get(position).getImage());
         return convertView;
     }
 

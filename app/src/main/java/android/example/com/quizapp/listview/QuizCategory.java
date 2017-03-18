@@ -11,9 +11,15 @@ public class QuizCategory
     private String subCategory;
     private String mainCategory;
 
-    public QuizCategory(int categoryID, String cMain)
+    public QuizCategory()
+    {
+
+    }
+
+    public QuizCategory(int categoryID, String cMain, int catImage)
     {
         this.categoryID = categoryID;
+        this.image = catImage;
         if (cMain.contains(":"))
         {
             String[] parts = cMain.split(":");
@@ -51,7 +57,14 @@ public class QuizCategory
 
     public void setMainCategory(String mainCategory)
     {
-        this.mainCategory = mainCategory;
+        if (mainCategory.contains(":"))
+        {
+            String[] parts = mainCategory.split(":");
+            this.mainCategory = parts[0].trim();
+            this.subCategory = parts[1].trim();
+        }
+        else
+            this.mainCategory = mainCategory;
     }
 
     public String getSubCategory()

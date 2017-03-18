@@ -9,15 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.os.Build.VERSION_CODES.M;
 
 public class CategorySelectionActivity extends AppCompatActivity
 {
@@ -31,32 +31,12 @@ public class CategorySelectionActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_selection);
 
-        String[] categories = getResources().getStringArray(R.array.categories);
-        List<QuizCategory> qc = new ArrayList<>();
-        JSONObject obj = null;
-        String categoryName = "";
-        int categoryID = -1;
-        //String testJSON = "{\"catID\":\"any\",\"catName\":\"Any Category\"}";
-        for (String item : categories)
-        {
+        //String[] categories = getResources().getStringArray(R.array.categories);
+        ArrayList<QuizCategory> qc = loadCategoriesJSON();
 
-            try
-            {
-                obj = new JSONObject(item);
-                categoryID = obj.getInt("catID");
-                categoryName = obj.optString("catName");
-
-            }
-            catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-
-            qc.add(new QuizCategory(categoryID, categoryName));
-        }
             
         QuizCategoryAdapter qca = new QuizCategoryAdapter(CategorySelectionActivity.this,
-                R.layout.template_category_list_item, new ArrayList<>(qc) );
+                R.layout.template_category_list_item, qc );
 
         ListView LvCatNames = (ListView) findViewById(R.id.category_ListView);
         LvCatNames.setAdapter(qca);
@@ -89,5 +69,39 @@ public class CategorySelectionActivity extends AppCompatActivity
         //return super.onOptionsItemSelected(item);
         int id = item.getItemId();
         return true;
+    }
+
+    private ArrayList<QuizCategory> loadCategoriesJSON()
+    {
+        ArrayList<QuizCategory> categoriesJSON = new ArrayList<>();
+        String json = null;
+        try {
+            InputStream is = getAssets().open("categories.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        try {
+            JSONObject obj = new JSONObject(json);
+            JSONArray m_jArry = obj.getJSONArray("categories");
+
+            for (int i = 0; i < m_jArry.length(); i++) {
+                obj = m_jArry.getJSONObject(i);
+                QuizCategory qc = new QuizCategory();
+                qc.setCategoryID(obj.getInt("id"));
+                qc.setMainCategory(obj.getString("name"));
+                qc.setImage(getResources().getIdentifier(obj.getString("img"), "drawable", getPackageName()));
+                                //Add your values in your `ArrayList` as below:
+                categoriesJSON.add(qc);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return categoriesJSON;
     }
 }

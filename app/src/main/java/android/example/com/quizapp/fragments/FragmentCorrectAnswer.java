@@ -1,25 +1,17 @@
 package android.example.com.quizapp.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.example.com.quizapp.R;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import com.itternet.interfaces.Communicator;
 
-import java.util.ArrayList;
 
-import static android.example.com.quizapp.R.id.tvCorrectAnswer;
 
 
 public class FragmentCorrectAnswer extends DialogFragment implements View.OnClickListener
@@ -37,7 +29,6 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
         FragmentCorrectAnswer fragment = new FragmentCorrectAnswer();
         Bundle args = new Bundle();
         args.putString(CORRECT_ANSWER, param1);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +43,6 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
 
         }
     }
-
 
 
     @Override
@@ -75,9 +65,9 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     {
         if (v.getId() == R.id.btnDialogSubmit)
         {
+            //onDialogMessage will trigger in MainActivity upon which the next question is displayed
             communicator.onDialogMessage("OK");
             dismiss();
-            //Call parent swithfragment or somethnig
         }
     }
 
@@ -88,10 +78,6 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
         communicator = (Communicator) activity;
     }
 
-    public interface Communicator
-    {
-        public void onDialogMessage(String msg);
 
-    }
 }
 

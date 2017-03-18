@@ -38,6 +38,7 @@ import com.google.gson.GsonBuilder;
 import com.itternet.OpenTDbResponse;
 import com.itternet.QuizConfig;
 import com.itternet.QuizQuestionFragmentFactory;
+import com.itternet.interfaces.Communicator;
 import com.itternet.interfaces.OpenTriviaDataBaseAPI;
 import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
@@ -54,7 +55,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentCorrectAnswer.Communicator
+public class MainActivity extends AppCompatActivity implements Communicator
 {
     public static final String CORRECT_ANSWER_DIALOG_TAG = "CADTag";
     public static final String SESSION_TOKEN = "sessionToken";
@@ -173,6 +174,13 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        //TODO: Perhaps go to startup ?
+        //finish();
     }
 //endregion
 
