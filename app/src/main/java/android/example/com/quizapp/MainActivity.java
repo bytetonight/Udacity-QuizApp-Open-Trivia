@@ -1,7 +1,12 @@
 package android.example.com.quizapp;
 
-import android.app.Dialog;
-//import android.app.Fragment;
+/**
+ *  Open Trivia QuizApp is a Udacity EU-Scholarship Project
+ *  created by ByteTonight at GitHub.
+ *  Questions and answers provided by Open Trivia Database
+ *  through a free for commercial use API maintained by PIXELTAIL GAMES LLC
+ */
+
 import android.example.com.quizapp.fragments.FragmentCorrectAnswer;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -16,9 +21,7 @@ import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -27,11 +30,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.itternet.OpenTDbResponse;
@@ -42,12 +43,7 @@ import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
 import com.itternet.models.QuizSessionTokenReset;
 import com.itternet.models.Result;
-
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-//import java.util.logging.Handler;
-
 import de.vogella.algorithms.shuffle.ShuffleArray;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -60,8 +56,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements FragmentCorrectAnswer.Communicator
 {
-    //Toolbar mToolbar;
     public static final String CORRECT_ANSWER_DIALOG_TAG = "CADTag";
+    public static final String SESSION_TOKEN = "sessionToken";
+    public static final String BASE_URL = "baseUrl";
+    public static final String PLAYER_SCORE = "playerScore";
+    public static final String QUIZ_LIST_DATA = "qListData";
+
     private int playerScore = 0;
     private Toast toaster;
     private ProgressBar progBar;
@@ -69,30 +69,35 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
     private OpenTriviaDataBaseAPI openTDbAPI = null; //Instantiated on demand. No more eager loading
     private QuestionsListData qListData = null; //The Model holding the list of questions
     private TextView scoreField;
-    //private Handler mHandler;
 
+
+
+//region Events
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         //Read session token from shared preferences, perhaps there is one stored
         if (QuizConfig.getApiBaseURL() == null)
-            QuizConfig.setSessionToken(readStringFromPreferences("sessionToken"));
+            QuizConfig.setSessionToken(readStringFromPreferences(SESSION_TOKEN));
 
         //Get the API-URL from manifest
         if (QuizConfig.getApiBaseURL() == null)
-            QuizConfig.setApiBaseURL(readMetaData("baseUrl"));
+            QuizConfig.setApiBaseURL(readMetaData(BASE_URL));
 
         //showActionBarIcon();
         setContentView(R.layout.activity_main);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        //mHandler = new Handler(Looper.getMainLooper());
+
+        //Set the Quiz Category ID from the ListView, or set 18 as default
+        Intent previousIntent = getIntent();
+        QuizConfig.setCategoryID(previousIntent.getIntExtra("categoryID", 18));
 
         if (savedInstanceState != null)
         {
-            playerScore = savedInstanceState.getInt("playerScore");
-            qListData = savedInstanceState.getParcelable("qListData");
+            playerScore = savedInstanceState.getInt(PLAYER_SCORE);
+            qListData = savedInstanceState.getParcelable(QUIZ_LIST_DATA);
             displayPlayerScore();
         }
         else
@@ -105,21 +110,14 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("playerScore", playerScore);
-        outState.putParcelable("qListData", qListData);
+        outState.putInt(PLAYER_SCORE, playerScore);
+        outState.putParcelable(QUIZ_LIST_DATA, qListData);
     }
 
     /*
     onRestoreInstanceState seems a redundant callback,
-    according to Google it's OPTIONAL
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        playerScore = savedInstanceState.getInt("playerScore");
-        qListData = savedInstanceState.getParcelable("qListData");
-        String a = "b";
-        //QuizConfig.setApiBaseURL(savedInstanceState.getString("baseUrl"));
-    }*/
+    according to Google it's OPTIONAL and I am restoring in onCreate
+    */
 
 
     @Override
@@ -144,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * An OnClick-Callback triggered by the Wrong Answer Dialog
+     * @param msg : The message returned by the Dialog Button
+     */
     @Override
     public void onDialogMessage(String msg)
     {
@@ -152,9 +154,32 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
             switchQuizFragment(null);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        //prepareToast(item.getTitle().toString());
+        Intent targetIntent;
+        //Bundle passData = new Bundle();
+        //passData.putInt("score", playerScore);
+        //passData.putInt("questions", QuizConfig.getAmountOfQuestions());
+        //targetIntent.putExtras(passData);
+
+        switch(item.getItemId())
+        {
+            case R.id.nav_categories:
+                targetIntent = new Intent(MainActivity.this, CategorySelectionActivity.class);
+                startActivity(targetIntent);
+                finish(); //Finishes the current Activity but I should better reset than finish
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+//endregion
+
+
     private void initializeQuizAPI()
     {
-        Log.v("entered","initializeQuizAPI()");
+        Log.d("entered","initializeQuizAPI()");
 
         Gson gson = new GsonBuilder().create();
 
@@ -190,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         }
     }
 
+//region Shared Preferences Handling
     private void writeStringToPreferences(String key, String value)
     {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
@@ -203,9 +229,10 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         String returnData = sharedPref.getString(key, null);
         //Let's see what we got from shared preferences
-        Log.v("readPreferences", key + " = " + returnData);
+        Log.d("readPreferences", key + " = " + returnData);
         return returnData;
     }
+//endregion
 
     private void showActionBarIcon()
     {
@@ -222,15 +249,13 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
      * Inject question and options
      * Replace FragmentContainer content with newly created Fragment
      *
-     * @param v : the view
+     * @param v : the view holding the button that originally called this method
      */
     public void switchQuizFragment(View v)
     {
         Fragment f;
-
-        //f = new MultipleChoiceFragment();
         String question = "A Blank Question";
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
 
         //Check if there are questions at all
         if (qListData != null && !qListData.getResults().isEmpty())
@@ -239,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
             {
 
                 int cIndex = QuizConfig.getCurrentQuestionIndex();
-                progBar.setProgress((cIndex + 1) * 100 / QuizConfig.getAmountOfQuestions());
+                progBar.setProgress(calcQuizProgress(cIndex));
                 //The current Record or DataSet is a type of Result Model
                 Result currentRecord = qListData.getResultAtIndex(cIndex);
                 question = currentRecord.getQuestion();
@@ -275,6 +300,19 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         }
     }
 
+    /**
+     * Returns an integer amount to update the progress bar
+     * @param currentIndex : the current question index
+     * @return
+     */
+    private int calcQuizProgress(int currentIndex)
+    {
+        return (currentIndex + 1) * 100 / QuizConfig.getAmountOfQuestions();
+    }
+
+    /**
+     * Let the Game begin
+     */
     private void startQuiz()
     {
         if (null == QuizConfig.getSessionToken())
@@ -287,11 +325,13 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         }
     }
 
-
+    /**
+     * During a Quiz Session, a category may not have enough questions for the next request.
+     * In that case, reset the session to start over again
+     */
     private void resetToken()
     {
-        Log.v("entered function", "resetToken");
-        //https://opentdb.com/api_token.php?command=reset&token=e283af58893a13155d45c5700d3144d27f1969ad45428bb9c493f39d511d3b13
+        Log.d("entered function", "resetToken");
         Call<QuizSessionTokenReset> qTokenCall = openTDbAPI.resetToken(QuizConfig.getSessionToken());
         //enqueue for async calls, execute for synced calls
         qTokenCall.enqueue(new Callback<QuizSessionTokenReset>()
@@ -302,9 +342,9 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
 
                 if (null != pDialog && pDialog.isShowing())
                     pDialog.dismiss();
-                Log.v("resetToken()", "HTTP-Response: " + response.code());
+                Log.d("resetToken()", "HTTP-Response: " + response.code());
                 if (response.code() == 200)
-                { //Server responded with "everything cool"
+                {   //Server responded with "everything cool"
                     if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS)
                     {
                         loadQuizQuestions();
@@ -320,9 +360,12 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         });
     }
 
+    /**
+     * Load Session Token from API using Retrofit
+     */
     private void loadQuizSessionToken()
     {
-        Log.v("entered function", "loadQuizSessionToken");
+        Log.d("entered function", "loadQuizSessionToken");
         if (null == openTDbAPI)
             initializeQuizAPI();
 
@@ -345,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
                     {
                         QuizConfig.setSessionToken(response.body().getToken());
                         writeStringToPreferences("sessionToken", QuizConfig.getSessionToken());
-                        //Log.v("token", sessionToken);
+                        //Log.d("token", sessionToken);
                         loadQuizQuestions();
                     }
                 }
@@ -359,12 +402,15 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         });
     }
 
+    /**
+     * Load Quiz Data from API using Retrofit
+     */
     private void loadQuizQuestions()
     {
         if (null == openTDbAPI)
             initializeQuizAPI();
 
-        Log.v("entered function", "loadQuizQuestions");
+        Log.d("entered function", "loadQuizQuestions");
 
 
         if (pDialog != null && pDialog.isShowing())
@@ -375,19 +421,20 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         pDialog.show();
 
 
-        Call<QuestionsListData> qlistDataCall;
-        qlistDataCall = openTDbAPI.getQuizQuestions(
+        Call<QuestionsListData> qListDataCall;
+        qListDataCall = openTDbAPI.getQuizQuestions(
+                QuizConfig.getCategoryID(),
                 QuizConfig.getAmountOfQuestions(),
                 QuizConfig.getSessionToken(),
                 QuizConfig.getDifficulty(),
                 QuizConfig.getQuestionType());
 
-        qlistDataCall.enqueue(new Callback<QuestionsListData>()
+        qListDataCall.enqueue(new Callback<QuestionsListData>()
         {
             @Override
             public void onResponse(Call<QuestionsListData> call, Response<QuestionsListData> response)
             {
-                Log.v("HTTP Response", "" + response.code());
+                Log.d("HTTP Response", "" + response.code());
 
                 if (pDialog != null && pDialog.isShowing())
                     pDialog.dismiss();
@@ -395,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
                 if (response.code() == 200)
                 {
                     qListData = response.body();
-                    Log.v("loadQuizQuestions", "quiz response :" + qListData.getResponseCode());
+                    Log.d("loadQuizQuestions", "quiz response :" + qListData.getResponseCode());
                     if (qListData.getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS)
                     {
                         //All good here
@@ -436,9 +483,13 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         });
     }
 
+    /**
+     * Evaluates the User's answer from the Question Fragment, processes score, and calls next
+     * Questions if necessary.
+     * @param answer : The HTML-encoded answer to the current question submitted in the Fragment for Questions
+     */
     public void fragmentSubmit(String answer)
     {
-
 
         if (isCorrectAnswer(answer))
         {
@@ -455,15 +506,10 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         }
         else
         {
-
-
             //String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(QuizConfig.getCorrectAnswer()));
-
-
             displayCorrectAnswerDialog(Html.fromHtml(QuizConfig.getCorrectAnswer()).toString());
             playSound(R.raw.wrong);
             //prepareToast(message);
-
             //new AsyncDelaySwitchFragement().execute(null, null, null);
             /*new Timer().schedule(
                     new TimerTask()
@@ -488,6 +534,9 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         }
     }
 
+    /**
+     * What the function name says
+     */
     private void displayPlayerScore()
     {
         /*if (scoreField == null)
@@ -502,7 +551,11 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
             });*/
     }
 
-
+    /**
+     * Displays a Dialog containing the correct answer to the current question.
+     * Includes an OK Button to close the Dialog and proceed in the Quiz
+     * @param msg : The correct Answer to the current question
+     */
     public void displayCorrectAnswerDialog(String msg)
     {
         DialogFragment fca = FragmentCorrectAnswer.newInstance(msg);
@@ -510,6 +563,10 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         fca.show(getSupportFragmentManager(), CORRECT_ANSWER_DIALOG_TAG);
     }
 
+    /**
+     * A simple Wrapper to display Toasts
+     * @param msg: The text to display in the Toast
+     */
     public void prepareToast(String msg)
     {
         if (toaster != null)
@@ -518,6 +575,10 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
         toaster.show();
     }
 
+    /**
+     * A simple Wrapper to play Sounds
+     * @param resource : The resource Id of the sound file to play
+     */
     public void playSound(int resource)
     {
 
@@ -537,56 +598,14 @@ public class MainActivity extends AppCompatActivity implements FragmentCorrectAn
 
     }
 
+    /**
+     * Compares the player's chosen answer with the correct answer
+     * @param a
+     * @return
+     */
     private boolean isCorrectAnswer(String a)
     {
         return Html.fromHtml(QuizConfig.getCorrectAnswer()).toString().equals(a);
     }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        //prepareToast(item.getTitle().toString());
-        Intent targetIntent;
-        //Bundle passData = new Bundle();
-        //passData.putInt("score", playerScore);
-        //passData.putInt("questions", QuizConfig.getAmountOfQuestions());
-        //targetIntent.putExtras(passData);
-
-        switch(item.getItemId())
-        {
-            case R.id.nav_categories:
-                targetIntent = new Intent(MainActivity.this, CategorySelection.class);
-                startActivity(targetIntent);
-                finish(); //Finishes the current Activity but I should better reset than finish
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private class AsyncDelaySwitchFragement extends AsyncTask<Void, Void, Void>
-    {
-        protected Void doInBackground(Void...params) {
-            try
-            {
-                Thread.sleep(3000);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        protected void onProgressUpdate(Void...params) {
-
-        }
-
-        protected void onPostExecute(Void...params) {
-            switchQuizFragment(null);
-        }
-
-    }
-
 
 }

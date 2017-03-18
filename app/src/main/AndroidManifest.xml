@@ -28,7 +28,7 @@
                 android:value="https://www.opentdb.com/"/>
         </activity>
         <activity android:name=".Results"/>
-        <activity android:name=".CategorySelection">
+        <activity android:name=".CategorySelectionActivity">
         </activity>
     </application>
 

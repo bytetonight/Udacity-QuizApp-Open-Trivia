@@ -5,7 +5,7 @@
     style="@style/FullWidthFullHeight"
     android:padding="@dimen/fragmentPadding"
     android:orientation="vertical"
-    tools:context="android.example.com.quizapp.CategorySelection">
+    tools:context="android.example.com.quizapp.CategorySelectionActivity">
 
 
     <TextView

@@ -8,6 +8,7 @@ package com.itternet;
  */
 
 public class QuizConfig {
+    private static int categoryID = 18;
     private static String apiBaseURL;
     private static int currentQuestionIndex = 0;
     private static int lastQuestionIndex = 0;
@@ -23,6 +24,16 @@ public class QuizConfig {
 
     public static void setSessionToken(String sessionToken) {
         QuizConfig.sessionToken = sessionToken;
+    }
+
+    public static int getCategoryID()
+    {
+        return categoryID;
+    }
+
+    public static void setCategoryID(int categoryID)
+    {
+        QuizConfig.categoryID = categoryID;
     }
 
     public static String getApiBaseURL() {
@@ -62,10 +73,10 @@ public class QuizConfig {
         QuizConfig.correctAnswer = correctAnswer;
     }
 
-    public static boolean isCorrectAnswer(String answer)
+    /*public static boolean isCorrectAnswer(String answer)
     {
         return answer.equals(correctAnswer);
-    }
+    }*/
 
     public static int getAmountOfQuestions() {
         return amountOfQuestions;

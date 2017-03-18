@@ -1,7 +1,7 @@
 package android.example.com.quizapp.listview;
 
 /**
- * Created by dns on 12.03.2017.
+ * The Model of a ListView Row representing one ListView Item
  */
 
 public class RowItem
