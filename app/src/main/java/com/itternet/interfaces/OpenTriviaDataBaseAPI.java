@@ -22,5 +22,5 @@ public interface OpenTriviaDataBaseAPI {
     Call<QuizSessionToken> getQuizSessionToken();
 
     @GET("api.php")
-    Call<QuestionsListData> getQuizQuestions(@Query("category") int category, @Query("amount") int amount, @Query("token") String token, @Query("difficulty") String difficulty, @Query("type") String type);
+    Call<QuestionsListData> getQuizQuestions(@Query("category") Integer category, @Query("amount") int amount, @Query("token") String token, @Query("difficulty") String difficulty, @Query("type") String type);
 }

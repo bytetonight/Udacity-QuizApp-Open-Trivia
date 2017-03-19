@@ -18,4 +18,5 @@
         android:id="@+id/category_ListView"
         style="@style/FullWidthWrapHeight"></ListView>
 
+
 </LinearLayout>

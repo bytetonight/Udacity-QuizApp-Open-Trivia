@@ -8,7 +8,7 @@ package com.itternet;
  */
 
 public class QuizConfig {
-    private static int categoryID = 18;
+    private static int categoryID = 18; //Getter returns Integer because it needs to be nullable at times
     private static String apiBaseURL;
     private static int currentQuestionIndex = 0;
     private static int lastQuestionIndex = 0;
@@ -26,14 +26,16 @@ public class QuizConfig {
         QuizConfig.sessionToken = sessionToken;
     }
 
-    public static int getCategoryID()
+    public static Integer getCategoryID()
     {
+        if (categoryID == -1)
+            return null;
         return categoryID;
     }
 
     public static void setCategoryID(int categoryID)
     {
-        QuizConfig.categoryID = categoryID;
+       QuizConfig.categoryID = categoryID;
     }
 
     public static String getApiBaseURL() {
