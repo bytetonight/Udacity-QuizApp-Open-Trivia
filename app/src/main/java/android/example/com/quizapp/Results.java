@@ -3,12 +3,8 @@ package android.example.com.quizapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.widget.TextView;
 
-import com.itternet.QuizConfig;
-
-import static android.R.id.message;
 
 public class Results extends AppCompatActivity {
 
@@ -28,8 +24,13 @@ public class Results extends AppCompatActivity {
             int questions = extrasBundle.getInt("questions");
             textView.setText(String.format(getResources().getString(R.string.scoreMessage), score, questions));
         }
+    }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
 
-
+        //finish();
     }
 }

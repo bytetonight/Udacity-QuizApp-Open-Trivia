@@ -1,8 +1,5 @@
 package com.itternet.models;
 
-/**
- * Created by dns on 04.03.2017.
- */
 
 import android.os.Parcel;
 import android.os.Parcelable;

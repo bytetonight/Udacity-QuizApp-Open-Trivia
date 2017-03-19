@@ -61,6 +61,27 @@
         <!--<item name="android:layout_height">match_parent</item>-->
     </style>
 
+    <!--
+        Jeez in API 23 the behaviour changed and requires explicit enabling the dialog Title ?!?!?
+        Additionally, the DialogFragment had to be converted from Linear to Relative Layout
+        Additionally the parent style for the CustomDialog style has to be set
+        Additionally the style has to be applied to programmatically to the DialogFragment
+        And if any one of the above is missing, you end up with unexplainable CHAOS
+        What a PAIN in the posterior
+    -->
+    <style name="CustomDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">false</item>
+   </style>
+
+    <style name="dialogSubmitButton" parent="@style/gradientButtonText">
+
+        <item name="android:clipToPadding">true</item>
+        <item name="android:background">@drawable/gradient_button</item>
+        <item name="android:layout_marginBottom">24dp</item> <!-- causes issues when used in relative layout -->
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
     <style name="gradientButtonText" parent="@style/FullWidthWrapHeight">
         <item name="android:minHeight">40dp</item>
         <item name="android:textColor">#ffffff</item>

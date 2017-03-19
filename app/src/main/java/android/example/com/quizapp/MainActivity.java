@@ -36,7 +36,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.itternet.OpenTDbResponse;
-import com.itternet.QuizConfig;
 import com.itternet.QuizQuestionFragmentFactory;
 import com.itternet.interfaces.Communicator;
 import com.itternet.interfaces.OpenTriviaDataBaseAPI;
@@ -91,9 +90,21 @@ public class MainActivity extends AppCompatActivity implements Communicator
         progBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
-        //Set the Quiz Category ID from the ListView, or set 18 as default
         Intent previousIntent = getIntent();
-        QuizConfig.setCategoryID(previousIntent.getIntExtra("categoryID", 18));
+        Bundle extras = null;
+        if (previousIntent != null)
+            extras = previousIntent.getExtras();
+
+        /**
+         * find out if previous intent was category selector.
+         * Other Activities shouldn't pass categoryID
+         */
+
+        if (extras != null)
+        {
+            if (extras.containsKey("categoryID"))
+                QuizConfig.setCategoryID(previousIntent.getIntExtra("categoryID", 18));
+        }
 
         if (savedInstanceState != null)
         {
@@ -115,11 +126,12 @@ public class MainActivity extends AppCompatActivity implements Communicator
         outState.putParcelable(QUIZ_LIST_DATA, qListData);
     }
 
-    /*
-    onRestoreInstanceState seems a redundant callback,
-    according to Google it's OPTIONAL and I am restoring in onCreate
-    */
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig)
@@ -175,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        //prepareQuiz();
         //TODO: Perhaps go to startup ?
         //finish();
     }
@@ -319,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
             }
             else
             {
-                QuizConfig.ResetCurrentQuestionIndex();
+                QuizConfig.resetCurrentQuestionIndex();
             }
         }
     }
@@ -345,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         }
         else
         {
+            //QuizConfig.resetCurrentQuestionIndex();
             loadQuizQuestions();
         }
     }
@@ -588,6 +602,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
     public void displayCorrectAnswerDialog(String msg)
     {
         DialogFragment fca = FragmentCorrectAnswer.newInstance(msg);
+        //Due to changes in API 23, Dialogs don't work as they did before, hence line below !
+        fca.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+
         fca.setCancelable(false);
         fca.show(getSupportFragmentManager(), CORRECT_ANSWER_DIALOG_TAG);
     }
@@ -637,4 +654,102 @@ public class MainActivity extends AppCompatActivity implements Communicator
         return Html.fromHtml(QuizConfig.getCorrectAnswer()).toString().equals(a);
     }
 
+
+    private static class QuizConfig {
+        private static int categoryID = 18; //Getter returns Integer because it needs to be nullable at times
+        private static String apiBaseURL;
+        private static int currentQuestionIndex = 0;
+        private static int lastQuestionIndex = 0;
+        private static String correctAnswer;
+        private static int amountOfQuestions = 10;
+        private static String difficulty = null;//"any";
+        private static String questionType = null;//"any";
+        private static String sessionToken = null;
+
+        public static String getSessionToken() {
+            return sessionToken;
+        }
+
+        public static void setSessionToken(String sessionToken) {
+            QuizConfig.sessionToken = sessionToken;
+        }
+
+        public static Integer getCategoryID()
+        {
+            if (categoryID == -1)
+                return null;
+            return categoryID;
+        }
+
+        public static void setCategoryID(int categoryID)
+        {
+            QuizConfig.categoryID = categoryID;
+        }
+
+        public static String getApiBaseURL() {
+            return apiBaseURL;
+        }
+
+        public static void setApiBaseURL(String apiBaseURL) {
+            QuizConfig.apiBaseURL = apiBaseURL;
+        }
+
+        public static int getCurrentQuestionIndex() {
+            return currentQuestionIndex;
+        }
+
+        public static void resetCurrentQuestionIndex() {
+            currentQuestionIndex = 0;
+        }
+
+        public static void setNextQuestionIndex()
+        {
+            ++currentQuestionIndex;
+        }
+
+        public static int getLastQuestionIndex() {
+            return lastQuestionIndex;
+        }
+
+        public static void setLastQuestionIndex(int index) {
+            lastQuestionIndex = index;
+        }
+
+        public static String getCorrectAnswer() {
+            return correctAnswer;
+        }
+
+        public static void setCorrectAnswer(String correctAnswer) {
+            QuizConfig.correctAnswer = correctAnswer;
+        }
+
+    /*public static boolean isCorrectAnswer(String answer)
+    {
+        return answer.equals(correctAnswer);
+    }*/
+
+        public static int getAmountOfQuestions() {
+            return amountOfQuestions;
+        }
+
+        public static void setAmountOfQuestions(int amountOfQuestions) {
+            QuizConfig.amountOfQuestions = amountOfQuestions;
+        }
+
+        public static String getDifficulty() {
+            return difficulty;
+        }
+
+        public static void setDifficulty(String difficulty) {
+            QuizConfig.difficulty = difficulty;
+        }
+
+        public static String getQuestionType() {
+            return questionType;
+        }
+
+        public static void setQuestionType(String questionType) {
+            QuizConfig.questionType = questionType;
+        }
+    }
 }

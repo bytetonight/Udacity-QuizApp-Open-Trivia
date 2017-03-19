@@ -50,6 +50,7 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
                              Bundle savedInstanceState)
     {
         getDialog().setTitle(R.string.correctAnswerTitle);
+
         View thisView = inflater.inflate(R.layout.fragment_fragment_correct_answer, container, false);
         ok = (Button) thisView.findViewById(R.id.btnDialogSubmit);
         TextView tvCorrectAnswer = (TextView)thisView.findViewById(R.id.tvCorrectAnswer);
