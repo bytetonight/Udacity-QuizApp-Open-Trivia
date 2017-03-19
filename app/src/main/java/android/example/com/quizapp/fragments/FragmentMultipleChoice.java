@@ -164,8 +164,8 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
             submitButton.setEnabled(false);
             String radiovalue = getCheckedText();
 
-            //Call fragmentSubmit method in MainActivity
-            ((MainActivity) getActivity()).fragmentSubmit(radiovalue);
+            //Call onFragmentSubmit method in MainActivity
+            ((MainActivity) getActivity()).onFragmentSubmit(radiovalue);
         }
         else
         {

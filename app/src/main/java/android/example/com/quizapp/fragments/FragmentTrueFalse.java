@@ -164,8 +164,8 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
             submitButton.setEnabled(false);
             String radiovalue = getCheckedText();
 
-            //Call fragmentSubmit method in MainActivity
-            ((MainActivity) getActivity()).fragmentSubmit(radiovalue);
+            //Call onFragmentSubmit method in MainActivity
+            ((MainActivity) getActivity()).onFragmentSubmit(radiovalue);
         }
         else
         {

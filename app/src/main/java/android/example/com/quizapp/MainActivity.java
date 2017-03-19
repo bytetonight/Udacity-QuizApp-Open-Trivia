@@ -164,7 +164,14 @@ public class MainActivity extends AppCompatActivity implements Communicator
     {
         //prepareToast(msg);
         if (msg.equals("OK"))
-            switchQuizFragment(null);
+        {
+            if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex())
+                switchQuizFragment(null);
+            else
+            {
+                runResultsActivity();
+            }
+        }
     }
 
     @Override
@@ -327,13 +334,13 @@ public class MainActivity extends AppCompatActivity implements Communicator
                     ft.replace(R.id.fragment_container, f);
                     ft.commit();
 
-                    QuizConfig.setNextQuestionIndex();
+                    //QuizConfig.setNextQuestionIndex();
                 }
             }
-            else
+            /*else
             {
                 QuizConfig.resetCurrentQuestionIndex();
-            }
+            }*/
         }
     }
 
@@ -487,7 +494,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
                         //All good here
                         if (qListData.getResults() != null)
                         {
-                            QuizConfig.setLastQuestionIndex(qListData.getResults().size() - 1);
+                            int listLength = qListData.getResults().size();
+                            playerScore = 0;
+                            QuizConfig.setLastQuestionIndex(listLength - 1);
+                            QuizConfig.setAmountOfQuestions(listLength);
+                            QuizConfig.resetCurrentQuestionIndex();
                             switchQuizFragment(null);
                         }
 
@@ -529,44 +540,41 @@ public class MainActivity extends AppCompatActivity implements Communicator
     /**
      * Evaluates the User's answer from the Question Fragment, processes score, and calls next
      * Questions if necessary.
-     * @param answer : The HTML-encoded answer to the current question submitted in the Fragment for Questions
+     * @param submitted : The HTML-encoded answer to the current question submitted in the Fragment for Questions
      */
-    public void fragmentSubmit(String answer)
+    public void onFragmentSubmit(String submitted)
     {
+        String correctAnswer = Html.fromHtml(QuizConfig.getCorrectAnswer()).toString();
+        QuizConfig.setNextQuestionIndex();
 
-        if (isCorrectAnswer(answer))
+        if (isCorrectAnswer(submitted))
         {
             ++playerScore;
-
             displayPlayerScore();
-
             playSound(R.raw.right);
-
-            switchQuizFragment(null);
 
             if (toaster != null)
                 toaster.cancel();
+
+            if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex())
+                switchQuizFragment(null);
+            else
+                runResultsActivity();
+
         }
         else
         {
-            //String message = String.format(getResources().getString(R.string.incorrectMessage), Html.fromHtml(QuizConfig.getCorrectAnswer()));
-            displayCorrectAnswerDialog(Html.fromHtml(QuizConfig.getCorrectAnswer()).toString());
+            displayCorrectAnswerDialog(correctAnswer);
             playSound(R.raw.wrong);
             //prepareToast(message);
-            //new AsyncDelaySwitchFragement().execute(null, null, null);
-            /*new Timer().schedule(
-                    new TimerTask()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            switchQuizFragment(null);
-                        }
-                    }, 2000
-            );*/
         }
+        //prepareToast(""+QuizConfig.getCurrentQuestionIndex());
+    }
 
-        if (QuizConfig.getCurrentQuestionIndex() > QuizConfig.getLastQuestionIndex())
+
+    private void runResultsActivity()
+    {
+        //if (QuizConfig.getCurrentQuestionIndex() > QuizConfig.getLastQuestionIndex())
         {
             Intent resultsIntent = new Intent(MainActivity.this, Results.class);
             Bundle passData = new Bundle();
@@ -651,6 +659,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
      */
     private boolean isCorrectAnswer(String a)
     {
+        //if (true) return false;
+
         return Html.fromHtml(QuizConfig.getCorrectAnswer()).toString().equals(a);
     }
 
