@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         }
         else
         {
-            startQuiz();
+            prepareQuiz();
         }
 
     }
@@ -160,10 +160,6 @@ public class MainActivity extends AppCompatActivity implements Communicator
     {
         //prepareToast(item.getTitle().toString());
         Intent targetIntent;
-        //Bundle passData = new Bundle();
-        //passData.putInt("score", playerScore);
-        //passData.putInt("questions", QuizConfig.getAmountOfQuestions());
-        //targetIntent.putExtras(passData);
 
         switch(item.getItemId())
         {
@@ -184,7 +180,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 //endregion
 
-
+    /**
+     * Start up Retrofit and required components for API communications
+     */
     private void initializeQuizAPI()
     {
         Log.d("entered","initializeQuizAPI()");
@@ -209,6 +207,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
     }
 
+    /**
+     * Read metaData from AndroidManfiest.xml
+     * @param which key to read from manifest metaData
+     * @return String value of key if found, or null
+     */
     private String readMetaData(String which)
     {
         try
@@ -218,12 +221,17 @@ public class MainActivity extends AppCompatActivity implements Communicator
         }
         catch (PackageManager.NameNotFoundException e)
         {
-            return "";
-            //e.printStackTrace();
+            return null;
         }
     }
 
 //region Shared Preferences Handling
+
+    /**
+     * Store key,value pairs in Android Shared Preferences
+     * @param key to store
+     * @param value to store
+     */
     private void writeStringToPreferences(String key, String value)
     {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
@@ -232,6 +240,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
         editor.apply();
     }
 
+    /**
+     * Read key,value pairs from Android Shared Preferences
+     * @param key to read
+     * @return
+     */
     private String readStringFromPreferences(String key)
     {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
@@ -242,6 +255,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 //endregion
 
+    /**
+     * Call this to have the Actionbar (top of screen) display the launcher icon
+     */
     private void showActionBarIcon()
     {
         ActionBar ab = getSupportActionBar();
@@ -321,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     /**
      * Let the Game begin
      */
-    private void startQuiz()
+    private void prepareQuiz()
     {
         if (null == QuizConfig.getSessionToken())
         {
@@ -435,7 +451,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
                 QuizConfig.getAmountOfQuestions(),
                 QuizConfig.getSessionToken(),
                 QuizConfig.getDifficulty(),
-                QuizConfig.getQuestionType());
+                QuizConfig.getQuestionType()
+        );
 
         qListDataCall.enqueue(new Callback<QuestionsListData>()
         {
@@ -455,7 +472,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
                     {
                         //All good here
                         if (qListData.getResults() != null)
+                        {
                             QuizConfig.setLastQuestionIndex(qListData.getResults().size() - 1);
+                            switchQuizFragment(null);
+                        }
+
                     }
                     else
                     {
@@ -607,8 +628,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     /**
-     * Compares the player's chosen answer with the correct answer
-     * @param a
+     * Compares the player's submitted answer with the correct answer
+     * @param a is the answer submitted by the player
      * @return
      */
     private boolean isCorrectAnswer(String a)

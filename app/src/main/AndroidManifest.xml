@@ -5,7 +5,7 @@
     <!-- Load Questions from Web-API -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- Don't make the device sleep on you -->
+    <!-- Don't make the device sleep during a quiz -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
 
-            <!-- android:configChanges="orientation|screenSize" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

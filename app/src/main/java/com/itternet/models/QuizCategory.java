@@ -1,9 +1,10 @@
-package android.example.com.quizapp.listview;
+package com.itternet.models;
+
 
 /**
- * Created by dns on 12.03.2017.
+ * A Model representing one List Item in the Category Selection ListView
+ * One List Item has a categoryID, a name and an image (or not)
  */
-
 public class QuizCategory
 {
     private int categoryID;

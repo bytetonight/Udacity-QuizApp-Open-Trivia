@@ -1,14 +1,14 @@
 {"categories":[
-{"id":"-1","name":" Any Category","img":""},
+{"id":"-1","name":" Random Category","img":""},
 {"id":"9","name":"General Knowledge","img":"knowledge"},
 {"id":"10","name":"Entertainment: Books","img":"books"},
 {"id":"11","name":"Entertainment: Film","img":"film"},
 {"id":"12","name":"Entertainment: Music","img":"music"},
-{"id":"13","name":"Entertainment: Musicals &amp; Theatres","img":"musicals"},
+{"id":"13","name":"Entertainment: Musicals & Theatres","img":"musicals"},
 {"id":"14","name":"Entertainment: Television","img":"television"},
 {"id":"15","name":"Entertainment: Video Games","img":"video_games"},
 {"id":"16","name":"Entertainment: Board Games","img":"board_games"},
-{"id":"17","name":"Science &amp; Nature","img":"knowledge"},
+{"id":"17","name":"Science & Nature","img":"knowledge"},
 {"id":"18","name":"Science: Computers","img":"knowledge"},
 {"id":"19","name":"Science: Mathematics","img":"knowledge"},
 {"id":"20","name":"Mythology","img":"knowledge"},
@@ -22,6 +22,6 @@
 {"id":"28","name":"Vehicles","img":"knowledge"},
 {"id":"29","name":"Entertainment: Comics","img":"knowledge"},
 {"id":"30","name":"Science: Gadgets","img":"knowledge"},
-{"id":"31","name":"Entertainment: Japanese Anime &amp; Manga","img":"knowledge"},
-{"id":"32","name":"Entertainment: Cartoon &amp; Animations","img":"knowledge"}
+{"id":"31","name":"Entertainment: Japanese Anime & Manga","img":"knowledge"},
+{"id":"32","name":"Entertainment: Cartoon & Animations","img":"knowledge"}
 ]}
