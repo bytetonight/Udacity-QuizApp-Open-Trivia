@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     public static final String QUIZ_LIST_DATA = "qListData";
 
     private int playerScore = 0;
+    private TextView tvCategoryName;
     private Toast toaster;
     private ProgressBar progBar;
     private ProgressDialog pDialog;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         //showActionBarIcon();
         setContentView(R.layout.activity_main);
+        tvCategoryName = (TextView) findViewById(R.id.tvCurrentCategory);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
@@ -103,7 +105,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
         if (extras != null)
         {
             if (extras.containsKey("categoryID"))
-                QuizConfig.setCategoryID(previousIntent.getIntExtra("categoryID", 18));
+                QuizConfig.setCategoryID(previousIntent.getIntExtra("categoryID", -1));
+            if (extras.containsKey("categoryName"))
+                QuizConfig.setCategoryName(previousIntent.getStringExtra("categoryName"));
         }
 
         if (savedInstanceState != null)
@@ -117,6 +121,10 @@ public class MainActivity extends AppCompatActivity implements Communicator
             prepareQuiz();
         }
 
+        if (QuizConfig.getCategoryID() == null)
+            tvCategoryName.setText(getString(R.string.any_category));
+        else
+            tvCategoryName.setText(QuizConfig.getCategoryName());
     }
 
     @Override
@@ -576,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     {
         //if (QuizConfig.getCurrentQuestionIndex() > QuizConfig.getLastQuestionIndex())
         {
-            Intent resultsIntent = new Intent(MainActivity.this, Results.class);
+            Intent resultsIntent = new Intent(MainActivity.this, ResultsActivity.class);
             Bundle passData = new Bundle();
             passData.putInt("score", playerScore);
             passData.putInt("questions", QuizConfig.getAmountOfQuestions());
@@ -611,7 +619,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
     {
         DialogFragment fca = FragmentCorrectAnswer.newInstance(msg);
         //Due to changes in API 23, Dialogs don't work as they did before, hence line below !
-        fca.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        //fca.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        //fca.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
+
 
         fca.setCancelable(false);
         fca.show(getSupportFragmentManager(), CORRECT_ANSWER_DIALOG_TAG);
@@ -666,7 +676,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
 
     private static class QuizConfig {
-        private static int categoryID = 18; //Getter returns Integer because it needs to be nullable at times
+        private static int categoryID = -1; //Getter returns Integer because it needs to be nullable at times
+        private static String categoryName = "";
         private static String apiBaseURL;
         private static int currentQuestionIndex = 0;
         private static int lastQuestionIndex = 0;
@@ -684,6 +695,10 @@ public class MainActivity extends AppCompatActivity implements Communicator
             QuizConfig.sessionToken = sessionToken;
         }
 
+        /**
+         * When null, random questions will be supplied by the API
+         * @return Integer Nullable
+         */
         public static Integer getCategoryID()
         {
             if (categoryID == -1)
@@ -694,6 +709,18 @@ public class MainActivity extends AppCompatActivity implements Communicator
         public static void setCategoryID(int categoryID)
         {
             QuizConfig.categoryID = categoryID;
+        }
+
+        public static String getCategoryName()
+        {
+           /* if (categoryID == -1)
+                 getResources().getString(R.id.any_category);*/
+            return categoryName;
+        }
+
+        public static void setCategoryName(String categoryName)
+        {
+            QuizConfig.categoryName = categoryName;
         }
 
         public static String getApiBaseURL() {

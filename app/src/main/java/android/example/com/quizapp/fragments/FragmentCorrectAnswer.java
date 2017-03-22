@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import com.itternet.interfaces.Communicator;
@@ -20,7 +21,7 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     private static final String CORRECT_ANSWER = "param1";
 
     Communicator communicator;
-    Button ok;
+    Button okButton;
     private String correctAnswer;
 
 
@@ -40,7 +41,6 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
         if (getArguments() != null)
         {
             correctAnswer = getArguments().getString(CORRECT_ANSWER);
-
         }
     }
 
@@ -49,15 +49,16 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        getDialog().setTitle(R.string.correctAnswerTitle);
-
+        //getDialog().setTitle(R.string.correctAnswerTitle);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View thisView = inflater.inflate(R.layout.fragment_fragment_correct_answer, container, false);
-        ok = (Button) thisView.findViewById(R.id.btnDialogSubmit);
-        TextView tvCorrectAnswer = (TextView)thisView.findViewById(R.id.tvCorrectAnswer);
+        //thisView.setClipToOutline(true);
+        okButton = (Button) thisView.findViewById(R.id.btnDialogSubmit);
+        TextView tvCorrectAnswer = (TextView)thisView.findViewById(R.id.tvDialogCorrectAnswer);
         tvCorrectAnswer.setText(correctAnswer);
         setCancelable(false);
 
-        ok.setOnClickListener(this);
+        okButton.setOnClickListener(this);
         return thisView;
     }
 

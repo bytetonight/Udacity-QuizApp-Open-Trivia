@@ -21,16 +21,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>-->
 
-        <Button
-            android:id="@+id/button1"
-            style="@style/buttons"
-            android:onClick="switchQuizFragment"
-            android:text="@string/btnDisplayMcFragment"/>
-
         <!--<TextView
             android:id="@+id/currQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />-->
+
+        <TextView
+            android:id="@+id/tvCurrentCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/quizCategoryMargin"
+            android:layout_marginBottom="@dimen/quizCategoryMargin"
+            android:text="TextView"
+            />
 
         <FrameLayout
             android:id="@+id/fragment_container"

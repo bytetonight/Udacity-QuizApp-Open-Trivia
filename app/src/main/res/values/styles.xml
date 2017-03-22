@@ -10,10 +10,22 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+
+        <!--- Support library compatibility-->
+        <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
-    <style name="ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:icon">@mipmap/ic_launcher</item>
-       <!-- <item name="background">@drawable/action_bar</item>-->
+        <item name="android:background">@drawable/gradient_not_rounded</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/gradient_not_rounded</item>
+    </style>
+
+    <style name="MyTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">#FFF</item>
+        <!--<item name="android:textStyle">bold</item>-->
     </style>
 
     <!-- Inheritable Commons -->
@@ -33,7 +45,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:visibility">visible</item>
-        <item name="android:background">@color/colorAccent</item>
+       <!-- <item name="android:background">@color/colorAccent</item>-->
     </style>
 
     <style name="logo">
@@ -44,6 +56,9 @@
 
     <style name="mainLayout" parent="@style/FullWidthFullHeight">
         <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/mainBackgroundColor</item>
+        <!--- Support library compatibility-->
+        <item name="background">@color/mainBackgroundColor</item>
     </style>
 
     <style name="buttons" parent="@style/FullWidthWrapHeight">
@@ -71,6 +86,9 @@
     -->
     <style name="CustomDialog" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">false</item>
+        <item name="android:background">@drawable/textview_container</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/textview_container</item>
    </style>
 
     <style name="dialogSubmitButton" parent="@style/gradientButtonText">
@@ -100,18 +118,27 @@
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:textSize">@dimen/questionTextSize</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/questionText</item>
+        <item name="android:background">@drawable/textview_container</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/textview_container</item>
     </style>
 
     <style name="answer_container_vertical" parent="@style/FullWidthWrapHeight">
         <item name="android:layout_below">@id/questionBox</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:padding">4dp</item>
         <item name="android:layout_marginTop">@dimen/answerContainerTopMargin</item>
+        <item name="android:background">@drawable/textview_container</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/textview_container</item>
     </style>
 
     <style name="answer_container_horizontal" parent="@style/FullWidthWrapHeight">
         <item name="android:layout_below">@+id/questionBox</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:layout_marginTop">@dimen/answerContainerTopMargin</item>
+       <!-- <item name="android:layout_marginTop">@dimen/answerContainerTopMargin</item>-->
         <item name="android:layout_alignParentLeft">true</item>
         <!--<item name="android:layout_alignParentStart">true</item>-->
        <item name="android:baselineAligned">false</item>
@@ -136,11 +163,22 @@
     <style name="fragment_multiple_choice_portrait" parent="@style/FullWidthFullHeight">
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/fragmentPadding</item>
+        <!--<item name="android:background">@android:color/holo_blue_dark</item>-->
+
         <!--<item name="android:background">@android:color/holo_blue_bright</item>-->
     </style>
     <style name="fragment_multiple_choice_land" parent="@style/FullWidthFullHeight">
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/fragmentPadding</item>
+        <!--<item name="android:background">@android:color/holo_blue_dark</item>-->
         <!--<item name="android:background">@android:color/holo_blue_bright</item>-->
+    </style>
+    <style name="fragment_correct_answer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/textview_container</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/textview_container</item>
     </style>
 </resources>

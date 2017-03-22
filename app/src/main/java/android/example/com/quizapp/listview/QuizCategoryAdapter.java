@@ -35,9 +35,11 @@ public class QuizCategoryAdapter extends ArrayAdapter
     {
         super(context, resource, objects);
 
-        Collections.sort(objects, new Comparator<QuizCategory>() {
+        Collections.sort(objects, new Comparator<QuizCategory>()
+        {
             @Override
-            public int compare(QuizCategory lhs, QuizCategory rhs) {
+            public int compare(QuizCategory lhs, QuizCategory rhs)
+            {
                 return lhs.getMainCategory().compareTo(rhs.getMainCategory());
             }
         });

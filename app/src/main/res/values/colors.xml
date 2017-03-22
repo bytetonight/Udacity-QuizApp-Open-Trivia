@@ -3,5 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="mainBackgroundColor">#018BCB</color>
     <color name="buttonText">#000</color>
+    <color name="questionText">#000</color>
 </resources>

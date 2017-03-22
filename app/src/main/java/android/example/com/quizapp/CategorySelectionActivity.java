@@ -20,82 +20,86 @@ import java.util.ArrayList;
 
 /**
  * Loads JSON data from assets "manually" as opposed to using retrofit.
- * Populates a custom Adapter with JSON data
+ * Populates ListView by using my custom Array Adapter with JSON data
  * Yes we can
  */
 
 public class CategorySelectionActivity extends AppCompatActivity
 {
-    QuizCategory selectedCategory;
-    String selectedCategoryName;
-    int selectedIndex;
+    private static final String CATEGORIES_JSON = "categories.json";
+    private static final String JSON_ENCODING = "UTF-8";
+    private QuizCategory selectedCategory;
+    //private int selectedIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.category_selection);
+        setContentView(R.layout.activity_category_selection);
 
         //String[] categories = getResources().getStringArray(R.array.categories);
         ArrayList<QuizCategory> qc = loadCategoriesJSON();
 
             
-        QuizCategoryAdapter qca = new QuizCategoryAdapter(CategorySelectionActivity.this,
-                R.layout.template_category_list_item, qc );
+        QuizCategoryAdapter qca = new QuizCategoryAdapter
+        (
+            CategorySelectionActivity.this,
+            R.layout.template_category_list_item, qc
+        );
 
         ListView LvCatNames = (ListView) findViewById(R.id.category_ListView);
         LvCatNames.setAdapter(qca);
 
-        LvCatNames.setOnItemClickListener(
-                new AdapterView.OnItemClickListener()
+        LvCatNames.setOnItemClickListener
+        (
+            new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                 {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                    {
-                        selectedIndex = position;
-                        //selectedCategoryName = String.valueOf(parent.getItemAtPosition(position));
-                        selectedCategory = (QuizCategory) parent.getItemAtPosition(position);
-                        //String catID = String.valueOf(selectedCategory.getCategoryID());
-                        Intent gotoMain = new Intent(CategorySelectionActivity.this, MainActivity.class);
-                        gotoMain.putExtra("categoryID", selectedCategory.getCategoryID());
-                        startActivity(gotoMain);
-                        finish();
-                        //Toast.makeText(CategorySelectionActivity.this, catID, Toast.LENGTH_SHORT).show();
-
-
-                    }
+                    //selectedIndex = position;
+                    //selectedCategoryName = String.valueOf(parent.getItemAtPosition(position));
+                    selectedCategory = (QuizCategory) parent.getItemAtPosition(position);
+                    //String catID = String.valueOf(selectedCategory.getCategoryID());
+                    Intent gotoMain = new Intent(CategorySelectionActivity.this, MainActivity.class);
+                    gotoMain.putExtra("categoryID", selectedCategory.getCategoryID());
+                    gotoMain.putExtra("categoryName", selectedCategory.getMainCategory()+
+                            ": "
+                            +selectedCategory.getSubCategory());
+                    startActivity(gotoMain);
+                    finish();
+                    //Toast.makeText(CategorySelectionActivity.this, catID, Toast.LENGTH_SHORT).show();
                 }
+            }
         );
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        //return super.onOptionsItemSelected(item);
-        int id = item.getItemId();
-        return true;
     }
 
     private ArrayList<QuizCategory> loadCategoriesJSON()
     {
         ArrayList<QuizCategory> categoriesJSON = new ArrayList<>();
         String json = null;
-        try {
-            InputStream is = getAssets().open("categories.json");
+        try
+        {
+            InputStream is = getAssets().open(CATEGORIES_JSON);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
+            json = new String(buffer, JSON_ENCODING);
+        }
+        catch (IOException ex)
+        {
             ex.printStackTrace();
             return null;
         }
-        try {
+
+        try
+        {
             JSONObject obj = new JSONObject(json);
             JSONArray jsonArray = obj.getJSONArray("categories");
 
-            for (int i = 0; i < jsonArray.length(); ++i) {
+            for (int i = 0; i < jsonArray.length(); ++i)
+            {
                 obj = jsonArray.getJSONObject(i);
                 QuizCategory qc = new QuizCategory();
                 qc.setCategoryID(obj.getInt("id"));
@@ -104,7 +108,9 @@ public class CategorySelectionActivity extends AppCompatActivity
 
                 categoriesJSON.add(qc);
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e)
+        {
             e.printStackTrace();
         }
         return categoriesJSON;

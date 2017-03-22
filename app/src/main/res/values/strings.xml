@@ -12,9 +12,14 @@
     <string name="incorrectMessage">The correct answer would have been:\n<b>%1$s</b></string>
     <string name="scoreMessage">You answered %1$d out of %2$d questions <b>correctly</b>.</string>
     <string name="no_selection">Please select an Option</string>
+    <string name="any_category">Random Category</string>
 
     <string name="menu_category_select">Choose Category</string>
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="answer_option_1">Option 1</string>
+    <string name="answer_option_2">Option 2</string>
+    <string name="answer_option_3">Option 3</string>
+    <string name="answer_option_4">Option 4</string>
 </resources>
