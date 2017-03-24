@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/fragmentPadding"
-    tools:context="android.example.com.quizapp.ResultsActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/results_layout"
+              style="@style/resultsActivity"
+               tools:context="android.example.com.quizapp.MainActivity">
+
 
     <TextView
-        android:id="@+id/resultsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:text="@string/scoreMessage"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.502" />
-</android.support.constraint.ConstraintLayout>
+        android:id="@+id/resultsHeader"
+        style="@style/resultsHeader"
+        android:text="@string/resultsHeader"/>
+
+    <TextView
+        android:id="@+id/resultMsg1"
+        style="@style/resultsMsg1"
+        android:text="@string/youAnswered"/>
+
+    <TextView
+        android:id="@+id/resultScore"
+        style="@style/resultScore"
+        android:text="@string/fakeResult"/>
+
+    <TextView
+        android:id="@+id/resultMsg2"
+        style="@style/resultsMsg1"
+        android:text="@string/ofAmount"/>
+
+    <TextView
+        android:id="@+id/resultMsg3"
+        style="@style/resultsMsg1"
+        android:text="@string/questionsCorrectly"/>
+
+    <Button
+        android:id="@+id/btnMoreQuestions"
+        style="@style/resultsButton"
+        android:text="@string/btnMoreQuestions"/>
+
+    <Button
+        android:id="@+id/btnOptions"
+        style="@style/resultsButton"
+        android:text="@string/btnOptions"/>
+
+    <Button
+        android:id="@+id/btnQuit"
+        style="@style/resultsButton"
+        android:text="@string/btnQuit"/>
+
+
+    <!--
+    TODO : perhaps some stats like total questions
+    total unique questions
+    Average score
+    -->
+</LinearLayout>

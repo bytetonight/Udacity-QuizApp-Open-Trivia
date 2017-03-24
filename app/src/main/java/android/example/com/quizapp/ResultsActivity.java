@@ -19,17 +19,22 @@ public class ResultsActivity extends AppCompatActivity {
         if(!extrasBundle.isEmpty())
         {
             // Capture the layout's TextView and set the string as its text
-            TextView textView = (TextView) findViewById(R.id.resultsTextView);
+            TextView scoreTextView = (TextView) findViewById(R.id.resultScore);
+            TextView resultMsg1 = (TextView) findViewById(R.id.resultMsg2);
             int score = extrasBundle.getInt("score");
             int questions = extrasBundle.getInt("questions");
-            textView.setText(String.format(getResources().getString(R.string.scoreMessage), score, questions));
+            scoreTextView.setText(String.valueOf(score));
+            resultMsg1.setText(String.format(getResources().getString(R.string.ofAmount),  questions));
+            //scoreTextView.setText(String.format(getResources().getString(R.string.scoreMessage), score, questions));
         }
     }
 
     @Override
     public void onBackPressed(){
+        if (true)
+            return;
         super.onBackPressed();
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, StartActivity.class));
 
         //finish();
     }

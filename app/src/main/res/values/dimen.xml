@@ -4,8 +4,18 @@
     <dimen name="btnLayoutMargin">0dp</dimen>
     <dimen name="gradBtnPadding">0dp</dimen>
     <dimen name="fragmentPadding">8dp</dimen>
+    <dimen name="padding4">4dp</dimen>
     <dimen name="radioButtonTextSize">16sp</dimen>
     <dimen name="answerContainerTopMargin">20dp</dimen>
     <dimen name="quizCategoryMargin">4dp</dimen>
+    <dimen name="margin16dp">16dp</dimen>
+    <dimen name="margin24dp">24dp</dimen>
+    <dimen name="dialogTextSize">20sp</dimen>
+    <dimen name="minHeight">40dp</dimen>
+    <dimen name="resultsHeader">32sp</dimen>
+    <dimen name="resultMsg123">20sp</dimen>
+    <dimen name="resultScore">80sp</dimen>
+    <dimen name="resultButtonMargin">4dp</dimen>
+    <item name="resultMsgAlpha" format="float" type="dimen">0.5</item>
     <!--<dimen name="animDuration">400</dimen>-->
 </resources>

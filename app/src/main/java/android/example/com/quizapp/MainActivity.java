@@ -56,6 +56,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements Communicator
 {
+    //private Fragment questionFragment;
+    private static final String QUESTION_FRAGMENT_TAG = "questionFragmentTag";
     public static final String CORRECT_ANSWER_DIALOG_TAG = "CADTag";
     public static final String SESSION_TOKEN = "sessionToken";
     public static final String BASE_URL = "baseUrl";
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         if (savedInstanceState != null)
         {
+            //questionFragment = getSupportFragmentManager().findFragmentByTag(QUESTION_FRAGMENT_TAG);
             playerScore = savedInstanceState.getInt(PLAYER_SCORE);
             qListData = savedInstanceState.getParcelable(QUIZ_LIST_DATA);
             displayPlayerScore();
@@ -305,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
      */
     public void switchQuizFragment(View v)
     {
-        Fragment f;
+        Fragment questionFragment;
         String question = "A Blank Question";
         ArrayList<String> choices = new ArrayList<>();
 
@@ -330,16 +333,16 @@ public class MainActivity extends AppCompatActivity implements Communicator
                 }
                 //Randomize Array to not always have the correct answer in the first radio button
                 ShuffleArray.shuffleList(choices);
+                //Log.v("switchFrag","get new Fragment");
+                questionFragment = QuizQuestionFragmentFactory.create(typeOfQuestion, question, choices);
 
-                f = QuizQuestionFragmentFactory.create(typeOfQuestion, question, choices);
-
-                if (f != null)
+                if (questionFragment != null && !questionFragment.isInLayout())
                 {
                     //FragmentManager fm = getFragmentManager();
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
-                    ft.replace(R.id.fragment_container, f);
+                    ft.replace(R.id.fragment_container, questionFragment, QUESTION_FRAGMENT_TAG);
                     ft.commit();
 
                     //QuizConfig.setNextQuestionIndex();
@@ -713,9 +716,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         public static String getCategoryName()
         {
-           /* if (categoryID == -1)
-                 getResources().getString(R.id.any_category);*/
-            return categoryName;
+           return categoryName;
         }
 
         public static void setCategoryName(String categoryName)
@@ -756,14 +757,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
             return correctAnswer;
         }
 
-        public static void setCorrectAnswer(String correctAnswer) {
+        public static void setCorrectAnswer(String correctAnswer)
+        {
             QuizConfig.correctAnswer = correctAnswer;
         }
 
-    /*public static boolean isCorrectAnswer(String answer)
-    {
-        return answer.equals(correctAnswer);
-    }*/
 
         public static int getAmountOfQuestions() {
             return amountOfQuestions;

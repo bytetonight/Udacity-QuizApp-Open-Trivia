@@ -4,5 +4,5 @@
 <item android:id="@+id/nav_categories"
       android:title="@string/menu_category_select"
       android:icon="@drawable/film"
-      app:showAsAction="never"/>
+      app:showAsAction="ifRoom"/>
 </menu>

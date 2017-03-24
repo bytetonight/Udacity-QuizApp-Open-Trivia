@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
-    style="@style/mainLayout"
-    tools:context="android.example.com.quizapp.MainActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/main_layout"
+              style="@style/mainLayout"
+              tools:context="android.example.com.quizapp.MainActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        style="@style/mainActLinearContainer">
 
 
         <ProgressBar
@@ -28,13 +25,7 @@
 
         <TextView
             android:id="@+id/tvCurrentCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/quizCategoryMargin"
-            android:layout_marginBottom="@dimen/quizCategoryMargin"
-            android:text="TextView"
-            />
+            style="@style/currentCategory"/>
 
         <FrameLayout
             android:id="@+id/fragment_container"
@@ -44,4 +35,4 @@
 
 </LinearLayout>
 
-<!--http://www.softicons.com/game-icons/brain-games-icons-by-quizanswers/quiz-games-icon-->
+    <!--http://www.softicons.com/game-icons/brain-games-icons-by-quizanswers/quiz-games-icon-->

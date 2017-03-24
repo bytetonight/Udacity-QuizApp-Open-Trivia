@@ -9,30 +9,15 @@
 
         <TextView
             android:id="@+id/tvDialogTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/correctAnswerTitle"
-            android:textSize="20sp"/>
+            style="@style/dialogTitle"/>
 
         <TextView
             android:id="@+id/tvDialogCorrectAnswer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/hello_blank_fragment"
-            android:textSize="20sp"/>
+            style="@style/dialogAnswer"/>
 
         <Button
             android:id="@+id/btnDialogSubmit"
-            style="@style/dialogSubmitButton"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center"
-            android:text="ok"
-            />
+            style="@style/dialogSubmitButton"/>
     </LinearLayout>
 
 

@@ -63,9 +63,10 @@ public class CategorySelectionActivity extends AppCompatActivity
                     //String catID = String.valueOf(selectedCategory.getCategoryID());
                     Intent gotoMain = new Intent(CategorySelectionActivity.this, MainActivity.class);
                     gotoMain.putExtra("categoryID", selectedCategory.getCategoryID());
-                    gotoMain.putExtra("categoryName", selectedCategory.getMainCategory()+
-                            ": "
-                            +selectedCategory.getSubCategory());
+                    String categoryName = selectedCategory.getMainCategory();
+                    if (selectedCategory.getSubCategory() != null && !selectedCategory.getSubCategory().trim().isEmpty())
+                        categoryName += ": " + selectedCategory.getSubCategory();
+                    gotoMain.putExtra("categoryName", categoryName);
                     startActivity(gotoMain);
                     finish();
                     //Toast.makeText(CategorySelectionActivity.this, catID, Toast.LENGTH_SHORT).show();

@@ -6,6 +6,7 @@ import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        //setRetainInstance(true);
 
         if (savedInstanceState != null)
         {
@@ -82,10 +84,10 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState)
     {
 
+        Log.v("Fragment","onCreateView");
         inflater = getActivity().getLayoutInflater();
         // Inflate the layout for this fragment with the correct layout.xml
-        //(R.layout.fragment_fragment_multiple_choice) is automatically replaced with the layout
-        //matching the current orientation. See comments for this function.
+
         rootView = inflater.inflate(R.layout.fragment_fragment_true_false, container, false);
         //Once inflated, search the Fragment for desired components
         //and set them
@@ -104,7 +106,7 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
             if (realIDstring != null)
             {
                 setRadioSelectionByRealID(realIDstring);
-
+                //Log.v("RadioButton","id -> "+rb.getId());
             }
             rb.setText(Html.fromHtml(item));
             rb.setOnClickListener(this);
@@ -130,12 +132,12 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
 
     public static FragmentTrueFalse newInstance(String question, ArrayList<String> options)
     {
-        FragmentTrueFalse fmc = new FragmentTrueFalse();
+        FragmentTrueFalse ftf = new FragmentTrueFalse();
         Bundle args = new Bundle();
         args.putString(KEY_QUESTION, question);
         args.putStringArrayList(KEY_CHOICES, options);
-        fmc.setArguments(args);
-        return fmc;
+        ftf.setArguments(args);
+        return ftf;
     }
 
     @Override
