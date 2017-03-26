@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/results_layout"
+              style="@style/resultsActivity_land"
+
+              tools:context="android.example.com.quizapp.MainActivity">
+
+
+    <LinearLayout
+        style="@style/resultActivity_landCol">
+
+        <TextView
+            android:id="@+id/resultsHeader"
+            style="@style/resultsHeader"
+            android:text="@string/resultsHeader"/>
+
+        <TextView
+            android:id="@+id/resultMsg1"
+            style="@style/resultsMsg1"
+            android:text="@string/youAnswered"/>
+
+        <TextView
+            android:id="@+id/resultScore"
+            style="@style/resultScore"
+            android:text="@string/fakeResult"/>
+
+        <TextView
+            android:id="@+id/resultMsg2"
+            style="@style/resultsMsg1"
+            android:text="@string/ofAmount"/>
+
+        <TextView
+            android:id="@+id/resultMsg3"
+            style="@style/resultsMsg1"
+            android:text="@string/questionsCorrectly"/>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/resultActivity_landCol">
+
+        <Button
+            android:id="@+id/btnMoreQuestions"
+            style="@style/resultsButton"
+            android:onClick="onClickAction"
+            android:tag="MORE_QUESTIONS"
+            android:text="@string/btnMoreQuestions"/>
+
+        <Button
+            android:id="@+id/btnOptions"
+            style="@style/resultsButton"
+            android:onClick="onClickAction"
+            android:tag="OPTIONS"
+            android:text="@string/btnOptions"/>
+
+        <Button
+            android:id="@+id/btnQuit"
+            style="@style/resultsButton"
+            android:onClick="onClickAction"
+            android:tag="QUIT"
+            android:text="@string/btnQuit"/>
+
+    </LinearLayout>
+    <!--
+    TODO : perhaps some stats like total questions
+    total unique questions
+    Average score
+    -->
+</LinearLayout>

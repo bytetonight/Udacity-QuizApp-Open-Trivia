@@ -221,6 +221,20 @@
         <item name="android:padding">4dp</item>
     </style>
 
+    <style name="resultsActivity_land" parent="@style/mainLayout">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:weightSum">2</item>
+    </style>
+
+    <style name="resultActivity_landCol">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
     <style name="resultsHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
