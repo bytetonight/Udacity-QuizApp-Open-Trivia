@@ -3,43 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/FullWidthFullHeight"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="4dp">
+    style="@style/categories_ListView_Item">
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        style="@style/WrapBoth">
 
         <ImageView
             android:id="@+id/ivImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            style="@style/categories_ListView_Item_Image"
             app:srcCompat="@drawable/knowledge"/>
 
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="4dp">
+        style="@style/categories_ListView_Item_Text_Container">
 
         <TextView
             android:id="@+id/tvMainCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView"
-            android:textStyle="bold"/>
+            style="@style/categories_ListView_Item_Header"
+            android:text="@string/textView"
+            />
 
         <TextView
             android:id="@+id/tvSubCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView"/>
+            style="@style/categories_ListView_Item_Sub"
+            android:text="@string/textView"/>
     </LinearLayout>
 
 </LinearLayout>

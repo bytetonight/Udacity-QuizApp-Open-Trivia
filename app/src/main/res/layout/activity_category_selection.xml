@@ -2,21 +2,18 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/FullWidthFullHeight"
-    android:padding="@dimen/fragmentPadding"
-    android:orientation="vertical"
+    style="@style/category_selection"
     tools:context="android.example.com.quizapp.CategorySelectionActivity">
 
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/bla"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/select_a_category"/>
+        style="@style/categories_header"
+        android:text="@string/select_a_category"/>-->
 
     <ListView
         android:id="@+id/category_ListView"
-        style="@style/FullWidthWrapHeight"></ListView>
+        style="@style/categories_listView"></ListView>
 
 
 </LinearLayout>
