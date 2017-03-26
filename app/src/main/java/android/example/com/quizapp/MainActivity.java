@@ -200,9 +200,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
         switch(item.getItemId())
         {
             case R.id.nav_categories:
-                targetIntent = new Intent(MainActivity.this, CategorySelectionActivity.class);
+                targetIntent = new Intent(MainActivity.this, StartActivity.class);
                 startActivity(targetIntent);
-                finish(); //Finishes the current Activity but I should better reset than finish
+                this.finish(); //Finishes the current Activity but I should better reset than finish
                 return true;
         }
         return super.onOptionsItemSelected(item);

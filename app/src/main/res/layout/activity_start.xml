@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#2F95FB"
-    >
+                style="@style/startActivity">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:adjustViewBounds="true"
-        android:src="@drawable/open_trivia"/>
+        style="@style/startActivityImage"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-        android:padding="@dimen/fragmentPadding">
+                  style="@style/startActivityTopButtonContainer">
+
         <Button
 
             style="@style/resultsButton"
-            android:text="Select Category"
-            android:onClick="openCategorySelection"/>
+            android:onClick="openCategorySelection"
+            android:text="@string/select_a_category"/>
 
         <Button
             style="@style/resultsButton"
-            android:text="Start Quiz"
-            android:onClick="openQuiz"/>
+            android:onClick="openQuiz"
+            android:text="@string/start_quiz"/>
+
+
     </LinearLayout>
 
+    <Button
+        style="@style/quitButton_Start"
+        android:onClick="quitApp"
+        android:text="@string/btnQuit"/>
 </RelativeLayout>

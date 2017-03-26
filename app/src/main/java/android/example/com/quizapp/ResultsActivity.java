@@ -68,13 +68,25 @@ public class ResultsActivity extends AppCompatActivity {
         if (view instanceof Button)
         {
             Button b = (Button) view;
+            Intent targetIntent;
             switch (b.getTag().toString())
             {
                 case "MORE_QUESTIONS":
-                    break;
+                    targetIntent = new Intent(ResultsActivity.this, MainActivity.class);
+                    startActivity(targetIntent);
+                    finish();
+                break;
+
                 case "OPTIONS":
+                    targetIntent = new Intent(ResultsActivity.this, StartActivity.class);
+                    startActivity(targetIntent);
+                    finish();
                     break;
                 case "QUIT":
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     break;
             }
         }

@@ -3,6 +3,6 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 <item android:id="@+id/nav_categories"
       android:title="@string/menu_category_select"
-      android:icon="@drawable/film"
+      android:icon="@android:drawable/ic_input_delete"
       app:showAsAction="ifRoom"/>
 </menu>
