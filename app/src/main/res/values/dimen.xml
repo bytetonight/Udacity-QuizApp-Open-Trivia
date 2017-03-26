@@ -15,7 +15,7 @@
     <dimen name="resultsHeader">32sp</dimen>
     <dimen name="resultMsg123">20sp</dimen>
     <dimen name="resultScore">80sp</dimen>
-    <dimen name="resultButtonMargin">4dp</dimen>
+    <dimen name="resultButtonMargin">8dp</dimen>
 
     <!-- This is a special one allowing for floating point values -->
     <item name="resultMsgAlpha" format="float" type="dimen">0.5</item>

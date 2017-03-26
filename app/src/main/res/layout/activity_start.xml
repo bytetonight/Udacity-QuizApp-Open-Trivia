@@ -27,4 +27,5 @@
         style="@style/quitButton_Start"
         android:onClick="quitApp"
         android:text="@string/btnQuit"/>
+
 </RelativeLayout>
