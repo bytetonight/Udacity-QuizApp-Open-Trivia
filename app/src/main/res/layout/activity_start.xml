@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Select Category"
-    android:onClick="openCategorySelection"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#2F95FB"
+    >
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Quiz"
-        android:onClick="openQuiz"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+
+        android:adjustViewBounds="true"
+        android:src="@drawable/open_trivia"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+        android:padding="@dimen/fragmentPadding">
+        <Button
+
+            style="@style/resultsButton"
+            android:text="Select Category"
+            android:onClick="openCategorySelection"/>
+
+        <Button
+            style="@style/resultsButton"
+            android:text="Start Quiz"
+            android:onClick="openQuiz"/>
+    </LinearLayout>
+
+</RelativeLayout>

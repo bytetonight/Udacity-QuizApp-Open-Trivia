@@ -244,6 +244,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/resultMsg123</item>
         <item name="android:alpha">@dimen/resultMsgAlpha</item>
+        <item name="android:layout_marginBottom">@dimen/padding4</item>
    </style>
 
     <style name="resultsButton" parent="submitButton">

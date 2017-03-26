@@ -7,6 +7,7 @@ package android.example.com.quizapp;
  *  through a free for commercial use API maintained by PIXELTAIL GAMES LLC
  */
 
+import android.content.DialogInterface;
 import android.example.com.quizapp.fragments.FragmentCorrectAnswer;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
@@ -43,7 +45,11 @@ import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
 import com.itternet.models.QuizSessionTokenReset;
 import com.itternet.models.Result;
+
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import de.vogella.algorithms.shuffle.ShuffleArray;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -226,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
 
         okHTTPClientBuilder.addInterceptor(loggingInterceptor);
-
+        okHTTPClientBuilder.connectTimeout(QuizConfig.getQuizTimeout(), TimeUnit.SECONDS);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(QuizConfig.getApiBaseURL())
                 //.baseUrl(getResources().getString(R.string.api_base_url))
@@ -453,7 +459,13 @@ public class MainActivity extends AppCompatActivity implements Communicator
             @Override
             public void onFailure(Call<QuizSessionToken> call, Throwable t)
             {
+                if (pDialog != null && pDialog.isShowing())
+                    pDialog.dismiss();
 
+                if (t instanceof SocketTimeoutException)
+                {
+                    showTimeOutDialog();
+                }
             }
         });
     }
@@ -543,10 +555,44 @@ public class MainActivity extends AppCompatActivity implements Communicator
             @Override
             public void onFailure(Call<QuestionsListData> call, Throwable t)
             {
+                Log.v("loadQuizQuestion","Failure "+t.getMessage());
+
+                if (pDialog != null && pDialog.isShowing())
+                    pDialog.dismiss();
+
+                if (t instanceof SocketTimeoutException)
+                {
+                    showTimeOutDialog();
+                }
 
             }
         });
     }
+
+
+    public void showTimeOutDialog()
+    {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(String.format(getResources().getString(R.string.error_timeout),  QuizConfig.getQuizTimeout()))
+                .setTitle(R.string.error_header);
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int id)
+            {
+                // User clicked OK button
+                runStartActivity();
+            }
+        });
+
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     /**
      * Evaluates the User's answer from the Question Fragment, processes score, and calls next
@@ -594,6 +640,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
             resultsIntent.putExtras(passData);
             startActivity(resultsIntent);
         }
+    }
+
+    public void runStartActivity()
+    {
+        startActivity(new Intent(MainActivity.this, StartActivity.class));
     }
 
     /**
@@ -679,6 +730,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
 
     private static class QuizConfig {
+        private static int quizTimeout = 30;
         private static int categoryID = -1; //Getter returns Integer because it needs to be nullable at times
         private static String categoryName = "";
         private static String apiBaseURL;
@@ -696,6 +748,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         public static void setSessionToken(String sessionToken) {
             QuizConfig.sessionToken = sessionToken;
+        }
+
+        public static int getQuizTimeout()
+        {
+            return quizTimeout;
         }
 
         /**

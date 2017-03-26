@@ -143,7 +143,7 @@ public class FragmentMultipleChoice extends Fragment implements View.OnClickList
     {
         if (view instanceof RadioButton)
         {
-            if (checkedRadioID != -1)
+            if (checkedRadioID != -1 && checkedRadioID != view.getId())
             {
                 RadioButton rb = (RadioButton) rootView.findViewById(checkedRadioID);
                 if (rb != null)

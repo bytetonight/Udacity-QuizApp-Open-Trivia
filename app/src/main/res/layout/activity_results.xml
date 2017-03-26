@@ -34,17 +34,23 @@
     <Button
         android:id="@+id/btnMoreQuestions"
         style="@style/resultsButton"
-        android:text="@string/btnMoreQuestions"/>
+        android:text="@string/btnMoreQuestions"
+        android:onClick="onClickAction"
+        android:tag="MORE_QUESTIONS"/>
 
     <Button
         android:id="@+id/btnOptions"
         style="@style/resultsButton"
-        android:text="@string/btnOptions"/>
+        android:text="@string/btnOptions"
+        android:onClick="onClickAction"
+        android:tag="OPTIONS"/>
 
     <Button
         android:id="@+id/btnQuit"
         style="@style/resultsButton"
-        android:text="@string/btnQuit"/>
+        android:text="@string/btnQuit"
+        android:onClick="onClickAction"
+        android:tag="QUIT"/>
 
 
     <!--

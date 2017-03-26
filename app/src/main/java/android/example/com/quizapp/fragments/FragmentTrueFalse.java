@@ -145,7 +145,7 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
     {
         if (view instanceof RadioButton)
         {
-            if (checkedRadioID != -1)
+            if (checkedRadioID != -1 && checkedRadioID != view.getId())
             {
                 RadioButton rb = (RadioButton) rootView.findViewById(checkedRadioID);
                 if (rb != null)

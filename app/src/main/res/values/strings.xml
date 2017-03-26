@@ -32,4 +32,15 @@
     <string name="btnMoreQuestions">Try more questions</string>
     <string name="btnOptions">Options</string>
     <string name="btnQuit">Quit</string>
+
+    <string name="score_perfect">Perfect !</string>
+    <string name="score_awesome">Awesome !</string>
+    <string name="score_congrats">Congratulations !</string>
+    <string name="score_wellDone">Well done !</string>
+    <string name="score_nice">Nice !</string>
+    <string name="score_notBad">Not bad !</string>
+    <string name="score_oops">Oops !</string>
+
+    <string name="error_header">Error</string>
+    <string name="error_timeout">Failed to connect to Server after %1$d seconds.\nPlease check your connection and/or try again later.</string>
 </resources>
