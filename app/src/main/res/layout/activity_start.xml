@@ -21,7 +21,19 @@
             android:text="@string/start_quiz"/>
 
 
+
+        <!--<ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/imageView1"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/imageView2"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/imageView3"/>-->
     </LinearLayout>
+
+
 
     <Button
         style="@style/quitButton_Start"

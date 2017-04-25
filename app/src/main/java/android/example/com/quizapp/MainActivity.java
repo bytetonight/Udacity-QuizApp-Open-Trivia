@@ -8,7 +8,10 @@ package android.example.com.quizapp;
  */
 
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.example.com.quizapp.fragments.FragmentCorrectAnswer;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +63,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.R.attr.name;
+
 
 public class MainActivity extends AppCompatActivity implements Communicator
 {
@@ -80,6 +86,39 @@ public class MainActivity extends AppCompatActivity implements Communicator
     private TextView scoreField;
 
 
+    /**
+     *
+     * @param name : The name of the drawable you want to fetch, example image1, image2 etc.
+     * @return a drawable or null if not found
+     */
+    private Drawable getDrawableByName(String name)
+    {
+        try
+        {
+            Resources resources = getResources();
+            int resourceId = resources.getIdentifier(name, "drawable", getPackageName());
+            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            {
+                return resources.getDrawable(resourceId);
+            }
+            return resources.getDrawable(resourceId, getTheme());
+        }
+        catch (Resources.NotFoundException e)
+        {
+            return null;
+        }
+    }
+
+    private void setImages()
+    {
+        Resources resources = getResources();
+
+        for (int i = 1; i <= 5; ++i)
+        {
+            ImageView currentimageView = (ImageView) findViewById(getResources().getIdentifier("imageView_"+ i, "id", getPackageName()));
+            currentimageView.setImageResource(resources.getIdentifier("myImage"+ i , "drawable", getPackageName()));
+        }
+    }
 
 //region Events
     @Override
