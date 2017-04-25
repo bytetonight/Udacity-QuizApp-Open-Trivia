@@ -1,6 +1,7 @@
 package android.example.com.quizapp.fragments;
 
 import android.app.Activity;
+import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -38,6 +39,7 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        communicator = (Communicator) getActivity();
         if (getArguments() != null)
         {
             correctAnswer = getArguments().getString(CORRECT_ANSWER);
@@ -73,12 +75,12 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
         }
     }
 
-    @Override
+    /*@Override
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
         communicator = (Communicator) activity;
-    }
+    }*/
 
 
 }
