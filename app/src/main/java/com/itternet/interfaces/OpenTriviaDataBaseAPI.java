@@ -1,7 +1,5 @@
 package com.itternet.interfaces;
 
-import android.example.com.quizapp.MainActivity;
-
 import com.itternet.models.QuestionsListData;
 import com.itternet.models.QuizSessionToken;
 import com.itternet.models.QuizSessionTokenReset;
@@ -14,7 +12,8 @@ import retrofit2.http.Query;
  * Created by dns on 04.03.2017.
  */
 
-public interface OpenTriviaDataBaseAPI {
+public interface OpenTriviaDataBaseAPI
+{
     @GET("api_token.php?command=reset")
     Call<QuizSessionTokenReset> resetToken(@Query("token") String token);
 
@@ -22,5 +21,9 @@ public interface OpenTriviaDataBaseAPI {
     Call<QuizSessionToken> getQuizSessionToken();
 
     @GET("api.php")
-    Call<QuestionsListData> getQuizQuestions(@Query("category") Integer category, @Query("amount") int amount, @Query("token") String token, @Query("difficulty") String difficulty, @Query("type") String type);
+    Call<QuestionsListData> getQuizQuestions(@Query("category") Integer category,
+                                             @Query("amount") int amount,
+                                             @Query("token") String token,
+                                             @Query("difficulty") String difficulty,
+                                             @Query("type") String type);
 }

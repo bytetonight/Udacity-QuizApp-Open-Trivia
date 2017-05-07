@@ -1,7 +1,5 @@
 package android.example.com.quizapp.fragments;
 
-import android.app.Activity;
-import android.example.com.quizapp.MainActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -51,10 +49,9 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        //getDialog().setTitle(R.string.correctAnswerTitle);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View thisView = inflater.inflate(R.layout.fragment_fragment_correct_answer, container, false);
-        //thisView.setClipToOutline(true);
+
         okButton = (Button) thisView.findViewById(R.id.btnDialogSubmit);
         TextView tvCorrectAnswer = (TextView)thisView.findViewById(R.id.tvDialogCorrectAnswer);
         tvCorrectAnswer.setText(correctAnswer);
@@ -74,14 +71,5 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
             dismiss();
         }
     }
-
-    /*@Override
-    public void onAttach(Activity activity)
-    {
-        super.onAttach(activity);
-        communicator = (Communicator) activity;
-    }*/
-
-
 }
 

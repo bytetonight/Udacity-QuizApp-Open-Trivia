@@ -7,5 +7,4 @@ package com.itternet.interfaces;
 public interface Communicator
 {
     void onDialogMessage(String msg);
-
 }

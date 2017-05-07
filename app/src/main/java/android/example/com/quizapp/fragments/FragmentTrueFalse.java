@@ -1,11 +1,9 @@
 package android.example.com.quizapp.fragments;
 
-//import android.app.Fragment;
 import android.support.v4.app.Fragment;
-import android.example.com.quizapp.MainActivity;
+import android.example.com.quizapp.QuizActivity;
 import android.example.com.quizapp.R;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +13,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.itternet.interfaces.Questionable;
+import com.itternet.utils.Utils;
 
 import java.util.ArrayList;
-
-//import android.support.v4.app.Fragment;
 
 
 /**
@@ -29,7 +26,7 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
 
     private  View rootView;
     private int checkedRadioID = -1;
-    private String realIDstring;
+    private String realIdString;
     private String question;
     private ArrayList<String> choices;
     private Button submitButton;
@@ -39,11 +36,10 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //setRetainInstance(true);
 
         if (savedInstanceState != null)
         {
-            realIDstring = savedInstanceState.getString(KEY_REAL_ID_STRING, null);
+            realIdString = savedInstanceState.getString(KEY_REAL_ID_STRING, null);
         }
         // Get back arguments
         Bundle b = this.getArguments();
@@ -62,7 +58,7 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_REAL_ID_STRING, realIDstring);
+        outState.putString(KEY_REAL_ID_STRING, realIdString);
     }
 
 
@@ -94,7 +90,7 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
         submitButton = (Button) rootView.findViewById(R.id.btnSubmit);
         submitButton.setOnClickListener(this);
         TextView questionBox = (TextView) rootView.findViewById(R.id.questionBox);
-        questionBox.setText(Html.fromHtml(question));
+        questionBox.setText(Utils.fromHtml(question));
 
         String packageName = getActivity().getPackageName();
 
@@ -103,30 +99,17 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
         {
             RadioButton rb = (RadioButton) rootView.findViewById(getResources()
                     .getIdentifier("radioBtn" + counter, "id", packageName));
-            if (realIDstring != null)
+            if (realIdString != null)
             {
-                setRadioSelectionByRealID(realIDstring);
+                setRadioSelectionByRealID(realIdString);
                 //Log.v("RadioButton","id -> "+rb.getId());
             }
-            rb.setText(Html.fromHtml(item));
+            rb.setText(Utils.fromHtml(item));
             rb.setOnClickListener(this);
             ++counter;
         }
 
-        //Yet Another Interesting Find :
-        //View States are saved/restored internally by Android  BUT ...
-        //If these RadioButtons have no id, the selected state will not
-        //survive orientation changes
-        /*int counter = 1;
-        for (String item : choices)
-        {
-            //http://belencruz.com/2013/04/set-styles-programmatically-in-android/
-            RadioButton rb = (RadioButton) inflater.inflate(R.layout.template_radiobutton, null);
-            rb.setId(100 + counter);
-            rb.setText(Html.fromHtml(item));
-            radioChoices.addView(rb);
-            ++counter;
-        }*/
+
         return rootView;
     }
 
@@ -152,8 +135,8 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
                     rb.setChecked(false);
             }
             checkedRadioID = view.getId();
-            realIDstring = getResources().getResourceName(checkedRadioID);
-            //((MainActivity) getActivity()).prepareToast(realIDstring);
+            realIdString = getResources().getResourceName(checkedRadioID);
+            //((MainActivity) getActivity()).prepareToast(realIdString);
             return;
         }
 
@@ -164,16 +147,15 @@ public class FragmentTrueFalse extends Fragment implements View.OnClickListener,
             //Disable button after a successful submission to prevent multiple
             // submissions from click-happy-users
             submitButton.setEnabled(false);
-            String radiovalue = getCheckedText();
+            String radioValue = getCheckedText();
 
             //Call onFragmentSubmit method in MainActivity
-            ((MainActivity) getActivity()).onFragmentSubmit(radiovalue);
+            ((QuizActivity) getActivity()).onFragmentSubmit(radioValue);
         }
         else
         {
-            ((MainActivity) getActivity()).playSound(R.raw.no_selection);
-            ((MainActivity) getActivity()).prepareToast(getResources().getText(R.string.no_selection).toString());
-            //Toast.makeText(this.getActivity(), getResources().getText(R.string.no_selection), Toast.LENGTH_LONG).show();
+            ((QuizActivity) getActivity()).playSound(R.raw.no_selection);
+            ((QuizActivity) getActivity()).prepareToast(getResources().getText(R.string.no_selection).toString());
         }
     }
 

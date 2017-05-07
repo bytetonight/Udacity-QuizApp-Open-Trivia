@@ -1,6 +1,5 @@
 package com.itternet;
 
-//import android.app.Fragment;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
@@ -14,18 +13,8 @@ import android.example.com.quizapp.fragments.FragmentTrueFalse;
 
 public class QuizQuestionFragmentFactory
 {
-    //private static Map<String, Fragment> qFragments = new HashMap<String, Fragment>();
-
-
-
     public static Fragment create(String type, String question, ArrayList<String> choices)
     {
-        /*if (qFragments.isEmpty())
-        {
-            qFragments.put("multiple", FragmentMultipleChoice.newInstance(question, choices));
-            qFragments.put("boolean", FragmentTrueFalse.newInstance(question, choices));
-        }
-        return qFragments.get("type");*/
         switch(type)
         {
             case "multiple":

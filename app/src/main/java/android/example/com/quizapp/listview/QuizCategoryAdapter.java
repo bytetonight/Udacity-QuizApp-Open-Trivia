@@ -59,8 +59,8 @@ public class QuizCategoryAdapter extends ArrayAdapter
         public MyViewHolder(View v)
         {
             categoryImage = (ImageView) v.findViewById(R.id.ivImage);
-            categoryMain  = (TextView) v.findViewById(R.id.tvMainCategory);
-            categorySub  = (TextView) v.findViewById(R.id.tvSubCategory);
+            categoryMain = (TextView) v.findViewById(R.id.tvMainCategory);
+            categorySub = (TextView) v.findViewById(R.id.tvSubCategory);
         }
     }
 
@@ -87,8 +87,6 @@ public class QuizCategoryAdapter extends ArrayAdapter
 
         return convertView;
     }
-
-
 }
 
 

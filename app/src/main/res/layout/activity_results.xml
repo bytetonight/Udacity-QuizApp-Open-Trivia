@@ -3,7 +3,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:id="@+id/results_layout"
               style="@style/resultsActivity"
-               tools:context="android.example.com.quizapp.MainActivity">
+               tools:context="android.example.com.quizapp.QuizActivity">
 
 
     <TextView
@@ -19,12 +19,12 @@
     <TextView
         android:id="@+id/resultScore"
         style="@style/resultScore"
-        android:text="@string/fakeResult"/>
+        tools:text="@string/fakeResult"/>
 
     <TextView
         android:id="@+id/resultMsg2"
         style="@style/resultsMsg1"
-        android:text="@string/ofAmount"/>
+        tools:text="@string/ofAmount"/>
 
     <TextView
         android:id="@+id/resultMsg3"

@@ -1,11 +1,12 @@
 package android.example.com.quizapp;
 
 import android.content.Intent;
+
 import com.itternet.models.QuizCategory;
+
 import android.example.com.quizapp.listview.QuizCategoryAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -37,14 +38,12 @@ public class CategorySelectionActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_selection);
 
-        //String[] categories = getResources().getStringArray(R.array.categories);
         ArrayList<QuizCategory> qc = loadCategoriesJSON();
 
-            
         QuizCategoryAdapter qca = new QuizCategoryAdapter
         (
-            CategorySelectionActivity.this,
-            R.layout.template_category_list_item, qc
+                CategorySelectionActivity.this,
+                R.layout.template_category_list_item, qc
         );
 
         ListView LvCatNames = (ListView) findViewById(R.id.category_ListView);
@@ -61,10 +60,11 @@ public class CategorySelectionActivity extends AppCompatActivity
                     //selectedCategoryName = String.valueOf(parent.getItemAtPosition(position));
                     selectedCategory = (QuizCategory) parent.getItemAtPosition(position);
                     //String catID = String.valueOf(selectedCategory.getCategoryID());
-                    Intent gotoMain = new Intent(CategorySelectionActivity.this, MainActivity.class);
+                    Intent gotoMain = new Intent(CategorySelectionActivity.this, QuizActivity.class);
                     gotoMain.putExtra("categoryID", selectedCategory.getCategoryID());
                     String categoryName = selectedCategory.getMainCategory();
-                    if (selectedCategory.getSubCategory() != null && !selectedCategory.getSubCategory().trim().isEmpty())
+                    if (selectedCategory.getSubCategory() != null &&
+                            !selectedCategory.getSubCategory().trim().isEmpty())
                         categoryName += ": " + selectedCategory.getSubCategory();
                     gotoMain.putExtra("categoryName", categoryName);
                     startActivity(gotoMain);
@@ -105,7 +105,8 @@ public class CategorySelectionActivity extends AppCompatActivity
                 QuizCategory qc = new QuizCategory();
                 qc.setCategoryID(obj.getInt("id"));
                 qc.setMainCategory(obj.getString("name"));
-                qc.setImage(getResources().getIdentifier(obj.getString("img"), "drawable", getPackageName()));
+                qc.setImage(getResources().getIdentifier(obj.getString("img"),
+                        "drawable", getPackageName()));
 
                 categoriesJSON.add(qc);
             }

@@ -4,7 +4,7 @@
               android:id="@+id/results_layout"
               style="@style/resultsActivity_land"
 
-              tools:context="android.example.com.quizapp.MainActivity">
+              tools:context="android.example.com.quizapp.QuizActivity">
 
 
     <LinearLayout

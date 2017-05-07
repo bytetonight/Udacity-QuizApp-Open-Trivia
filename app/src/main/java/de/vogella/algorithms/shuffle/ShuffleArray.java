@@ -1,10 +1,14 @@
 package de.vogella.algorithms.shuffle;
 
+
 import java.util.List;
 import java.util.Random;
 
 /**
  * Created by dns on 07.03.2017.
+ * It's a shame that a lot of the n00bs in the course don't mention the source of code
+ * they obviously didn't create themselves and don't even bother to credit the original makers.
+ * The code below was taken from de.vogella.algorithms.shuffle
  */
 
 public class ShuffleArray {
@@ -24,7 +28,4 @@ public class ShuffleArray {
         a.set(i, a.get(change));
         a.set(change, helper);
     }
-
-
-
 }
