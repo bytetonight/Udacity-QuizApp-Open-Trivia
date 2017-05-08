@@ -39,7 +39,7 @@ public class OptionsActivity extends AppCompatActivity
         TextView currentCategory = (TextView)findViewById(R.id.tvCurrentCategory);
 
 
-        int lastSelectedValue = 1;
+        int lastSelectedValue = 10;
         String temp = Utils.readStringFromPreferences(OptionsActivity.this, Utils.NUMBER_OF_QUESTIONS);
         if ( null != temp && !temp.isEmpty())
             lastSelectedValue = Integer.parseInt(temp);

@@ -820,7 +820,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
         public static String getDifficulty()
         {
-            if (difficulty.equals("any"))
+            if (difficulty != null && difficulty.equals("any"))
                 return null;
             return difficulty;
         }

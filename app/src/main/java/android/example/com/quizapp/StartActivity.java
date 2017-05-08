@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.itternet.utils.Utils;
+
 
 public class StartActivity extends AppCompatActivity
 {
@@ -14,6 +16,7 @@ public class StartActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        setDefaults();
     }
 
     public void openOptionsActivity(View view)
@@ -36,5 +39,10 @@ public class StartActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-
+    private void setDefaults()
+    {
+        String temp = Utils.readStringFromPreferences(StartActivity.this, Utils.NUMBER_OF_QUESTIONS);
+        if ( null == temp )
+            Utils.writeStringToPreferences(StartActivity.this, Utils.NUMBER_OF_QUESTIONS, "10");
+    }
 }
