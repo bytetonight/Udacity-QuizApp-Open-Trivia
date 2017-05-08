@@ -25,4 +25,9 @@
     <color name="blue">#0000FF</color>
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
+
+    <color name="getBarColor">#3796b9</color>
+    <color name="getBarHighlightColor">@color/aqua</color>
+    <color name="getLeftThumbColor">@color/startActivityBackGround</color>
+    <color name="getLeftThumbColorPressed">@color/fuchsia</color>
 </resources>

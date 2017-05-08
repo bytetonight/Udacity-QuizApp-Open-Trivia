@@ -12,8 +12,8 @@
         <Button
 
             style="@style/resultsButton"
-            android:onClick="openCategorySelection"
-            android:text="@string/select_a_category"/>
+            android:onClick="openOptionsActivity"
+            android:text="@string/btnOptions"/>
 
         <Button
             style="@style/resultsButton"
@@ -22,15 +22,7 @@
 
 
 
-        <!--<ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/imageView1"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/imageView2"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/imageView3"/>-->
+
     </LinearLayout>
 
 

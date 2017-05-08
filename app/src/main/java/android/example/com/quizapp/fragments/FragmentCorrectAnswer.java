@@ -52,7 +52,7 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View thisView = inflater.inflate(R.layout.fragment_fragment_correct_answer, container, false);
 
-        okButton = (Button) thisView.findViewById(R.id.btnDialogSubmit);
+        okButton = (Button) thisView.findViewById(R.id.btnConfirmCorrectAnswer);
         TextView tvCorrectAnswer = (TextView)thisView.findViewById(R.id.tvDialogCorrectAnswer);
         tvCorrectAnswer.setText(correctAnswer);
         setCancelable(false);
@@ -64,9 +64,10 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     @Override
     public void onClick(View v)
     {
-        if (v.getId() == R.id.btnDialogSubmit)
+        if (v.getId() == R.id.btnConfirmCorrectAnswer)
         {
-            //onDialogMessage will trigger in MainActivity upon which the next question is displayed
+            //onDialogMessage will fire in Activity that implements Communicator
+            //upon which the next question is displayed
             communicator.onDialogMessage("OK");
             dismiss();
         }

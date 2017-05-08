@@ -60,7 +60,7 @@ public class CategorySelectionActivity extends AppCompatActivity
                     //selectedCategoryName = String.valueOf(parent.getItemAtPosition(position));
                     selectedCategory = (QuizCategory) parent.getItemAtPosition(position);
                     //String catID = String.valueOf(selectedCategory.getCategoryID());
-                    Intent gotoMain = new Intent(CategorySelectionActivity.this, QuizActivity.class);
+                    Intent gotoMain = new Intent(CategorySelectionActivity.this, OptionsActivity.class);
                     gotoMain.putExtra("categoryID", selectedCategory.getCategoryID());
                     String categoryName = selectedCategory.getMainCategory();
                     if (selectedCategory.getSubCategory() != null &&

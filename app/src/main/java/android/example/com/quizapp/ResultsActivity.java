@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,9 +45,15 @@ public class ResultsActivity extends AppCompatActivity
             TextView resultMsg1 = (TextView) findViewById(R.id.resultMsg2);
             TextView resultsHeader = (TextView) findViewById(R.id.resultsHeader);
 
-            int score = extrasBundle.getInt("score");
+            int correctAnswers = extrasBundle.getInt("score");
             int questions = extrasBundle.getInt("questions");
-            scoreTextView.setText(String.valueOf(score));
+            assert correctAnswers <= questions : "Cannot have more answers than questions";
+            int score = (int)(correctAnswers/(float)questions * 10);
+            if (score > 10)
+            {
+                score = 10;
+            }
+            scoreTextView.setText(String.valueOf(correctAnswers));
             resultMsg1.setText(String.format(getResources().getString(R.string.ofAmount), questions));
             resultsHeader.setText(getString(scoreHeaders[score]));
 
@@ -54,7 +61,7 @@ public class ResultsActivity extends AppCompatActivity
             Toast.makeText(this,
                     getString(scoreHeaders[score]) + "\n" +
                     getString(R.string.youAnswered) + "\n" +
-                    String.valueOf(score)+ "\n" +
+                    String.valueOf(correctAnswers)+ "\n" +
                     String.format(getResources().getString(R.string.ofAmount), questions)+ "\n" +
                     getString(R.string.questionsCorrectly)
                     ,Toast.LENGTH_LONG ).show();
@@ -84,7 +91,7 @@ public class ResultsActivity extends AppCompatActivity
                     break;
 
                 case "OPTIONS":
-                    targetIntent = new Intent(ResultsActivity.this, StartActivity.class);
+                    targetIntent = new Intent(ResultsActivity.this, OptionsActivity.class);
                     startActivity(targetIntent);
                     finish();
                     break;

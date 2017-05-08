@@ -1,7 +1,13 @@
 package com.itternet.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.example.com.quizapp.R;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
+
+import static android.R.attr.key;
 
 /**
  * Created by ByteTonight on 07.05.2017.
@@ -9,6 +15,11 @@ import android.text.Spanned;
 
 public class Utils
 {
+
+    public static final String NUMBER_OF_QUESTIONS = "NumberOfQuestions";
+    public static final String DIFFICULTY = "difficulty";
+    public static final String CATEGORY_ID = "categoryID";
+    public static final String CATEGORY_NAME = "categoryName";
 
     /**
      * Yet another deprecation in Android-N to work around
@@ -28,5 +39,40 @@ public class Utils
             result = Html.fromHtml(html);
         }
         return result;
+    }
+
+
+    /**
+     * Store key,value pairs in Android Shared Preferences
+     * @param key to store
+     * @param value to store
+     */
+    public static void writeStringToPreferences(Context context, String key, String value)
+    {
+
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(key, value);
+        editor.apply();
+        Log.v("writePreferences", key +" : " +value);
+    }
+
+
+    /**
+     * Read key,value pairs from Android Shared Preferences
+     * @param key to read
+     * @return
+     */
+    public static String readStringFromPreferences(Context context, String key)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String returnData = sharedPref.getString(key, null);
+        //Let's see what we got from shared preferences
+        Log.v("readPreferences", key + " = " + returnData);
+        return returnData;
     }
 }

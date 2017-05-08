@@ -8,11 +8,8 @@ package android.example.com.quizapp;
  */
 
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.example.com.quizapp.fragments.FragmentCorrectAnswer;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.os.Build;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,19 +21,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +57,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.itternet.utils.Utils.NUMBER_OF_QUESTIONS;
 
 
 public class QuizActivity extends AppCompatActivity implements Communicator
@@ -110,39 +103,32 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
 
         //Read session token from shared preferences, perhaps there is one stored
-        if (QuizConfig.getApiBaseURL() == null)
-            QuizConfig.setSessionToken(readStringFromPreferences(SESSION_TOKEN));
+        if (QuizConfig.getSessionToken() == null)
+            QuizConfig.setSessionToken(Utils.readStringFromPreferences(QuizActivity.this, SESSION_TOKEN));
+
+        String temp = Utils.readStringFromPreferences(QuizActivity.this, NUMBER_OF_QUESTIONS);
+        if ( null != temp && !temp.isEmpty())
+            QuizConfig.setAmountOfQuestions(Integer.parseInt(temp));
+
+        temp = Utils.readStringFromPreferences(QuizActivity.this, Utils.CATEGORY_ID);
+        if ( null != temp && !temp.isEmpty())
+            QuizConfig.setCategoryID(Integer.parseInt(temp));
+
+        temp = Utils.readStringFromPreferences(QuizActivity.this, Utils.CATEGORY_NAME);
+        if ( null != temp && !temp.isEmpty())
+            QuizConfig.setCategoryName(temp);
 
         //Get the API-URL from manifest
         if (QuizConfig.getApiBaseURL() == null)
             QuizConfig.setApiBaseURL(readMetaData(BASE_URL));
 
         //showActionBarIcon();
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_quiz);
         tvCategoryName = (TextView) findViewById(R.id.tvCurrentCategory);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        Intent previousIntent = getIntent();
-        Bundle extras = null;
-        if (previousIntent != null)
-            extras = previousIntent.getExtras();
-
-        /**
-         * find out if previous intent was category selector.
-         * Other Activities shouldn't pass categoryID
-         */
-
-        if (extras != null)
-        {
-            if (extras.containsKey("categoryID"))
-                QuizConfig.setCategoryID(previousIntent.getIntExtra("categoryID", -1));
-            if (extras.containsKey("categoryName"))
-                QuizConfig.setCategoryName(previousIntent.getStringExtra("categoryName"));
-        }
-
         if (savedInstanceState != null)
         {
-            //questionFragment = getSupportFragmentManager().findFragmentByTag(QUESTION_FRAGMENT_TAG);
             playerScore = savedInstanceState.getInt(PLAYER_SCORE);
             qListData = savedInstanceState.getParcelable(QUIZ_LIST_DATA);
 
@@ -166,14 +152,6 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         outState.putParcelable(QUIZ_LIST_DATA, qListData);
     }
 
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-
     /**
      * An OnClick-Callback triggered by the Wrong Answer Dialog
      * @param msg : The message returned by the Dialog Button
@@ -191,6 +169,13 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                 runResultsActivity();
             }
         }
+    }
+
+    @Override
+    protected void onStop() //or onPause Event will work
+    {
+        super.onStop();
+        releaseMediaPlayer();
     }
 
     @Override
@@ -262,8 +247,10 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
         OkHttpClient.Builder okHTTPClientBuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+        //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        //Enable above to see constructed URLs for the calls made in the app
 
         okHTTPClientBuilder.addInterceptor(loggingInterceptor);
         okHTTPClientBuilder.connectTimeout(QuizConfig.getQuizTimeout(), TimeUnit.MILLISECONDS);
@@ -295,35 +282,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         }
     }
 
-//region Shared Preferences Handling
 
-    /**
-     * Store key,value pairs in Android Shared Preferences
-     * @param key to store
-     * @param value to store
-     */
-    private void writeStringToPreferences(String key, String value)
-    {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    /**
-     * Read key,value pairs from Android Shared Preferences
-     * @param key to read
-     * @return
-     */
-    private String readStringFromPreferences(String key)
-    {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String returnData = sharedPref.getString(key, null);
-        //Let's see what we got from shared preferences
-        Log.d("readPreferences", key + " = " + returnData);
-        return returnData;
-    }
-//endregion
 
     /**
      * Call this to have the Actionbar (top of screen) display the launcher icon
@@ -348,7 +307,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     public void switchQuizFragment(View v)
     {
         Fragment questionFragment;
-        String question = "A Blank Question";
+        String question;// = "A Blank Question";
         ArrayList<String> choices = new ArrayList<>();
 
         //Check if there are questions at all
@@ -408,7 +367,6 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         }
         else
         {
-            //QuizConfig.resetCurrentQuestionIndex();
             loadQuizQuestions();
         }
     }
@@ -475,7 +433,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                     if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS)
                     {
                         QuizConfig.setSessionToken(response.body().getToken());
-                        writeStringToPreferences("sessionToken", QuizConfig.getSessionToken());
+                        Utils.writeStringToPreferences(QuizActivity.this, SESSION_TOKEN, QuizConfig.getSessionToken());
                         //Log.d("token", sessionToken);
                         loadQuizQuestions();
                     }
@@ -544,7 +502,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                             int listLength = qListData.getResults().size();
                             playerScore = 0;
                             QuizConfig.setLastQuestionIndex(listLength - 1);
-                            QuizConfig.setAmountOfQuestions(listLength);
+                            //QuizConfig.setAmountOfQuestions(listLength);
                             QuizConfig.resetCurrentQuestionIndex();
                             switchQuizFragment(null);
                         }
@@ -554,20 +512,24 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                         switch (qListData.getResponseCode())
                         {
                             case OpenTDbResponse.RESPONSE_CODE_NO_RESULTS:
+                                Log.v("QuizResponse", qListData.getResponseCode()+" RESPONSE_CODE_NO_RESULTS");
                                 //Not enough questions for requested amount in category
                                 resetToken();
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_INVALID_PARAM:
+                                Log.v("QuizResponse",qListData.getResponseCode()+" RESPONSE_CODE_INVALID_PARAM");
                                 //Now that Retrofit is configured, this shouldn't actually happen
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_TOKEN_NOT_FOUND:
+                                Log.v("QuizResponse",qListData.getResponseCode()+" RESPONSE_CODE_TOKEN_NOT_FOUND");
                                 //Request a Token
                                 loadQuizSessionToken();
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_TOKEN_EMPTY:
+                                Log.v("QuizResponse",qListData.getResponseCode()+" RESPONSE_CODE_TOKEN_EMPTY");
                                 //No more questions in Session
                                 resetToken();
                                 break;
@@ -644,9 +606,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         {
             displayCorrectAnswerDialog(correctAnswer);
             playSound(R.raw.wrong);
-            //prepareToast(message);
         }
-        //prepareToast(""+QuizConfig.getCurrentQuestionIndex());
     }
 
 
@@ -658,6 +618,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         passData.putInt("questions", QuizConfig.getAmountOfQuestions());
         resultsIntent.putExtras(passData);
         startActivity(resultsIntent);
+        finish();//Once we leave the Quiz, we don't want to come back by pressing back
     }
 
     public void runStartActivity()

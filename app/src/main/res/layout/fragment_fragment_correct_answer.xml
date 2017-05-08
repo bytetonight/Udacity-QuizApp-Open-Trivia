@@ -16,7 +16,7 @@
             style="@style/dialogAnswer"/>
 
         <Button
-            android:id="@+id/btnDialogSubmit"
+            android:id="@+id/btnConfirmCorrectAnswer"
             style="@style/dialogSubmitButton"/>
     </LinearLayout>
 

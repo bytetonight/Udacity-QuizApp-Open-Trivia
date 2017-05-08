@@ -11,6 +11,11 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:actionBarStyle">@style/MyActionBar</item>
 
+        <!-- For the resting Spinner style -->
+        <item name="android:spinnerItemStyle">
+            @style/spinnerItemStyle
+        </item>
+
         <!--- Support library compatibility-->
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
@@ -260,6 +265,15 @@
         <item name="android:textSize">@dimen/resultsHeader</item>
     </style>
 
+    <style name="optionsHeader" parent="@style/resultsHeader">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/resultMsg123</item>
+    </style>
+
+    <style name="tvNumberOfQuestions" parent="@style/optionsHeader">
+        <item name="android:textColor">@color/yellow</item>
+    </style>
+
     <style name="resultScore">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -361,4 +375,25 @@
     <style name="quitButton_Start" parent="@style/resultsButton">
         <item name="android:layout_alignParentBottom">true</item>
     </style>
+
+    <style name="questionsSeekBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="spinnerItemStyle">
+        <item name="android:padding">@dimen/listViewItemPadding</item>
+        <item name="android:textSize">@dimen/resultMsg123</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
+    <style name="optionsSubContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/fragmentPadding</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
 </resources>

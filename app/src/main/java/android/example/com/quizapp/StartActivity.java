@@ -16,9 +16,9 @@ public class StartActivity extends AppCompatActivity
         setContentView(R.layout.activity_start);
     }
 
-    public void openCategorySelection(View view)
+    public void openOptionsActivity(View view)
     {
-        Intent intent = new Intent(this, CategorySelectionActivity.class);
+        Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 

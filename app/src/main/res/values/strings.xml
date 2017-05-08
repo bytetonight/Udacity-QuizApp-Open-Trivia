@@ -14,6 +14,7 @@
     <string name="scoreMessage">You answered %1$d out of %2$d questions <b>correctly</b>.</string>
     <string name="no_selection">Please select an Option</string>
     <string name="any_category">Random Category</string>
+    <string name="optionsDifficulty">Difficulty</string>
 
     <string name="menu_category_select">Choose Category</string>
     <string name="currentCategoryBlank">The Category</string>
@@ -47,6 +48,18 @@
     <string name="textView">textView</string>
 
     <string name="label_QuizActivity">Quiz</string>
+    <string name="label_OptionsActivity">Options</string>
     <string name="label_CategorySelectionActivity">Categories</string>
     <string name="label_ResultsActivity">Results</string>
+    <string name="numberOfQuestions">Number of Questions</string>
+
+
+    <string-array name="array_difficulty">
+        <item>any</item>
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
+    </string-array>
+
+    <string name="preference_file_key">b3Dash8LL</string>
 </resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/main_layout"
+              style="@style/mainLayout"
+              tools:context="android.example.com.quizapp.OptionsActivity">
+
+
+    <LinearLayout
+        style="@style/optionsSubContainer">
+
+        <TextView
+            style="@style/optionsHeader"
+            android:text="@string/numberOfQuestions"/>
+
+        <TextView
+            android:id="@+id/tvNumberOfQuestions"
+            style="@style/tvNumberOfQuestions"
+            tools:text="1"/>
+
+        <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+            android:id="@+id/SeekBarAmountOfQuestions"
+            style="@style/questionsSeekBar"
+            app:bar_color="@color/getBarColor"
+            app:bar_highlight_color="@color/getBarHighlightColor"
+            app:left_thumb_color="@color/getLeftThumbColor"
+            app:left_thumb_color_pressed="@color/getLeftThumbColorPressed"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/optionsSubContainer">
+
+        <TextView
+            style="@style/optionsHeader"
+            android:text="@string/optionsDifficulty"/>
+
+        <Spinner
+            android:id="@+id/difficultySpinner"
+            style="@style/optionsHeader"
+            android:entries="@array/array_difficulty"
+            app:backgroundTint="@color/white"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/optionsSubContainer">
+
+        <TextView
+            android:id="@+id/tvCurrentCategory"
+            style="@style/optionsHeader"
+            tools:text="@string/currentCategoryBlank"/>
+
+        <Button
+            style="@style/resultsButton"
+            android:onClick="openCategoriesActivity"
+            android:text="@string/select_a_category"/>
+    </LinearLayout>
+
+</LinearLayout>
