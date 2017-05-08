@@ -118,6 +118,12 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         if ( null != temp && !temp.isEmpty())
             QuizConfig.setCategoryName(temp);
 
+        temp = Utils.readStringFromPreferences(QuizActivity.this, Utils.DIFFICULTY);
+        if ( null != temp && !temp.isEmpty())
+        {
+            String[] difficulty = getResources().getStringArray(R.array.array_difficulty);
+            QuizConfig.setDifficulty(difficulty[Integer.parseInt(temp)]);
+        }
         //Get the API-URL from manifest
         if (QuizConfig.getApiBaseURL() == null)
             QuizConfig.setApiBaseURL(readMetaData(BASE_URL));
@@ -814,6 +820,8 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
         public static String getDifficulty()
         {
+            if (difficulty.equals("any"))
+                return null;
             return difficulty;
         }
 
