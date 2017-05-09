@@ -1,11 +1,16 @@
+/*
+ * Open Trivia QuizApp is a Udacity EU-Scholarship Project
+ * written by Thorsten Itter, Copyright (c) 2017.
+ * This Software may be used solely for non-profit educational purposes
+ * unless specified otherwise by the original author Thorsten Itter
+ * Questions and answers provided by Open Trivia Database
+ * through a free for commercial use API maintained by PIXELTAIL GAME
+ * This source code including this header may not be modified
+ *
+ */
+
 package android.example.com.quizapp;
 
-/**
- * Open Trivia QuizApp is a Udacity EU-Scholarship Project
- * created by ByteTonight at GitHub.
- * Questions and answers provided by Open Trivia Database
- * through a free for commercial use API maintained by PIXELTAIL GAMES LLC
- */
 
 import android.content.DialogInterface;
 import android.example.com.quizapp.fragments.FragmentCorrectAnswer;
@@ -78,7 +83,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     private Toast toaster;
     private ProgressBar progBar;
     private ProgressDialog pDialog;
-    private OpenTriviaDataBaseAPI openTDbAPI = null; //Instantiated on demand. No more eager loading
+    private OpenTriviaDataBaseAPI openTDbAPI = null;
     private QuestionsListData qListData = null; //The Model holding the list of questions
 
 
@@ -89,6 +94,9 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_quiz);
+        //showActionBarIcon();
 
         /**
          * To ensure that volume controls adjust the correct stream, you should call
@@ -129,8 +137,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         if (QuizConfig.getApiBaseURL() == null)
             QuizConfig.setApiBaseURL(readMetaData(BASE_URL));
 
-        //showActionBarIcon();
-        setContentView(R.layout.activity_quiz);
+
         tvCategoryName = (TextView) findViewById(R.id.tvCurrentCategory);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -168,7 +175,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     public void onDialogMessage(String msg)
     {
         //prepareToast(msg);
-        if (msg.equals("OK"))
+        if (msg.equals(getString(R.string.ok)))
         {
             if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex())
                 switchQuizFragment(null);
@@ -425,7 +432,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
             initializeQuizAPI();
 
         pDialog = new ProgressDialog(QuizActivity.this);
-        pDialog.setMessage(getResources().getString(R.string.req_sess_token));
+        pDialog.setMessage(getResources().getString(R.string.req_session_token));
         pDialog.setCancelable(false);
         pDialog.show();
 

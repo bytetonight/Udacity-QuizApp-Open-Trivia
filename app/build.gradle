@@ -1,8 +1,19 @@
+/*
+ * Open Trivia QuizApp is a Udacity EU-Scholarship Project
+ * written by Thorsten Itter, Copyright (c) 2017.
+ * This Software may be used solely for non-profit educational purposes
+ * unless specified otherwise by the original author Thorsten Itter
+ * Questions and answers provided by Open Trivia Database
+ * through a free for commercial use API maintained by PIXELTAIL GAME
+ * This source code including this header may not be modified
+ *
+ */
+
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "android.example.com.quizapp"
         minSdkVersion 15
@@ -29,9 +40,8 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:support-v4:25.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-    compile 'com.android.support:cardview-v7:25.3.0'
     compile 'com.crystal:crystalrangeseekbar:1.1.1'
     testCompile 'junit:junit:4.12'
 }

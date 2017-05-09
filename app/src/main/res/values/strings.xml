@@ -1,16 +1,27 @@
+<!--
+  ~ Open Trivia QuizApp is a Udacity EU-Scholarship Project
+  ~ written by Thorsten Itter, Copyright (c) 2017.
+  ~ This Software may be used solely for non-profit educational purposes
+  ~ unless specified otherwise by the original author Thorsten Itter
+  ~ Questions and answers provided by Open Trivia Database
+  ~ through a free for commercial use API maintained by PIXELTAIL GAME
+  ~ This source code including this header may not be modified
+  ~
+  -->
+
 <resources>
     <string name="app_name">Open Trivia</string>
     <string name="start_quiz">Start Quiz</string>
     <string name="sessionToken">sessionToken</string>
     <string name="select_a_category">Select a Category</string>
-    <string name="req_sess_token">Requesting Session Token</string>
-    <string name="req_questions">Loading Questions...</string>
+    <string name="req_session_token">Requesting Session Token</string>
+    <string name="req_questions">Loading Questions&#8230;</string>
     <string name="btnDisplayMcFragment">Display Multiple Choice Fragment</string>
     <string name="blank_question">### Question not loaded ###</string>
     <string name="blank_radio_option">Option</string>
     <string name="submit">Submit</string>
     <string name="correctAnswerTitle">The correct answer is:</string>
-    <string name="incorrectMessage">The correct answer would have been:\n<b>%1$s</b></string>
+    <!--<string name="incorrectMessage"><![CDATA[The correct answer would have been:\n<b>%1$s</b>]]></string>-->
     <string name="scoreMessage">You answered %1$d out of %2$d questions <b>correctly</b>.</string>
     <string name="no_selection">Please select an Option</string>
     <string name="any_category">Random Category</string>
@@ -19,7 +30,7 @@
     <string name="menu_category_select">Choose Category</string>
     <string name="currentCategoryBlank">The Category</string>
 
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="answer_option_1">Option 1</string>
     <string name="answer_option_2">Option 2</string>
@@ -43,12 +54,13 @@
     <string name="score_notBad">Not bad !</string>
     <string name="score_oops">Oops !</string>
 
-    <string name="error_header">Error</string>
+    <string name="error_header">Please excuse</string>
     <string name="error_timeout">Failed to connect to Server after %1$d seconds.\nPlease check your connection and/or try again later.</string>
     <string name="error_maxQuestions_exceeded">
         Unfortunately the Database does not contain %1$s questions matching your Filters.
         %2$s
-        Please use less restrictive options example : Any difficulty and/or less questions.</string>
+        Please use less restrictive options, for example Difficulty : any, and/or less questions.
+    </string>
     <string name="textView">textView</string>
 
     <string name="label_QuizActivity">Quiz</string>
