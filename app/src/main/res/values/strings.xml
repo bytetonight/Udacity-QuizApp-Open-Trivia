@@ -45,6 +45,10 @@
 
     <string name="error_header">Error</string>
     <string name="error_timeout">Failed to connect to Server after %1$d seconds.\nPlease check your connection and/or try again later.</string>
+    <string name="error_maxQuestions_exceeded">
+        Unfortunately the Database does not contain %1$s questions matching your Filters.
+        %2$s
+        Please use less restrictive options example : Any difficulty and/or less questions.</string>
     <string name="textView">textView</string>
 
     <string name="label_QuizActivity">Quiz</string>

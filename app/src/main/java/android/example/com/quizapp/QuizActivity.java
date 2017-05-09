@@ -18,7 +18,6 @@ import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -58,6 +57,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 import static com.itternet.utils.Utils.NUMBER_OF_QUESTIONS;
 
 
@@ -70,6 +70,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     public static final String PLAYER_SCORE = "playerScore";
     public static final String QUIZ_LIST_DATA = "qListData";
 
+    private static long LAST_TOKEN_RESET_TIME = 0;
     private int playerScore = 0;
     private MediaPlayer mediaPlayer;
     private AudioManager mAudioManager;
@@ -141,6 +142,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         }
         else
         {
+            //showMaxQuestionsExceededDialog();//For testing
             prepareQuiz();
         }
 
@@ -399,6 +401,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                 {   //Server responded with "everything cool"
                     if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS)
                     {
+                        LAST_TOKEN_RESET_TIME = System.currentTimeMillis() / 1000;
                         loadQuizQuestions();
                     }
                 }
@@ -520,7 +523,12 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                             case OpenTDbResponse.RESPONSE_CODE_NO_RESULTS:
                                 Log.v("QuizResponse", qListData.getResponseCode()+" RESPONSE_CODE_NO_RESULTS");
                                 //Not enough questions for requested amount in category
-                                resetToken();
+                                //TODO will have to see what I do here
+                                //When using a VALID session token in the URL and exceeding the amount
+                                //of questions in the category restricted by difficulty
+                                //the server sends response code 4 instead of 1 (which is here)
+                                //This problem has now been confirmed by a Developer
+                                showMaxQuestionsExceededDialog();
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_INVALID_PARAM:
@@ -536,8 +544,19 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
                             case OpenTDbResponse.RESPONSE_CODE_TOKEN_EMPTY:
                                 Log.v("QuizResponse",qListData.getResponseCode()+" RESPONSE_CODE_TOKEN_EMPTY");
-                                //No more questions in Session
-                                resetToken();
+
+                                //If the token has been reset and the reset time was less than 5 seconds ago ... bail out
+                                if (LAST_TOKEN_RESET_TIME > 0 && LAST_TOKEN_RESET_TIME - (System.currentTimeMillis() / 1000) < 5000 )
+                                {
+                                    LAST_TOKEN_RESET_TIME = 0;
+                                    showMaxQuestionsExceededDialog();
+                                }
+                                else
+                                {
+                                    //No more questions in Session
+                                    resetToken();
+                                }
+
                                 break;
                         }
                     }
@@ -567,7 +586,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
 
         // 2. Chain together various setter methods to set the dialog characteristics
-        builder.setMessage(String.format(getResources().getString(R.string.error_timeout), QuizConfig.getQuizTimeout() / 1000))
+        builder.setMessage(String.format(getString(R.string.error_timeout), QuizConfig.getQuizTimeout() / 1000))
                 .setTitle(R.string.error_header);
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
@@ -576,6 +595,42 @@ public class QuizActivity extends AppCompatActivity implements Communicator
             {
                 // User clicked OK button
                 runStartActivity();
+            }
+        });
+
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void showMaxQuestionsExceededDialog()
+    {
+        String filters = QuizConfig.getDifficulty();
+        if ( filters != null && !filters.equals("any") )
+        {
+            filters = "<p>"+getString(R.string.optionsDifficulty)+":<b>"+QuizConfig.getDifficulty()+"</b><p>";
+        }
+        else
+        {
+            filters = "";
+        }
+
+        String displayMessage =String.format(getString(R.string.error_maxQuestions_exceeded),
+                "<b>"+QuizConfig.getAmountOfQuestions()+"</b>",
+                filters);
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(Utils.fromHtml(displayMessage))
+                .setTitle(R.string.error_header);
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int id)
+            {
+                // User clicked OK button
+                runOptionsActivity();
             }
         });
 
@@ -632,6 +687,10 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         startActivity(new Intent(QuizActivity.this, StartActivity.class));
     }
 
+    public void runOptionsActivity()
+    {
+        startActivity(new Intent(QuizActivity.this, OptionsActivity.class));
+    }
 
 
     /**
@@ -825,9 +884,9 @@ public class QuizActivity extends AppCompatActivity implements Communicator
             return difficulty;
         }
 
-        public static void setDifficulty(String difficulty)
+        public static void setDifficulty(String diff)
         {
-            QuizConfig.difficulty = difficulty;
+            difficulty = diff;
         }
 
         public static String getQuestionType()
