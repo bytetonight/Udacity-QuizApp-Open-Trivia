@@ -70,12 +70,12 @@
         <TextView
             android:id="@+id/bullshit_header"
             style="@style/optionsHeader"
-            android:text="Additional Bullshit" />
+            android:text="@string/additional_bullshit" />
 
         <Button
             style="@style/resultsButton"
             android:onClick="openBullshitActivity"
-            android:text="Try some Bullshit" />
+            android:text="@string/try_some_bullshit" />
     </LinearLayout>
 
 </LinearLayout>

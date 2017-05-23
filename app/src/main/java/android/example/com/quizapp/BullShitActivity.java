@@ -57,12 +57,12 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
         * Don't recreate the Fragment if there is no savedInstanceState
         * */
         if (savedInstanceState == null)
-            switchQuizFragment(null);
+            switchQuizFragment();
         Toast.makeText(BullShitActivity.this, "bullshit", Toast.LENGTH_SHORT).show();
     }
 
 
-    public void switchQuizFragment(View v) {
+    public void switchQuizFragment() {
         Fragment questionFragment = null;
         //Check if there are questions at all
         if (questions != null && !questions.isEmpty()) {
@@ -108,7 +108,7 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
             ++playerScore;
             if (currentQuestionIndex <= questions.size() - 1) {
 
-                switchQuizFragment(null);
+                switchQuizFragment();
             } else {
                 runResultsActivity();
             }
@@ -126,7 +126,7 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
             ++playerScore;
             if (currentQuestionIndex <= questions.size() - 1) {
 
-                switchQuizFragment(null);
+                switchQuizFragment();
             } else {
                 runResultsActivity();
             }
@@ -140,7 +140,7 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
     public void onDialogMessage(String msg) {
         if (msg.equals(getString(R.string.ok))) {
             if (currentQuestionIndex <= questions.size() - 1)
-                switchQuizFragment(null);
+                switchQuizFragment();
             else {
                 runResultsActivity();
             }

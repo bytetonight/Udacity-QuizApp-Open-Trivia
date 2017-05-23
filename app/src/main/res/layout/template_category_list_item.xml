@@ -19,6 +19,7 @@
         <ImageView
             android:id="@+id/ivImage"
             style="@style/categories_ListView_Item_Image"
+            android:contentDescription="@string/category_icon"
             app:srcCompat="@drawable/knowledge" />
 
     </FrameLayout>

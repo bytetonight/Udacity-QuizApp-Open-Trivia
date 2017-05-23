@@ -16,5 +16,5 @@ package android.example.com.quizapp.bullshit.interfaces;
  */
 
 public interface BaseQuestion {
-    public String getQuestion();
+    String getQuestion();
 }

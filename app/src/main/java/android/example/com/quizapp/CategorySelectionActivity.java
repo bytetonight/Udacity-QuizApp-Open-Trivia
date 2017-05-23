@@ -49,40 +49,40 @@ public class CategorySelectionActivity extends AppCompatActivity {
 
         ArrayList<QuizCategory> qc = loadCategoriesJSON();
 
-        QuizCategoryAdapter qca = new QuizCategoryAdapter
-                (
-                        CategorySelectionActivity.this,
-                        R.layout.template_category_list_item, qc
-                );
+        QuizCategoryAdapter qca = new QuizCategoryAdapter(
+                CategorySelectionActivity.this,
+                R.layout.template_category_list_item, qc
+        );
 
         ListView LvCatNames = (ListView) findViewById(R.id.category_ListView);
         LvCatNames.setAdapter(qca);
 
-        LvCatNames.setOnItemClickListener
-                (
-                        new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        LvCatNames.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
 
-                                selectedCategory = (QuizCategory) parent.getItemAtPosition(position);
+                        selectedCategory = (QuizCategory) parent.getItemAtPosition(position);
 
-                                Intent gotoMain = new Intent(CategorySelectionActivity.this, OptionsActivity.class);
-                                gotoMain.putExtra("categoryID", selectedCategory.getCategoryID());
-                                String categoryName = selectedCategory.getMainCategory();
-                                if (selectedCategory.getSubCategory() != null &&
-                                        !selectedCategory.getSubCategory().trim().isEmpty())
-                                    categoryName += ": " + selectedCategory.getSubCategory();
-                                gotoMain.putExtra("categoryName", categoryName);
-                                startActivity(gotoMain);
-                                finish();
-                            }
-                        }
-                );
+                        Intent gotoMain = new Intent(CategorySelectionActivity.this,
+                                OptionsActivity.class);
+                        gotoMain.putExtra("categoryID", selectedCategory.getCategoryID());
+                        String categoryName = selectedCategory.getMainCategory();
+                        if (selectedCategory.getSubCategory() != null &&
+                                !selectedCategory.getSubCategory().trim().isEmpty())
+                            categoryName += ": " + selectedCategory.getSubCategory();
+                        gotoMain.putExtra("categoryName", categoryName);
+                        startActivity(gotoMain);
+                        finish();
+                    }
+                }
+        );
     }
 
     private ArrayList<QuizCategory> loadCategoriesJSON() {
         ArrayList<QuizCategory> categoriesJSON = new ArrayList<>();
-        String json = null;
+        String json ;
         try {
             InputStream is = getAssets().open(CATEGORIES_JSON);
             int size = is.available();

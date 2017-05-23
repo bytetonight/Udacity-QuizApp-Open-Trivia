@@ -88,7 +88,8 @@ public class QuizActivity extends AppCompatActivity implements Communicator {
      * This listener gets triggered whenever the audio focus changes
      * (i.e., we gain or lose audio focus because of another app or device).
      */
-    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
@@ -109,7 +110,8 @@ public class QuizActivity extends AppCompatActivity implements Communicator {
      * This listener gets triggered when the {@link MediaPlayer} has completed
      * playing the audio file.
      */
-    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+    private MediaPlayer.OnCompletionListener mCompletionListener =
+            new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
             // Now that the sound file has finished playing, release the media player resources.
@@ -138,7 +140,8 @@ public class QuizActivity extends AppCompatActivity implements Communicator {
 
         //Read session token from shared preferences, perhaps there is one stored
         if (QuizConfig.getSessionToken() == null)
-            QuizConfig.setSessionToken(Utils.readStringFromPreferences(QuizActivity.this, SESSION_TOKEN));
+            QuizConfig.setSessionToken(Utils.readStringFromPreferences(
+                    QuizActivity.this, SESSION_TOKEN));
 
         String temp = Utils.readStringFromPreferences(QuizActivity.this, NUMBER_OF_QUESTIONS);
         if (null != temp && !temp.isEmpty())

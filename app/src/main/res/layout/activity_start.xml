@@ -13,7 +13,7 @@
 
     style="@style/startActivity">
 
-    <ImageView style="@style/startActivityImage" />
+    <ImageView style="@style/startActivityImage" android:contentDescription="@string/trivia"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/startActivityTopButtonContainer">

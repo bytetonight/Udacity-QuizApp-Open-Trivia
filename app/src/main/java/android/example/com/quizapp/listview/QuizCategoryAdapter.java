@@ -60,7 +60,7 @@ public class QuizCategoryAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        MyViewHolder holder = null;
+        MyViewHolder holder;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.template_category_list_item, parent, false);
             holder = new MyViewHolder(convertView);
