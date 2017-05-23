@@ -15,8 +15,7 @@ package com.itternet;
 /**
  * Wrapper for the custom response codes coming from Open Trivia Database API
  */
-public class OpenTDbResponse
-{
+public class OpenTDbResponse {
     /**
      * Returned results successfully.
      */

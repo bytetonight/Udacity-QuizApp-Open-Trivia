@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 public class Result {
 
     @SerializedName("category")
@@ -49,8 +48,6 @@ public class Result {
     @SerializedName("incorrect_answers")
     @Expose
     private List<String> incorrectAnswers = null;
-
-
 
 
     public String getCategory() {
@@ -111,7 +108,6 @@ public class Result {
     public void setIncorrectAnswers(List<String> incorrectAnswers) {
         this.incorrectAnswers = incorrectAnswers;
     }
-
 
 
 }

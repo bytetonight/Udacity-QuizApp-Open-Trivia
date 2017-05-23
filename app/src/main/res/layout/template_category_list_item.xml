@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Open Trivia QuizApp is a Udacity EU-Scholarship Project
   ~ written by Thorsten Itter, Copyright (c) 2017.
   ~ This Software may be used solely for non-profit educational purposes
@@ -10,35 +9,31 @@
   ~
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/categories_ListView_Item">
 
-    <FrameLayout
-        style="@style/WrapBoth">
+    <FrameLayout style="@style/WrapBoth">
 
         <ImageView
             android:id="@+id/ivImage"
             style="@style/categories_ListView_Item_Image"
-            app:srcCompat="@drawable/knowledge"/>
+            app:srcCompat="@drawable/knowledge" />
 
     </FrameLayout>
 
-    <LinearLayout
-        style="@style/categories_ListView_Item_Text_Container">
+    <LinearLayout style="@style/categories_ListView_Item_Text_Container">
 
         <TextView
             android:id="@+id/tvMainCategory"
             style="@style/categories_ListView_Item_Header"
-            android:text="@string/textView"
-            />
+            android:text="@string/textView" />
 
         <TextView
             android:id="@+id/tvSubCategory"
             style="@style/categories_ListView_Item_Sub"
-            android:text="@string/textView"/>
+            android:text="@string/textView" />
     </LinearLayout>
 
 </LinearLayout>

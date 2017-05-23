@@ -24,6 +24,7 @@
     <!--<string name="incorrectMessage"><![CDATA[The correct answer would have been:\n<b>%1$s</b>]]></string>-->
     <string name="scoreMessage">You answered %1$d out of %2$d questions <b>correctly</b>.</string>
     <string name="no_selection">Please select an Option</string>
+    <string name="no_answer">Please enter an Answer</string>
     <string name="any_category">Random Category</string>
     <string name="optionsDifficulty">Difficulty</string>
 
@@ -77,5 +78,8 @@
         <item>hard</item>
     </string-array>
 
+    <string name="and">and\n</string>
+    <string name="additionally">additionally</string>
     <string name="preference_file_key">b3Dash8LL</string>
+    <string name="free_text_hint">Your Answer here</string>
 </resources>

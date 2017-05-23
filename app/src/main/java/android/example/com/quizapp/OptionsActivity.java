@@ -31,28 +31,36 @@ import static com.itternet.utils.Utils.CATEGORY_NAME;
 import static com.itternet.utils.Utils.DIFFICULTY;
 
 
-public class OptionsActivity extends AppCompatActivity
-{
+public class OptionsActivity extends AppCompatActivity {
     private CrystalSeekbar seekBarAmountOfQuestions = null;
     private TextView tvNumberOfQuestions = null;
     private int numberOfQuestions = 1;
     private Spinner difficultySpinner;
+    private OnSeekbarChangeListener mSeekBarChangeListener = new OnSeekbarChangeListener() {
+
+        @Override
+        public void valueChanged(Number value) {
+            numberOfQuestions = Integer.parseInt(String.valueOf(value));
+            tvNumberOfQuestions.setText(String.valueOf(numberOfQuestions));
+            Utils.writeStringToPreferences(OptionsActivity.this, Utils.NUMBER_OF_QUESTIONS,
+                    String.valueOf(numberOfQuestions));
+        }
+    };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
 
         tvNumberOfQuestions = (TextView) findViewById(R.id.tvNumberOfQuestions);
         seekBarAmountOfQuestions = (CrystalSeekbar) findViewById(R.id.SeekBarAmountOfQuestions);
-        TextView currentCategory = (TextView)findViewById(R.id.tvCurrentCategory);
+        TextView currentCategory = (TextView) findViewById(R.id.tvCurrentCategory);
 
 
         int lastSelectedValue = 10;
         String temp = Utils.readStringFromPreferences(OptionsActivity.this, Utils.NUMBER_OF_QUESTIONS);
-        if ( null != temp && !temp.isEmpty())
+        if (null != temp && !temp.isEmpty())
             lastSelectedValue = Integer.parseInt(temp);
         seekBarAmountOfQuestions.setMinStartValue(lastSelectedValue); //Set seekbar value to last setting
         seekBarAmountOfQuestions.setMinValue(1);
@@ -71,17 +79,14 @@ public class OptionsActivity extends AppCompatActivity
          * Other Activities shouldn't pass categoryID
          */
 
-        if (extras != null)
-        {
-            if (extras.containsKey(CATEGORY_ID))
-            {
+        if (extras != null) {
+            if (extras.containsKey(CATEGORY_ID)) {
                 Utils.writeStringToPreferences(OptionsActivity.this,
                         CATEGORY_ID,
                         String.valueOf(previousIntent.getIntExtra(CATEGORY_ID, -1)));
             }
 
-            if (extras.containsKey(CATEGORY_NAME))
-            {
+            if (extras.containsKey(CATEGORY_NAME)) {
                 Utils.writeStringToPreferences(OptionsActivity.this,
                         CATEGORY_NAME,
                         String.valueOf(previousIntent.getStringExtra(CATEGORY_NAME)));
@@ -100,20 +105,7 @@ public class OptionsActivity extends AppCompatActivity
             difficultySpinner.setSelection(Integer.parseInt(temp));
     }
 
-    private OnSeekbarChangeListener  mSeekBarChangeListener = new OnSeekbarChangeListener() {
-
-        @Override
-        public void valueChanged(Number value)
-        {
-            numberOfQuestions =  Integer.parseInt( String.valueOf(value) );
-            tvNumberOfQuestions.setText(String.valueOf(numberOfQuestions));
-            Utils.writeStringToPreferences(OptionsActivity.this, Utils.NUMBER_OF_QUESTIONS,
-                    String.valueOf(numberOfQuestions));
-        }
-    };
-
-    private void setupDifficultySpinner()
-    {
+    private void setupDifficultySpinner() {
         difficultySpinner = (Spinner) findViewById(R.id.difficultySpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -123,27 +115,26 @@ public class OptionsActivity extends AppCompatActivity
         // Apply the adapter to the spinner
         difficultySpinner.setAdapter(adapter);
 
-        difficultySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        difficultySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                //String difficulty = parent.getItemAtPosition(position).toString();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Utils.writeStringToPreferences(OptionsActivity.this, DIFFICULTY, String.valueOf(position));
-                //Toast.makeText(OptionsActivity.this, difficulty, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                //Toast.makeText(OptionsActivity.this, "nothing", Toast.LENGTH_SHORT).show();
+            public void onNothingSelected(AdapterView<?> parent) {
+                //yeah ok
             }
         });
     }
 
-    public void openCategoriesActivity(View view)
-    {
+    public void openCategoriesActivity(View view) {
         Intent intent = new Intent(this, CategorySelectionActivity.class);
+        startActivity(intent);
+    }
+
+    public void openBullshitActivity(View v) {
+        Intent intent = new Intent(this, BullShitActivity.class);
         startActivity(intent);
     }
 }

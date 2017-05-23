@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Open Trivia QuizApp is a Udacity EU-Scholarship Project
   ~ written by Thorsten Itter, Copyright (c) 2017.
   ~ This Software may be used solely for non-profit educational purposes
@@ -8,14 +7,13 @@
   ~ through a free for commercial use API maintained by PIXELTAIL GAME
   ~ This source code including this header may not be modified
   ~
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="android.example.com.quizapp">
+    package="android.example.com.quizapp">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -25,9 +23,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".StartActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -36,20 +34,24 @@
             android:parentActivityName=".StartActivity">
             <meta-data
                 android:name="baseUrl"
-                android:value="https://www.opentdb.com/"/>
+                android:value="https://www.opentdb.com/" />
         </activity>
         <activity
             android:name=".ResultsActivity"
             android:label="@string/label_ResultsActivity"
-            android:parentActivityName=".StartActivity"/>
+            android:parentActivityName=".StartActivity" />
         <activity
             android:name=".CategorySelectionActivity"
             android:label="@string/label_CategorySelectionActivity"
-            android:parentActivityName=".OptionsActivity"/>
-        <activity android:name=".OptionsActivity"
-                  android:label="@string/label_OptionsActivity"
-                  android:parentActivityName=".StartActivity"/>
-
+            android:parentActivityName=".OptionsActivity" />
+        <activity
+            android:name=".OptionsActivity"
+            android:label="@string/label_OptionsActivity"
+            android:parentActivityName=".StartActivity" />
+        <activity
+            android:name=".BullShitActivity"
+            android:label="Bullshit"
+            android:parentActivityName=".StartActivity"></activity>
     </application>
 
 </manifest>

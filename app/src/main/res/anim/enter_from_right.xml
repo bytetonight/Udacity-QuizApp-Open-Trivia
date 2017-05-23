@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Open Trivia QuizApp is a Udacity EU-Scholarship Project
   ~ written by Thorsten Itter, Copyright (c) 2017.
   ~ This Software may be used solely for non-profit educational purposes
@@ -11,9 +10,11 @@
   -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-     android:shareInterpolator="false">
+    android:shareInterpolator="false">
     <translate
-        android:fromXDelta="100%" android:toXDelta="0%"
-        android:fromYDelta="0%" android:toYDelta="0%"
-        android:duration="@android:integer/config_mediumAnimTime" />
+        android:duration="@android:integer/config_mediumAnimTime"
+        android:fromXDelta="100%"
+        android:fromYDelta="0%"
+        android:toXDelta="0%"
+        android:toYDelta="0%" />
 </set>

@@ -9,12 +9,26 @@
  *
  */
 
-package com.itternet.interfaces;
+package android.example.com.quizapp.bullshit;
 
 /**
- * Created by ByteTonight on 18.03.2017.
+ * Created by ByteTonight on 22.05.2017.
  */
 
-public interface Communicator {
-    void onDialogMessage(String msg);
+public class IntStringPair {
+    private int key;
+    private String value;
+
+    public IntStringPair(int key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public int getKey() {
+        return key;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

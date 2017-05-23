@@ -23,8 +23,7 @@ import retrofit2.http.Query;
  * Created by dns on 04.03.2017.
  */
 
-public interface OpenTriviaDataBaseAPI
-{
+public interface OpenTriviaDataBaseAPI {
     @GET("api_token.php?command=reset")
     Call<QuizSessionTokenReset> resetToken(@Query("token") String token);
 

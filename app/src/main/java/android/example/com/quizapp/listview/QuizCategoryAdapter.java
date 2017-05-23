@@ -35,22 +35,18 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 /**
  * Populate the Category Selection ListView with QuizCategory Models
  */
-public class QuizCategoryAdapter extends ArrayAdapter
-{
+public class QuizCategoryAdapter extends ArrayAdapter {
     private List<QuizCategory> qcList;
     private int resource;
     private LayoutInflater inflater;
 
 
-    public QuizCategoryAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List objects)
-    {
+    public QuizCategoryAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List objects) {
         super(context, resource, objects);
 
-        Collections.sort(objects, new Comparator<QuizCategory>()
-        {
+        Collections.sort(objects, new Comparator<QuizCategory>() {
             @Override
-            public int compare(QuizCategory lhs, QuizCategory rhs)
-            {
+            public int compare(QuizCategory lhs, QuizCategory rhs) {
                 return lhs.getMainCategory().compareTo(rhs.getMainCategory());
             }
         });
@@ -60,35 +56,16 @@ public class QuizCategoryAdapter extends ArrayAdapter
         inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
     }
 
-    //About Viewholder : see https://www.youtube.com/watch?v=OTEiRiMaQ7M
-    class MyViewHolder
-    {
-        ImageView categoryImage;
-        TextView categoryMain;
-        TextView categorySub;
-
-        public MyViewHolder(View v)
-        {
-            categoryImage = (ImageView) v.findViewById(R.id.ivImage);
-            categoryMain = (TextView) v.findViewById(R.id.tvMainCategory);
-            categorySub = (TextView) v.findViewById(R.id.tvSubCategory);
-        }
-    }
-
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
-    {
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         MyViewHolder holder = null;
-        if (convertView == null)
-        {
+        if (convertView == null) {
             convertView = inflater.inflate(R.layout.template_category_list_item, parent, false);
             holder = new MyViewHolder(convertView);
             convertView.setTag(holder);
-        }
-        else
-        {
+        } else {
             holder = (MyViewHolder) convertView.getTag();
         }
 
@@ -97,6 +74,19 @@ public class QuizCategoryAdapter extends ArrayAdapter
         holder.categoryImage.setImageResource(qcList.get(position).getImage());
 
         return convertView;
+    }
+
+    //About Viewholder : see https://www.youtube.com/watch?v=OTEiRiMaQ7M
+    class MyViewHolder {
+        ImageView categoryImage;
+        TextView categoryMain;
+        TextView categorySub;
+
+        public MyViewHolder(View v) {
+            categoryImage = (ImageView) v.findViewById(R.id.ivImage);
+            categoryMain = (TextView) v.findViewById(R.id.tvMainCategory);
+            categorySub = (TextView) v.findViewById(R.id.tvSubCategory);
+        }
     }
 }
 

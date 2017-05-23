@@ -9,19 +9,26 @@
   ~
   -->
 
+<!--
+  ~ Open Trivia QuizApp is a Udacity EU-Scholarship Project
+  ~ written by Thorsten Itter, Copyright (c) 2017.
+  ~ This Software may be used solely for non-profit educational purposes
+  ~ unless specified otherwise by the original author Thorsten Itter
+  ~ Questions and answers provided by Open Trivia Database
+  ~ through a free for commercial use API maintained by PIXELTAIL GAME
+  ~ This source code including this header may not be modified
+  ~
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_multiple_choice"
-    style="@style/fragment_multiple_choice_land">
+    style="@style/fragment_multiple_choice_portrait">
 
     <TextView
         android:id="@+id/questionBox"
         style="@style/questionBox"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/blank_question" />
-
+        tools:text="@string/blank_question" />
 
     <LinearLayout style="@style/answer_container_vertical">
 
@@ -29,39 +36,37 @@
             android:id="@+id/answer_container"
             style="@style/answer_container_horizontal">
 
-            <LinearLayout
-                android:id="@+id/fragment_container_radios_l"
-                style="@style/answer_column">
 
-                <RadioButton
-                    android:id="@+id/radioBtn1"
-                    style="@style/radio_button_answer"
-                    android:text="@string/answer_option_1" />
+            <LinearLayout style="@style/answer_column">
 
-                <RadioButton
-                    android:id="@+id/radioBtn3"
+                <CheckBox
+                    android:id="@+id/cbAnswer1"
                     style="@style/radio_button_answer"
-                    android:text="@string/answer_option_3" />
+                    tools:text="@string/answer_option_1" />
+
+                <CheckBox
+                    android:id="@+id/cbAnswer3"
+                    style="@style/radio_button_answer"
+                    tools:text="@string/answer_option_3" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/answer_column">
+
+                <CheckBox
+                    android:id="@+id/cbAnswer2"
+                    style="@style/radio_button_answer"
+                    tools:text="@string/answer_option_2" />
+
+
+                <CheckBox
+                    android:id="@+id/cbAnswer4"
+                    style="@style/radio_button_answer"
+                    tools:text="@string/answer_option_4" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/fragment_container_radios_2"
-                style="@style/answer_column">
 
-                <RadioButton
-                    android:id="@+id/radioBtn2"
-                    style="@style/radio_button_answer"
-                    android:text="@string/answer_option_2" />
-
-                <RadioButton
-                    android:id="@+id/radioBtn4"
-                    style="@style/radio_button_answer"
-                    android:text="@string/answer_option_4" />
-
-            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
 

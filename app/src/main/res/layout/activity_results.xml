@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Open Trivia QuizApp is a Udacity EU-Scholarship Project
   ~ written by Thorsten Itter, Copyright (c) 2017.
   ~ This Software may be used solely for non-profit educational purposes
@@ -11,57 +10,57 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/results_layout"
-              style="@style/resultsActivity"
-               tools:context="android.example.com.quizapp.QuizActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/results_layout"
+    style="@style/resultsActivity"
+    tools:context="android.example.com.quizapp.QuizActivity">
 
 
     <TextView
         android:id="@+id/resultsHeader"
         style="@style/resultsHeader"
-        android:text="@string/resultsHeader"/>
+        android:text="@string/resultsHeader" />
 
     <TextView
         android:id="@+id/resultMsg1"
         style="@style/resultsMsg1"
-        android:text="@string/youAnswered"/>
+        android:text="@string/youAnswered" />
 
     <TextView
         android:id="@+id/resultScore"
         style="@style/resultScore"
-        tools:text="@string/fakeResult"/>
+        tools:text="@string/fakeResult" />
 
     <TextView
         android:id="@+id/resultMsg2"
         style="@style/resultsMsg1"
-        tools:text="@string/ofAmount"/>
+        tools:text="@string/ofAmount" />
 
     <TextView
         android:id="@+id/resultMsg3"
         style="@style/resultsMsg1"
-        android:text="@string/questionsCorrectly"/>
+        android:text="@string/questionsCorrectly" />
 
     <Button
         android:id="@+id/btnMoreQuestions"
         style="@style/resultsButton"
-        android:text="@string/btnMoreQuestions"
         android:onClick="onClickAction"
-        android:tag="MORE_QUESTIONS"/>
+        android:tag="MORE_QUESTIONS"
+        android:text="@string/btnMoreQuestions" />
 
     <Button
         android:id="@+id/btnOptions"
         style="@style/resultsButton"
-        android:text="@string/btnOptions"
         android:onClick="onClickAction"
-        android:tag="OPTIONS"/>
+        android:tag="OPTIONS"
+        android:text="@string/btnOptions" />
 
     <Button
         android:id="@+id/btnQuit"
         style="@style/resultsButton"
-        android:text="@string/btnQuit"
         android:onClick="onClickAction"
-        android:tag="QUIT"/>
+        android:tag="QUIT"
+        android:text="@string/btnQuit" />
 
 
     <!--

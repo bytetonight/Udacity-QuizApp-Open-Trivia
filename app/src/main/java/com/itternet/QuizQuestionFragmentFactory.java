@@ -22,12 +22,9 @@ import android.example.com.quizapp.fragments.FragmentTrueFalse;
  * Created by dns on 11.03.2017.
  */
 
-public class QuizQuestionFragmentFactory
-{
-    public static Fragment create(String type, String question, ArrayList<String> choices)
-    {
-        switch(type)
-        {
+public class QuizQuestionFragmentFactory {
+    public static Fragment create(String type, String question, ArrayList<String> choices) {
+        switch (type) {
             case "multiple":
                 return FragmentMultipleChoice.newInstance(question, choices);
 

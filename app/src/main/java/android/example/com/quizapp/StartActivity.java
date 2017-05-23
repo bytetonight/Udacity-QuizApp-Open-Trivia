@@ -19,41 +19,35 @@ import android.view.View;
 import com.itternet.utils.Utils;
 
 
-public class StartActivity extends AppCompatActivity
-{
+public class StartActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         setDefaults();
     }
 
-    public void openOptionsActivity(View view)
-    {
+    public void openOptionsActivity(View view) {
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 
-    public void openQuiz(View view)
-    {
+    public void openQuiz(View view) {
         Intent intent = new Intent(this, QuizActivity.class);
         startActivity(intent);
     }
 
-    public void quitApp(View view)
-    {
+    public void quitApp(View view) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
-    private void setDefaults()
-    {
+    private void setDefaults() {
         String temp = Utils.readStringFromPreferences(StartActivity.this, Utils.NUMBER_OF_QUESTIONS);
-        if ( null == temp )
+        if (null == temp)
             Utils.writeStringToPreferences(StartActivity.this, Utils.NUMBER_OF_QUESTIONS, "10");
     }
 }

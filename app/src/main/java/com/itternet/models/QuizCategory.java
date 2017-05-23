@@ -16,76 +16,61 @@ package com.itternet.models;
  * A Model representing one List Item in the Category Selection ListView
  * One List Item has a categoryID, a name and an image (or not)
  */
-public class QuizCategory
-{
+public class QuizCategory {
     private int categoryID;
     private int image = 0;
     private String subCategory;
     private String mainCategory;
 
-    public QuizCategory()
-    {
+    public QuizCategory() {
 
     }
 
-    public QuizCategory(int categoryID, String cMain, int catImage)
-    {
+    public QuizCategory(int categoryID, String cMain, int catImage) {
         this.categoryID = categoryID;
         this.image = catImage;
-        if (cMain.contains(":"))
-        {
+        if (cMain.contains(":")) {
             String[] parts = cMain.split(":");
             this.mainCategory = parts[0].trim();
             this.subCategory = parts[1].trim();
-        }
-        else
+        } else
             this.mainCategory = cMain;
     }
 
-    public int getImage()
-    {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(int image)
-    {
+    public void setImage(int image) {
         this.image = image;
     }
 
-    public int getCategoryID()
-    {
+    public int getCategoryID() {
         return categoryID;
     }
 
-    public void setCategoryID(int categoryID)
-    {
+    public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
     }
 
-    public String getMainCategory()
-    {
+    public String getMainCategory() {
         return mainCategory;
     }
 
-    public void setMainCategory(String mainCategory)
-    {
-        if (mainCategory.contains(":"))
-        {
+    public void setMainCategory(String mainCategory) {
+        if (mainCategory.contains(":")) {
             String[] parts = mainCategory.split(":");
             this.mainCategory = parts[0].trim();
             this.subCategory = parts[1].trim();
-        }
-        else
+        } else
             this.mainCategory = mainCategory;
     }
 
-    public String getSubCategory()
-    {
+    public String getSubCategory() {
         return subCategory;
     }
 
-    public void setSubCategory(String subCategory)
-    {
+    public void setSubCategory(String subCategory) {
         this.subCategory = subCategory;
     }
 }

@@ -10,77 +10,48 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/fragment_multiple_choice"
-                style="@style/multiple_choice_portrait">
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment_multiple_choice"
+    style="@style/multiple_choice_portrait">
 
-    <TextView
-        android:id="@+id/questionBox"
-        style="@style/questionBox"
-        android:text="@string/blank_question"/>
+    <TextView android:id="@+id/questionBox" style="@style/questionBox"
+        android:text="@string/blank_question" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        style="@style/radio_group1">
-    </RadioGroup>
-    <LinearLayout
-        android:id="@+id/radio_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/questionBox"
-        android:layout_marginTop="20dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="2">
+    <RadioGroup android:id="@+id/radioGroup" style="@style/radio_group1"></RadioGroup>
+    <LinearLayout android:id="@+id/radio_container" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" android:layout_below="@+id/questionBox"
+        android:layout_marginTop="20dp" android:baselineAligned="false"
+        android:orientation="horizontal" android:weightSum="2">
 
-        <LinearLayout
-            android:id="@+id/fragment_container_radios_l"
-            style="@style/fragment_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <LinearLayout android:id="@+id/fragment_container_radios_l"
+            style="@style/fragment_container" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_weight="1"
             android:orientation="vertical">
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Option 1 asda sasda sdasd asasdasdas"/>
+            <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Option 1 asda sasda sdasd asasdasdas" />
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Option 2"/>
+            <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Option 2" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/fragment_container_radios_2"
-            style="@style/fragment_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <LinearLayout android:id="@+id/fragment_container_radios_2"
+            style="@style/fragment_container" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_weight="1"
             android:orientation="vertical">
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Option 3 asdasd asdasdasda sdasda sdaasdasdasdasd"/>
+            <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Option 3 asdasd asdasdasda sdasda sdaasdasdasdasd" />
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Option 4"/>
+            <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Option 4" />
 
         </LinearLayout>
 
     </LinearLayout>
 
 
-    <Button
-        android:id="@+id/btnSubmit"
-        style="@style/buttons"
-        android:layout_alignParentBottom="true"
-        android:text="@string/submit"/>
+    <Button android:id="@+id/btnSubmit" style="@style/buttons"
+        android:layout_alignParentBottom="true" android:text="@string/submit" />
 </RelativeLayout>

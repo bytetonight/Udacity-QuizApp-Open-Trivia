@@ -9,12 +9,12 @@
  *
  */
 
-package com.itternet.interfaces;
+package android.example.com.quizapp.bullshit.interfaces;
 
 /**
- * Created by ByteTonight on 18.03.2017.
+ * Created by ByteTonight on 22.05.2017.
  */
 
-public interface Communicator {
-    void onDialogMessage(String msg);
+public interface BaseQuestion {
+    public String getQuestion();
 }

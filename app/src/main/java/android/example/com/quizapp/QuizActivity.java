@@ -66,8 +66,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static com.itternet.utils.Utils.NUMBER_OF_QUESTIONS;
 
 
-public class QuizActivity extends AppCompatActivity implements Communicator
-{
+public class QuizActivity extends AppCompatActivity implements Communicator {
     public static final String QUESTION_FRAGMENT_TAG = "questionFragmentTag";
     public static final String CORRECT_ANSWER_DIALOG_TAG = "CADTag";
     public static final String SESSION_TOKEN = "sessionToken";
@@ -85,18 +84,45 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     private ProgressDialog pDialog;
     private OpenTriviaDataBaseAPI openTDbAPI = null;
     private QuestionsListData qListData = null; //The Model holding the list of questions
-
-
-
+    /**
+     * This listener gets triggered whenever the audio focus changes
+     * (i.e., we gain or lose audio focus because of another app or device).
+     */
+    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
+                    focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);
+            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                // The AUDIOFOCUS_GAIN case means we have regained focus and can resume playback.
+                mediaPlayer.start();
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                // The AUDIOFOCUS_LOSS case means we've lost audio focus and
+                // Stop playback and clean up resources
+                releaseMediaPlayer();
+            }
+        }
+    };
+    /**
+     * This listener gets triggered when the {@link MediaPlayer} has completed
+     * playing the audio file.
+     */
+    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            // Now that the sound file has finished playing, release the media player resources.
+            releaseMediaPlayer();
+        }
+    };
 
     //region Events
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_quiz);
-        //showActionBarIcon();
+
 
         /**
          * To ensure that volume controls adjust the correct stream, you should call
@@ -106,7 +132,6 @@ public class QuizActivity extends AppCompatActivity implements Communicator
          * to STREAM_MUSIC whenever the target activity or fragment is visible.
          */
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
         // Create and setup the {@link AudioManager} to request audio focus
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -116,20 +141,19 @@ public class QuizActivity extends AppCompatActivity implements Communicator
             QuizConfig.setSessionToken(Utils.readStringFromPreferences(QuizActivity.this, SESSION_TOKEN));
 
         String temp = Utils.readStringFromPreferences(QuizActivity.this, NUMBER_OF_QUESTIONS);
-        if ( null != temp && !temp.isEmpty())
+        if (null != temp && !temp.isEmpty())
             QuizConfig.setAmountOfQuestions(Integer.parseInt(temp));
 
         temp = Utils.readStringFromPreferences(QuizActivity.this, Utils.CATEGORY_ID);
-        if ( null != temp && !temp.isEmpty())
+        if (null != temp && !temp.isEmpty())
             QuizConfig.setCategoryID(Integer.parseInt(temp));
 
         temp = Utils.readStringFromPreferences(QuizActivity.this, Utils.CATEGORY_NAME);
-        if ( null != temp && !temp.isEmpty())
+        if (null != temp && !temp.isEmpty())
             QuizConfig.setCategoryName(temp);
 
         temp = Utils.readStringFromPreferences(QuizActivity.this, Utils.DIFFICULTY);
-        if ( null != temp && !temp.isEmpty())
-        {
+        if (null != temp && !temp.isEmpty()) {
             String[] difficulty = getResources().getStringArray(R.array.array_difficulty);
             QuizConfig.setDifficulty(difficulty[Integer.parseInt(temp)]);
         }
@@ -137,19 +161,14 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         if (QuizConfig.getApiBaseURL() == null)
             QuizConfig.setApiBaseURL(readMetaData(BASE_URL));
 
-
         tvCategoryName = (TextView) findViewById(R.id.tvCurrentCategory);
         progBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             playerScore = savedInstanceState.getInt(PLAYER_SCORE);
             qListData = savedInstanceState.getParcelable(QUIZ_LIST_DATA);
-
-        }
-        else
-        {
-            //showMaxQuestionsExceededDialog();//For testing
+        } else {
+            //Call showMaxQuestionsExceededDialog() for testing
             prepareQuiz();
         }
 
@@ -160,8 +179,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(PLAYER_SCORE, playerScore);
         outState.putParcelable(QUIZ_LIST_DATA, qListData);
@@ -169,18 +187,15 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
     /**
      * An OnClick-Callback triggered by the Wrong Answer Dialog
+     *
      * @param msg : The message returned by the Dialog Button
      */
     @Override
-    public void onDialogMessage(String msg)
-    {
-        //prepareToast(msg);
-        if (msg.equals(getString(R.string.ok)))
-        {
+    public void onDialogMessage(String msg) {
+        if (msg.equals(getString(R.string.ok))) {
             if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex())
                 switchQuizFragment(null);
-            else
-            {
+            else {
                 runResultsActivity();
             }
         }
@@ -194,68 +209,16 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
-
-    /**
-     * This listener gets triggered when the {@link MediaPlayer} has completed
-     * playing the audio file.
-     */
-    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener()
-    {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer)
-        {
-            // Now that the sound file has finished playing, release the media player resources.
-            releaseMediaPlayer();
-        }
-    };
-
-    /**
-     * This listener gets triggered whenever the audio focus changes
-     * (i.e., we gain or lose audio focus because of another app or device).
-     */
-    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener()
-    {
-        @Override
-        public void onAudioFocusChange(int focusChange)
-        {
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
-                    focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
-            {
-                // The AUDIOFOCUS_LOSS_TRANSIENT case means that we've lost audio focus for a
-                // short amount of time. The AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK case means that
-                // our app is allowed to continue playing sound but at a lower volume. We'll treat
-                // both cases the same way because our app is playing short sound files.
-
-                // Pause playback and reset player to the start of the file. That way, we can
-                // play the word from the beginning when we resume playback.
-                mediaPlayer.pause();
-                mediaPlayer.seekTo(0);
-            }
-            else if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
-            {
-                // The AUDIOFOCUS_GAIN case means we have regained focus and can resume playback.
-                mediaPlayer.start();
-            }
-            else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
-            {
-                // The AUDIOFOCUS_LOSS case means we've lost audio focus and
-                // Stop playback and clean up resources
-                releaseMediaPlayer();
-            }
-        }
-    };
 //endregion
 
     /**
      * Start up Retrofit and required components for API communications
      */
-    private void initializeQuizAPI()
-    {
+    private void initializeQuizAPI() {
         Log.d("entered", "initializeQuizAPI()");
 
         Gson gson = new GsonBuilder().create();
@@ -264,14 +227,12 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
 
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-        //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-        //Enable above to see constructed URLs for the calls made in the app
+        // use HttpLoggingInterceptor.Level.NONE to see constructed URLs for the requests
 
         okHTTPClientBuilder.addInterceptor(loggingInterceptor);
         okHTTPClientBuilder.connectTimeout(QuizConfig.getQuizTimeout(), TimeUnit.MILLISECONDS);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(QuizConfig.getApiBaseURL())
-                //.baseUrl(getResources().getString(R.string.api_base_url))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHTTPClientBuilder.build())
                 .build();
@@ -281,29 +242,24 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
     /**
      * Read metaData from AndroidManfiest.xml
+     *
      * @param which key to read from manifest metaData
      * @return String value of key if found, or null
      */
-    private String readMetaData(String which)
-    {
-        try
-        {
+    private String readMetaData(String which) {
+        try {
             PackageItemInfo info = getPackageManager().getActivityInfo(new ComponentName(this, QuizActivity.class), PackageManager.GET_META_DATA);
             return info.metaData.getString(which);
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
+        } catch (PackageManager.NameNotFoundException e) {
             return null;
         }
     }
 
 
-
     /**
      * Call this to have the Actionbar (top of screen) display the launcher icon
      */
-    private void showActionBarIcon()
-    {
+    private void showActionBarIcon() {
         ActionBar ab = getSupportActionBar();
         ab.setLogo(R.mipmap.ic_launcher);
         ab.setDisplayUseLogoEnabled(true);
@@ -319,17 +275,14 @@ public class QuizActivity extends AppCompatActivity implements Communicator
      *
      * @param v : the view holding the button that originally called this method
      */
-    public void switchQuizFragment(View v)
-    {
+    public void switchQuizFragment(View v) {
         Fragment questionFragment;
         String question;// = "A Blank Question";
         ArrayList<String> choices = new ArrayList<>();
 
         //Check if there are questions at all
-        if (qListData != null && !qListData.getResults().isEmpty())
-        {
-            if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex())
-            {
+        if (qListData != null && !qListData.getResults().isEmpty()) {
+            if (QuizConfig.getCurrentQuestionIndex() <= QuizConfig.getLastQuestionIndex()) {
 
                 int cIndex = QuizConfig.getCurrentQuestionIndex();
                 progBar.setProgress(calcQuizProgress(cIndex));
@@ -340,17 +293,15 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                 QuizConfig.setCorrectAnswer(currentRecord.getCorrectAnswer());
                 choices.add(QuizConfig.getCorrectAnswer());
 
-                for (String answer : currentRecord.getIncorrectAnswers())
-                {
+                for (String answer : currentRecord.getIncorrectAnswers()) {
                     choices.add(answer);
                 }
                 //Randomize Array to not always have the correct answer in the first radio button
                 ShuffleArray.shuffleList(choices);
-                //Log.v("switchFrag","get new Fragment");
+
                 questionFragment = QuizQuestionFragmentFactory.create(typeOfQuestion, question, choices);
 
-                if (questionFragment != null && !questionFragment.isInLayout())
-                {
+                if (questionFragment != null && !questionFragment.isInLayout()) {
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
@@ -363,25 +314,21 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
     /**
      * Returns an integer amount to update the progress bar
+     *
      * @param currentIndex : the current question index
      * @return
      */
-    private int calcQuizProgress(int currentIndex)
-    {
+    private int calcQuizProgress(int currentIndex) {
         return (currentIndex + 1) * 100 / QuizConfig.getAmountOfQuestions();
     }
 
     /**
      * Let the Game begin
      */
-    private void prepareQuiz()
-    {
-        if (null == QuizConfig.getSessionToken())
-        {
+    private void prepareQuiz() {
+        if (null == QuizConfig.getSessionToken()) {
             loadQuizSessionToken();
-        }
-        else
-        {
+        } else {
             loadQuizQuestions();
         }
     }
@@ -390,24 +337,19 @@ public class QuizActivity extends AppCompatActivity implements Communicator
      * During a Quiz Session, a category may not have enough questions for the next request.
      * In that case, reset the session to start over again
      */
-    private void resetToken()
-    {
+    private void resetToken() {
         Log.d("entered function", "resetToken");
         Call<QuizSessionTokenReset> qTokenCall = openTDbAPI.resetToken(QuizConfig.getSessionToken());
         //enqueue for async calls, execute for synced calls
-        qTokenCall.enqueue(new Callback<QuizSessionTokenReset>()
-        {
+        qTokenCall.enqueue(new Callback<QuizSessionTokenReset>() {
             @Override
-            public void onResponse(Call<QuizSessionTokenReset> call, Response<QuizSessionTokenReset> response)
-            {
+            public void onResponse(Call<QuizSessionTokenReset> call, Response<QuizSessionTokenReset> response) {
 
                 if (null != pDialog && pDialog.isShowing())
                     pDialog.dismiss();
                 Log.d("resetToken()", "HTTP-Response: " + response.code());
-                if (response.code() == 200)
-                {   //Server responded with "everything cool"
-                    if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS)
-                    {
+                if (response.code() == 200) {   //Server responded with "everything cool"
+                    if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         LAST_TOKEN_RESET_TIME = System.currentTimeMillis() / 1000;
                         loadQuizQuestions();
                     }
@@ -415,8 +357,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
             }
 
             @Override
-            public void onFailure(Call<QuizSessionTokenReset> call, Throwable t)
-            {
+            public void onFailure(Call<QuizSessionTokenReset> call, Throwable t) {
 
             }
         });
@@ -425,8 +366,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     /**
      * Load Session Token from API using Retrofit
      */
-    private void loadQuizSessionToken()
-    {
+    private void loadQuizSessionToken() {
         Log.d("entered function", "loadQuizSessionToken");
         if (null == openTDbAPI)
             initializeQuizAPI();
@@ -438,32 +378,25 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
         Call<QuizSessionToken> qTokenCall = openTDbAPI.getQuizSessionToken();
         //enqueue for async calls, execute for synced calls
-        qTokenCall.enqueue(new Callback<QuizSessionToken>()
-        {
+        qTokenCall.enqueue(new Callback<QuizSessionToken>() {
             @Override
-            public void onResponse(Call<QuizSessionToken> call, Response<QuizSessionToken> response)
-            {
-                if (response.code() == 200)
-                {
+            public void onResponse(Call<QuizSessionToken> call, Response<QuizSessionToken> response) {
+                if (response.code() == 200) {
                     //Server responded with "everything cool"
-                    if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS)
-                    {
+                    if (response.body().getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         QuizConfig.setSessionToken(response.body().getToken());
                         Utils.writeStringToPreferences(QuizActivity.this, SESSION_TOKEN, QuizConfig.getSessionToken());
-                        //Log.d("token", sessionToken);
                         loadQuizQuestions();
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<QuizSessionToken> call, Throwable t)
-            {
+            public void onFailure(Call<QuizSessionToken> call, Throwable t) {
                 if (pDialog != null && pDialog.isShowing())
                     pDialog.dismiss();
 
-                if (t instanceof SocketTimeoutException || t instanceof UnknownHostException)
-                {
+                if (t instanceof SocketTimeoutException || t instanceof UnknownHostException) {
                     showTimeOutDialog();
                 }
             }
@@ -473,8 +406,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     /**
      * Load Quiz Data from API using Retrofit
      */
-    private void loadQuizQuestions()
-    {
+    private void loadQuizQuestions() {
         if (null == openTDbAPI)
             initializeQuizAPI();
 
@@ -496,39 +428,30 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                 QuizConfig.getQuestionType()
         );
 
-        qListDataCall.enqueue(new Callback<QuestionsListData>()
-        {
+        qListDataCall.enqueue(new Callback<QuestionsListData>() {
             @Override
-            public void onResponse(Call<QuestionsListData> call, Response<QuestionsListData> response)
-            {
+            public void onResponse(Call<QuestionsListData> call, Response<QuestionsListData> response) {
                 Log.d("HTTP Response", "" + response.code());
 
                 if (pDialog != null && pDialog.isShowing())
                     pDialog.dismiss();
 
-                if (response.code() == 200)
-                {
+                if (response.code() == 200) {
                     qListData = response.body();
                     Log.d("loadQuizQuestions", "quiz response :" + qListData.getResponseCode());
-                    if (qListData.getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS)
-                    {
+                    if (qListData.getResponseCode() == OpenTDbResponse.RESPONSE_CODE_SUCCESS) {
                         //All good here
-                        if (qListData.getResults() != null)
-                        {
+                        if (qListData.getResults() != null) {
                             int listLength = qListData.getResults().size();
                             playerScore = 0;
                             QuizConfig.setLastQuestionIndex(listLength - 1);
-                            //QuizConfig.setAmountOfQuestions(listLength);
                             QuizConfig.resetCurrentQuestionIndex();
                             switchQuizFragment(null);
                         }
-                    }
-                    else
-                    {
-                        switch (qListData.getResponseCode())
-                        {
+                    } else {
+                        switch (qListData.getResponseCode()) {
                             case OpenTDbResponse.RESPONSE_CODE_NO_RESULTS:
-                                Log.v("QuizResponse", qListData.getResponseCode()+" RESPONSE_CODE_NO_RESULTS");
+                                Log.v("QuizResponse", qListData.getResponseCode() + " RESPONSE_CODE_NO_RESULTS");
                                 //Not enough questions for requested amount in category
                                 //TODO will have to see what I do here
                                 //When using a VALID session token in the URL and exceeding the amount
@@ -539,27 +462,24 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_INVALID_PARAM:
-                                Log.v("QuizResponse",qListData.getResponseCode()+" RESPONSE_CODE_INVALID_PARAM");
+                                Log.v("QuizResponse", qListData.getResponseCode() + " RESPONSE_CODE_INVALID_PARAM");
                                 //Now that Retrofit is configured, this shouldn't actually happen
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_TOKEN_NOT_FOUND:
-                                Log.v("QuizResponse",qListData.getResponseCode()+" RESPONSE_CODE_TOKEN_NOT_FOUND");
+                                Log.v("QuizResponse", qListData.getResponseCode() + " RESPONSE_CODE_TOKEN_NOT_FOUND");
                                 //Request a Token
                                 loadQuizSessionToken();
                                 break;
 
                             case OpenTDbResponse.RESPONSE_CODE_TOKEN_EMPTY:
-                                Log.v("QuizResponse",qListData.getResponseCode()+" RESPONSE_CODE_TOKEN_EMPTY");
+                                Log.v("QuizResponse", qListData.getResponseCode() + " RESPONSE_CODE_TOKEN_EMPTY");
 
                                 //If the token has been reset and the reset time was less than 5 seconds ago ... bail out
-                                if (LAST_TOKEN_RESET_TIME > 0 && LAST_TOKEN_RESET_TIME - (System.currentTimeMillis() / 1000) < 5000 )
-                                {
+                                if (LAST_TOKEN_RESET_TIME > 0 && LAST_TOKEN_RESET_TIME - (System.currentTimeMillis() / 1000) < 5000) {
                                     LAST_TOKEN_RESET_TIME = 0;
                                     showMaxQuestionsExceededDialog();
-                                }
-                                else
-                                {
+                                } else {
                                     //No more questions in Session
                                     resetToken();
                                 }
@@ -571,15 +491,13 @@ public class QuizActivity extends AppCompatActivity implements Communicator
             }
 
             @Override
-            public void onFailure(Call<QuestionsListData> call, Throwable t)
-            {
+            public void onFailure(Call<QuestionsListData> call, Throwable t) {
                 Log.v("loadQuizQuestion", "Failure -> " + t.getMessage());
 
                 if (pDialog != null && pDialog.isShowing())
                     pDialog.dismiss();
 
-                if (t instanceof SocketTimeoutException || t instanceof UnknownHostException)
-                {
+                if (t instanceof SocketTimeoutException || t instanceof UnknownHostException) {
                     showTimeOutDialog();
                 }
             }
@@ -587,8 +505,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     }
 
 
-    public void showTimeOutDialog()
-    {
+    public void showTimeOutDialog() {
         // 1. Instantiate an AlertDialog.Builder with its constructor
         AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
 
@@ -596,10 +513,8 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         builder.setMessage(String.format(getString(R.string.error_timeout), QuizConfig.getQuizTimeout() / 1000))
                 .setTitle(R.string.error_header);
 
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int id)
-            {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 runStartActivity();
             }
@@ -610,20 +525,16 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         dialog.show();
     }
 
-    public void showMaxQuestionsExceededDialog()
-    {
+    public void showMaxQuestionsExceededDialog() {
         String filters = QuizConfig.getDifficulty();
-        if ( filters != null && !filters.equals("any") )
-        {
-            filters = "<p>"+getString(R.string.optionsDifficulty)+":<b>"+QuizConfig.getDifficulty()+"</b><p>";
-        }
-        else
-        {
+        if (filters != null && !filters.equals("any")) {
+            filters = "<p>" + getString(R.string.optionsDifficulty) + ":<b>" + QuizConfig.getDifficulty() + "</b><p>";
+        } else {
             filters = "";
         }
 
-        String displayMessage =String.format(getString(R.string.error_maxQuestions_exceeded),
-                "<b>"+QuizConfig.getAmountOfQuestions()+"</b>",
+        String displayMessage = String.format(getString(R.string.error_maxQuestions_exceeded),
+                "<b>" + QuizConfig.getAmountOfQuestions() + "</b>",
                 filters);
         // 1. Instantiate an AlertDialog.Builder with its constructor
         AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
@@ -632,10 +543,8 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         builder.setMessage(Utils.fromHtml(displayMessage))
                 .setTitle(R.string.error_header);
 
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int id)
-            {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 runOptionsActivity();
             }
@@ -650,15 +559,14 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     /**
      * Evaluates the User's answer from the Question Fragment, processes score, and calls next
      * Questions if necessary.
+     *
      * @param submitted : The HTML-encoded answer to the current question submitted in the Fragment for Questions
      */
-    public void onFragmentSubmit(String submitted)
-    {
+    public void onFragmentSubmit(String submitted) {
         String correctAnswer = Utils.fromHtml(QuizConfig.getCorrectAnswer()).toString();
         QuizConfig.setNextQuestionIndex();
 
-        if (isCorrectAnswer(submitted))
-        {
+        if (isCorrectAnswer(submitted)) {
             ++playerScore;
             playSound(R.raw.right);
 
@@ -669,17 +577,14 @@ public class QuizActivity extends AppCompatActivity implements Communicator
                 switchQuizFragment(null);
             else
                 runResultsActivity();
-        }
-        else
-        {
+        } else {
             displayCorrectAnswerDialog(correctAnswer);
             playSound(R.raw.wrong);
         }
     }
 
 
-    private void runResultsActivity()
-    {
+    private void runResultsActivity() {
         Intent resultsIntent = new Intent(QuizActivity.this, ResultsActivity.class);
         Bundle passData = new Bundle();
         passData.putInt("score", playerScore);
@@ -689,13 +594,11 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         finish();//Once we leave the Quiz, we don't want to come back by pressing back
     }
 
-    public void runStartActivity()
-    {
+    public void runStartActivity() {
         startActivity(new Intent(QuizActivity.this, StartActivity.class));
     }
 
-    public void runOptionsActivity()
-    {
+    public void runOptionsActivity() {
         startActivity(new Intent(QuizActivity.this, OptionsActivity.class));
     }
 
@@ -703,25 +606,21 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     /**
      * Displays a Dialog containing the correct answer to the current question.
      * Includes an OK Button to close the Dialog and proceed in the Quiz
+     *
      * @param msg : The correct Answer to the current question
      */
-    public void displayCorrectAnswerDialog(String msg)
-    {
+    public void displayCorrectAnswerDialog(String msg) {
         DialogFragment fca = FragmentCorrectAnswer.newInstance(msg);
-        //Due to changes in API 23, Dialogs don't work as they did before, hence line below !
-        //fca.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-        //fca.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
-
         fca.setCancelable(false);
         fca.show(getSupportFragmentManager(), CORRECT_ANSWER_DIALOG_TAG);
     }
 
     /**
      * A simple Wrapper to display Toasts
+     *
      * @param msg: The text to display in the Toast
      */
-    public void prepareToast(String msg)
-    {
+    public void prepareToast(String msg) {
         if (toaster != null)
             toaster.cancel();
         toaster = Toast.makeText(this, msg, Toast.LENGTH_LONG);
@@ -730,19 +629,15 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
     /**
      * A simple Wrapper to play Sounds
+     *
      * @param resource : The resource Id of the sound file to play
      */
-    public void playSound(int resource)
-    {
+    public void playSound(int resource) {
         releaseMediaPlayer();
-        // Request audio focus so in order to play the audio file. The app needs to play a
-        // short audio file, so we will request audio focus with a short amount of time
-        // with AUDIOFOCUS_GAIN_TRANSIENT.
         int result = mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener,
                 AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
-        {
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             mediaPlayer = MediaPlayer.create(this, resource);
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -752,18 +647,16 @@ public class QuizActivity extends AppCompatActivity implements Communicator
 
     /**
      * Compares the player's submitted answer with the correct answer
+     *
      * @param a is the answer submitted by the player
      * @return
      */
-    private boolean isCorrectAnswer(String a)
-    {
+    private boolean isCorrectAnswer(String a) {
         return Utils.fromHtml(QuizConfig.getCorrectAnswer()).toString().equals(a);
     }
 
-    private void releaseMediaPlayer()
-    {
-        if (mediaPlayer != null)
-        {
+    private void releaseMediaPlayer() {
+        if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
         }
@@ -773,8 +666,7 @@ public class QuizActivity extends AppCompatActivity implements Communicator
     }
 
 
-    private static class QuizConfig
-    {
+    private static class QuizConfig {
         private static int quizTimeout = 5000; //milliseconds
         private static int categoryID = -1; //Getter returns Integer because it needs to be nullable at times
         private static String categoryName = "";
@@ -787,122 +679,101 @@ public class QuizActivity extends AppCompatActivity implements Communicator
         private static String questionType = null;//"any";
         private static String sessionToken = null;
 
-        public static String getSessionToken()
-        {
+        public static String getSessionToken() {
             return sessionToken;
         }
 
-        public static void setSessionToken(String sessionToken)
-        {
+        public static void setSessionToken(String sessionToken) {
             QuizConfig.sessionToken = sessionToken;
         }
 
-        public static int getQuizTimeout()
-        {
+        public static int getQuizTimeout() {
             return quizTimeout;
         }
 
         /**
          * When null, random questions will be supplied by the API
+         *
          * @return Integer Nullable
          */
-        public static Integer getCategoryID()
-        {
+        public static Integer getCategoryID() {
             if (categoryID == -1)
                 return null;
             return categoryID;
         }
 
-        public static void setCategoryID(int categoryID)
-        {
+        public static void setCategoryID(int categoryID) {
             QuizConfig.categoryID = categoryID;
         }
 
-        public static String getCategoryName()
-        {
+        public static String getCategoryName() {
             return categoryName;
         }
 
-        public static void setCategoryName(String categoryName)
-        {
+        public static void setCategoryName(String categoryName) {
             QuizConfig.categoryName = categoryName;
         }
 
-        public static String getApiBaseURL()
-        {
+        public static String getApiBaseURL() {
             return apiBaseURL;
         }
 
-        public static void setApiBaseURL(String apiBaseURL)
-        {
+        public static void setApiBaseURL(String apiBaseURL) {
             QuizConfig.apiBaseURL = apiBaseURL;
         }
 
-        public static int getCurrentQuestionIndex()
-        {
+        public static int getCurrentQuestionIndex() {
             return currentQuestionIndex;
         }
 
-        public static void resetCurrentQuestionIndex()
-        {
+        public static void resetCurrentQuestionIndex() {
             currentQuestionIndex = 0;
         }
 
-        public static void setNextQuestionIndex()
-        {
+        public static void setNextQuestionIndex() {
             ++currentQuestionIndex;
         }
 
-        public static int getLastQuestionIndex()
-        {
+        public static int getLastQuestionIndex() {
             return lastQuestionIndex;
         }
 
-        public static void setLastQuestionIndex(int index)
-        {
+        public static void setLastQuestionIndex(int index) {
             lastQuestionIndex = index;
         }
 
-        public static String getCorrectAnswer()
-        {
+        public static String getCorrectAnswer() {
             return correctAnswer;
         }
 
-        public static void setCorrectAnswer(String correctAnswer)
-        {
+        public static void setCorrectAnswer(String correctAnswer) {
             QuizConfig.correctAnswer = correctAnswer;
         }
 
 
-        public static int getAmountOfQuestions()
-        {
+        public static int getAmountOfQuestions() {
             return amountOfQuestions;
         }
 
-        public static void setAmountOfQuestions(int amountOfQuestions)
-        {
+        public static void setAmountOfQuestions(int amountOfQuestions) {
             QuizConfig.amountOfQuestions = amountOfQuestions;
         }
 
-        public static String getDifficulty()
-        {
+        public static String getDifficulty() {
             if (difficulty != null && difficulty.equals("any"))
                 return null;
             return difficulty;
         }
 
-        public static void setDifficulty(String diff)
-        {
+        public static void setDifficulty(String diff) {
             difficulty = diff;
         }
 
-        public static String getQuestionType()
-        {
+        public static String getQuestionType() {
             return questionType;
         }
 
-        public static void setQuestionType(String questionType)
-        {
+        public static void setQuestionType(String questionType) {
             QuizConfig.questionType = questionType;
         }
     }

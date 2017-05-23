@@ -20,13 +20,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.itternet.interfaces.Communicator;
 
 
-
-
-public class FragmentCorrectAnswer extends DialogFragment implements View.OnClickListener
-{
+public class FragmentCorrectAnswer extends DialogFragment implements View.OnClickListener {
 
     private static final String CORRECT_ANSWER = "param1";
 
@@ -35,8 +33,7 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     private String correctAnswer;
 
 
-    public static FragmentCorrectAnswer newInstance(String param1)
-    {
+    public static FragmentCorrectAnswer newInstance(String param1) {
         FragmentCorrectAnswer fragment = new FragmentCorrectAnswer();
         Bundle args = new Bundle();
         args.putString(CORRECT_ANSWER, param1);
@@ -45,12 +42,10 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         communicator = (Communicator) getActivity();
-        if (getArguments() != null)
-        {
+        if (getArguments() != null) {
             correctAnswer = getArguments().getString(CORRECT_ANSWER);
         }
     }
@@ -58,13 +53,12 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View thisView = inflater.inflate(R.layout.fragment_fragment_correct_answer, container, false);
 
         okButton = (Button) thisView.findViewById(R.id.btnConfirmCorrectAnswer);
-        TextView tvCorrectAnswer = (TextView)thisView.findViewById(R.id.tvDialogCorrectAnswer);
+        TextView tvCorrectAnswer = (TextView) thisView.findViewById(R.id.tvDialogCorrectAnswer);
         tvCorrectAnswer.setText(correctAnswer);
         setCancelable(false);
 
@@ -73,10 +67,8 @@ public class FragmentCorrectAnswer extends DialogFragment implements View.OnClic
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btnConfirmCorrectAnswer)
-        {
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnConfirmCorrectAnswer) {
             //onDialogMessage will fire in Activity that implements Communicator
             //upon which the next question is displayed
             communicator.onDialogMessage("OK");

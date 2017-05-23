@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Open Trivia QuizApp is a Udacity EU-Scholarship Project
   ~ written by Thorsten Itter, Copyright (c) 2017.
   ~ This Software may be used solely for non-profit educational purposes
@@ -11,24 +10,23 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/main_layout"
-              style="@style/mainLayout"
-              tools:context="android.example.com.quizapp.OptionsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    style="@style/mainLayout"
+    tools:context="android.example.com.quizapp.OptionsActivity">
 
 
-    <LinearLayout
-        style="@style/optionsSubContainer">
+    <LinearLayout style="@style/optionsSubContainer">
 
         <TextView
             style="@style/optionsHeader"
-            android:text="@string/numberOfQuestions"/>
+            android:text="@string/numberOfQuestions" />
 
         <TextView
             android:id="@+id/tvNumberOfQuestions"
             style="@style/tvNumberOfQuestions"
-            tools:text="1"/>
+            tools:text="1" />
 
         <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
             android:id="@+id/SeekBarAmountOfQuestions"
@@ -36,37 +34,48 @@
             app:bar_color="@color/getBarColor"
             app:bar_highlight_color="@color/getBarHighlightColor"
             app:left_thumb_color="@color/getLeftThumbColor"
-            app:left_thumb_color_pressed="@color/getLeftThumbColorPressed"/>
+            app:left_thumb_color_pressed="@color/getLeftThumbColorPressed" />
 
     </LinearLayout>
 
-    <LinearLayout
-        style="@style/optionsSubContainer">
+    <LinearLayout style="@style/optionsSubContainer">
 
         <TextView
             style="@style/optionsHeader"
-            android:text="@string/optionsDifficulty"/>
+            android:text="@string/optionsDifficulty" />
 
         <Spinner
             android:id="@+id/difficultySpinner"
             style="@style/optionsHeader"
             android:entries="@array/array_difficulty"
-            app:backgroundTint="@color/white"/>
+            app:backgroundTint="@color/white" />
 
     </LinearLayout>
 
-    <LinearLayout
-        style="@style/optionsSubContainer">
+    <LinearLayout style="@style/optionsSubContainer">
 
         <TextView
             android:id="@+id/tvCurrentCategory"
             style="@style/optionsHeader"
-            tools:text="@string/currentCategoryBlank"/>
+            tools:text="@string/currentCategoryBlank" />
 
         <Button
             style="@style/resultsButton"
             android:onClick="openCategoriesActivity"
-            android:text="@string/select_a_category"/>
+            android:text="@string/select_a_category" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/optionsSubContainer">
+
+        <TextView
+            android:id="@+id/bullshit_header"
+            style="@style/optionsHeader"
+            android:text="Additional Bullshit" />
+
+        <Button
+            style="@style/resultsButton"
+            android:onClick="openBullshitActivity"
+            android:text="Try some Bullshit" />
     </LinearLayout>
 
 </LinearLayout>

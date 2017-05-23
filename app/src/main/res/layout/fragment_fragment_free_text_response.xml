@@ -11,41 +11,31 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_true_false"
+    android:id="@+id/fragment_multiple_choice"
     style="@style/fragment_multiple_choice_portrait">
 
     <TextView
         android:id="@+id/questionBox"
         style="@style/questionBox"
-        android:text="@string/blank_question" />
+        tools:text="@string/blank_question" />
 
-    <!--
-        Bye Bye useless RadioGroup
-        <RadioGroup
-        android:id="@+id/radioGroup"
-        style="@style/radio_group1">-->
     <LinearLayout
         android:id="@+id/answer_container"
         style="@style/answer_container_vertical">
 
-        <RadioButton
-            android:id="@+id/radioBtn1"
+        <EditText
+            android:id="@+id/editTextAnswer"
             style="@style/radio_button_answer"
-            android:text="Option 1" />
+            android:hint="@string/free_text_hint"
 
-        <RadioButton
-            android:id="@+id/radioBtn2"
-            style="@style/radio_button_answer"
-            android:text="Option 2" />
+            />
 
 
     </LinearLayout>
-    <!-- </RadioGroup>-->
 
 
     <Button
         android:id="@+id/btnSubmit"
         style="@style/submitButton"
-        android:background="@drawable/gradient_button"
         android:text="@string/submit" />
 </RelativeLayout>

@@ -24,13 +24,11 @@ import android.widget.Toast;
 import static android.example.com.quizapp.R.string.youAnswered;
 
 
-public class ResultsActivity extends AppCompatActivity
-{
+public class ResultsActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         int[] scoreHeaders = {
@@ -49,8 +47,7 @@ public class ResultsActivity extends AppCompatActivity
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
         Bundle extrasBundle = intent.getExtras();
-        if (!extrasBundle.isEmpty())
-        {
+        if (!extrasBundle.isEmpty()) {
             // Capture the layout's TextView and set the string as its text
             TextView scoreTextView = (TextView) findViewById(R.id.resultScore);
             TextView resultMsg1 = (TextView) findViewById(R.id.resultMsg2);
@@ -58,10 +55,9 @@ public class ResultsActivity extends AppCompatActivity
 
             int correctAnswers = extrasBundle.getInt("score");
             int questions = extrasBundle.getInt("questions");
-            assert correctAnswers <= questions : "Cannot have more answers than questions";
-            int score = (int)(correctAnswers/(float)questions * 10);
-            if (score > 10)
-            {
+
+            int score = (int) (correctAnswers / (float) questions * 10);
+            if (score > 10) {
                 score = 10;
             }
             scoreTextView.setText(String.valueOf(correctAnswers));
@@ -71,30 +67,26 @@ public class ResultsActivity extends AppCompatActivity
             //You want a Toast to show the score ? You get a Toast
             Toast.makeText(this,
                     getString(scoreHeaders[score]) + "\n" +
-                    getString(R.string.youAnswered) + "\n" +
-                    String.valueOf(correctAnswers)+ "\n" +
-                    String.format(getResources().getString(R.string.ofAmount), questions)+ "\n" +
-                    getString(R.string.questionsCorrectly)
-                    ,Toast.LENGTH_LONG ).show();
+                            getString(R.string.youAnswered) + "\n" +
+                            String.valueOf(correctAnswers) + "\n" +
+                            String.format(getResources().getString(R.string.ofAmount), questions) + "\n" +
+                            getString(R.string.questionsCorrectly)
+                    , Toast.LENGTH_LONG).show();
 
         }
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         NavUtils.navigateUpFromSameTask(this);
         finish();
     }
 
-    public void onClickAction(View view)
-    {
-        if (view instanceof Button)
-        {
+    public void onClickAction(View view) {
+        if (view instanceof Button) {
             Button b = (Button) view;
             Intent targetIntent;
-            switch (b.getTag().toString())
-            {
+            switch (b.getTag().toString()) {
                 case "MORE_QUESTIONS":
                     targetIntent = new Intent(ResultsActivity.this, QuizActivity.class);
                     startActivity(targetIntent);
