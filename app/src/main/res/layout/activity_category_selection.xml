@@ -14,15 +14,9 @@
     style="@style/category_selection"
     tools:context="android.example.com.quizapp.CategorySelectionActivity">
 
-
-    <!-- <TextView
-         android:id="@+id/bla"
-         style="@style/categories_header"
-         android:text="@string/select_a_category"/>-->
-
     <ListView
         android:id="@+id/category_ListView"
-        style="@style/categories_listView"></ListView>
+        style="@style/categories_listView" />
 
 
 </LinearLayout>

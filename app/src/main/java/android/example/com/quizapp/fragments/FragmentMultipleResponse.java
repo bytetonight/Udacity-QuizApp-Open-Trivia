@@ -96,15 +96,7 @@ public class FragmentMultipleResponse extends Fragment implements View.OnClickLi
             cb.setOnClickListener(this);
             ++counter;
         }
-        Iterator<Map.Entry<String, String>> entries = checkedCheckBoxIds.entrySet().iterator();
-        while (entries.hasNext()) {
-            Map.Entry<String, String> entry = entries.next();
-            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-            /*CheckBox cb = entry.getKey();
-            if (cb != null)
-                cb.setChecked(true);*/
-            //setRadioSelectionByRealID(entry.getKey());
-        }
+
         return rootView;
     }
 
@@ -131,20 +123,6 @@ public class FragmentMultipleResponse extends Fragment implements View.OnClickLi
         }
     }
 
-    /*private void setRadioSelectionByRealID(String idString)
-    {
-        CheckBox rb = (CheckBox) rootView.findViewById(getResources()
-                .getIdentifier(idString, "id", getActivity().getPackageName()));
-        rb.setChecked(true);
-        checkedRadioID = rb.getId();
-    }
 
-    private String getCheckedText()
-    {
-        RadioButton rb = (RadioButton) rootView.findViewById(checkedRadioID);
-        if (rb != null)
-            return rb.getText().toString();
-        return "";
-    }*/
 
 }

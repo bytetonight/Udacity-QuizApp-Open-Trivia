@@ -26,9 +26,10 @@ public class QuestionHolder {
     public QuestionHolder() {
         String question;
         String answer;
-        List<IntStringPair> answers = new ArrayList<>();
+        List<IntStringPair> answers;
 
         question = "What's 1+1 ?";
+        answers = new ArrayList<>();
         answers.add(new IntStringPair(1, "2"));
         answers.add(new IntStringPair(0, "11"));
         answers.add(new IntStringPair(1, "two"));
@@ -39,6 +40,17 @@ public class QuestionHolder {
         answer = "42";
         questions.add(new FreeTextResponseQnA(question, answer));
 
+        question = "A farmer had 15 sheep, and all but 8 died. How many are left ?";
+        answers = new ArrayList<>();
+        answers.add(new IntStringPair(0, "7"));
+        answers.add(new IntStringPair(0, "none"));
+        answers.add(new IntStringPair(1, "8"));
+        answers.add(new IntStringPair(1, "Those that didn't die"));
+        questions.add(new MultipleResponseQnA(question, answers));
+
+        question = "If you had three apples and four oranges in one hand and four apples and three oranges in other hand, what would you have ?";
+        answer = "Very large hands";
+        questions.add(new FreeTextResponseQnA(question, answer));
 
     }
 
