@@ -20,11 +20,7 @@
         style="@style/questionBox"
         android:text="@string/blank_question" />
 
-    <!--
-        Bye Bye useless RadioGroup
-        <RadioGroup
-        android:id="@+id/radioGroup"
-        style="@style/radio_group1">-->
+
     <LinearLayout
         android:id="@+id/answer_container"
         style="@style/answer_container_vertical">
@@ -41,7 +37,7 @@
 
 
     </LinearLayout>
-    <!-- </RadioGroup>-->
+
 
 
     <Button
