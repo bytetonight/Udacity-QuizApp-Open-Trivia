@@ -49,8 +49,8 @@
             android:label="@string/label_OptionsActivity"
             android:parentActivityName=".StartActivity" />
         <activity
-            android:name=".BullShitActivity"
-            android:label="Bullshit"
+            android:name=".UdacityQuizRequirementsActivity"
+            android:label="@string/extra_activity_label"
             android:parentActivityName=".StartActivity"></activity>
     </application>
 

@@ -131,7 +131,7 @@ public class OptionsActivity extends AppCompatActivity {
     }
 
     public void openBullshitActivity(View v) {
-        Intent intent = new Intent(this, BullShitActivity.class);
+        Intent intent = new Intent(this, UdacityQuizRequirementsActivity.class);
         startActivity(intent);
     }
 }

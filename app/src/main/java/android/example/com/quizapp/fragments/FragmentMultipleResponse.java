@@ -11,31 +11,26 @@
 
 package android.example.com.quizapp.fragments;
 
-import android.example.com.quizapp.BullShitActivity;
-import android.example.com.quizapp.QuizActivity;
+import android.example.com.quizapp.UdacityQuizRequirementsActivity;
 import android.example.com.quizapp.R;
-import android.example.com.quizapp.bullshit.MultipleResponseQnA;
-import android.example.com.quizapp.bullshit.interfaces.BaseQuestion;
+import android.example.com.quizapp.udacity_required.MultipleResponseQnA;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itternet.interfaces.Questionable;
 import com.itternet.utils.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -45,7 +40,7 @@ public class FragmentMultipleResponse extends Fragment implements View.OnClickLi
 
     private View rootView;
     private MultipleResponseQnA qNa;
-    private HashMap<String, String> checkedCheckBoxIds = new HashMap();
+    private HashMap<String, String> checkedCheckBoxIds = new HashMap<>();
     private Button submitButton;
 
     public static FragmentMultipleResponse newInstance(MultipleResponseQnA questionAndAnswer) {
@@ -117,7 +112,7 @@ public class FragmentMultipleResponse extends Fragment implements View.OnClickLi
         if (checkedCheckBoxIds.size() > 0) {
             submitButton.setEnabled(false);
             //Call onFragmentSubmit method in MainActivity
-            ((BullShitActivity) getActivity()).onFragmentSubmit(checkedCheckBoxIds);
+            ((UdacityQuizRequirementsActivity) getActivity()).onFragmentSubmit(checkedCheckBoxIds);
         } else {
             Toast.makeText(getActivity(), getResources().getText(R.string.no_selection).toString(), Toast.LENGTH_SHORT).show();
         }

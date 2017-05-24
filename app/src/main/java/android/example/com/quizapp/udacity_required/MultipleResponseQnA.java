@@ -9,9 +9,9 @@
  *
  */
 
-package android.example.com.quizapp.bullshit;
+package android.example.com.quizapp.udacity_required;
 
-import android.example.com.quizapp.bullshit.interfaces.BaseQuestion;
+import android.example.com.quizapp.udacity_required.interfaces.BaseQuestion;
 import android.os.Parcel;
 import android.os.Parcelable;
 

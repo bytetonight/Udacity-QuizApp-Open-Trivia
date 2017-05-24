@@ -9,7 +9,7 @@
  *
  */
 
-package android.example.com.quizapp.bullshit.interfaces;
+package android.example.com.quizapp.udacity_required.interfaces;
 
 /**
  * Created by ByteTonight on 22.05.2017.

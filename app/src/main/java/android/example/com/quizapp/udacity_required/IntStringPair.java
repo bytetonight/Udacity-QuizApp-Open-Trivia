@@ -9,7 +9,7 @@
  *
  */
 
-package android.example.com.quizapp.bullshit;
+package android.example.com.quizapp.udacity_required;
 
 /**
  * Created by ByteTonight on 22.05.2017.

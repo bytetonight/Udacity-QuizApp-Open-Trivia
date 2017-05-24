@@ -12,10 +12,10 @@
 package android.example.com.quizapp;
 
 import android.content.Intent;
-import android.example.com.quizapp.bullshit.FreeTextResponseQnA;
-import android.example.com.quizapp.bullshit.MultipleResponseQnA;
-import android.example.com.quizapp.bullshit.interfaces.BaseQuestion;
-import android.example.com.quizapp.bullshit.QuestionHolder;
+import android.example.com.quizapp.udacity_required.FreeTextResponseQnA;
+import android.example.com.quizapp.udacity_required.MultipleResponseQnA;
+import android.example.com.quizapp.udacity_required.interfaces.BaseQuestion;
+import android.example.com.quizapp.udacity_required.QuestionHolder;
 import android.example.com.quizapp.fragments.FragmentCorrectAnswer;
 import android.example.com.quizapp.fragments.FragmentFreeTextResponse;
 import android.example.com.quizapp.fragments.FragmentMultipleResponse;
@@ -25,11 +25,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.itternet.interfaces.Communicator;
-import com.itternet.utils.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,9 +35,8 @@ import java.util.List;
 
 import static android.example.com.quizapp.QuizActivity.CORRECT_ANSWER_DIALOG_TAG;
 import static android.example.com.quizapp.QuizActivity.QUESTION_FRAGMENT_TAG;
-import static android.example.com.quizapp.R.string.and;
 
-public class BullShitActivity extends AppCompatActivity implements Communicator {
+public class UdacityQuizRequirementsActivity extends AppCompatActivity implements Communicator {
 
     private List<BaseQuestion> questions;
     private int currentQuestionIndex = 0;
@@ -48,7 +45,7 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bull_shit);
+        setContentView(R.layout.activity_udacity_requirements);
 
         QuestionHolder bSp = new QuestionHolder();
         questions = bSp.getQuestions();
@@ -58,7 +55,7 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
         * */
         if (savedInstanceState == null)
             switchQuizFragment();
-        Toast.makeText(BullShitActivity.this, "bullshit", Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -88,6 +85,10 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
         }
     }
 
+    /**
+     * Called in {@link FragmentMultipleResponse}
+     * @param answersMap HashMap of answers submitted by the Quiz Player
+     */
     public void onFragmentSubmit(HashMap<String, String> answersMap) {
         MultipleResponseQnA q = (MultipleResponseQnA) questions.get(currentQuestionIndex);
         ++currentQuestionIndex;
@@ -97,7 +98,9 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
         int hits = 0;
         for (String correctAnswer : q.getCorrectAnswers()) {
             if (!answersMap.containsValue(correctAnswer)) {
-                correctWouldHaveBeen.append(and + correctAnswer + "\n");
+                correctWouldHaveBeen.append(and);
+                correctWouldHaveBeen.append(correctAnswer);
+                correctWouldHaveBeen.append("\n");
                 and = aaand;
             } else {
                 ++hits;
@@ -119,6 +122,10 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
         }
     }
 
+    /**
+     * Called in {@link FragmentFreeTextResponse}
+     * @param submitted String answer submitted by the Quiz Player
+     */
     public void onFragmentSubmit(String submitted) {
         FreeTextResponseQnA q = (FreeTextResponseQnA) questions.get(currentQuestionIndex);
         ++currentQuestionIndex;
@@ -136,6 +143,10 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
 
     }
 
+    /**
+     * Used to determine whether the CorrectAnswerDialogFragment was confirmed by clicking the Button
+     * @param msg
+     */
     @Override
     public void onDialogMessage(String msg) {
         if (msg.equals(getString(R.string.ok))) {
@@ -154,7 +165,7 @@ public class BullShitActivity extends AppCompatActivity implements Communicator 
     }
 
     private void runResultsActivity() {
-        Intent resultsIntent = new Intent(BullShitActivity.this, ResultsActivity.class);
+        Intent resultsIntent = new Intent(UdacityQuizRequirementsActivity.this, ResultsActivity.class);
         Bundle passData = new Bundle();
         passData.putInt("score", playerScore);
         passData.putInt("questions", questions.size());

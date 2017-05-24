@@ -67,15 +67,10 @@
 
     <LinearLayout style="@style/optionsSubContainer">
 
-        <TextView
-            android:id="@+id/bullshit_header"
-            style="@style/optionsHeader"
-            android:text="@string/additional_bullshit" />
-
         <Button
             style="@style/resultsButton"
             android:onClick="openBullshitActivity"
-            android:text="@string/try_some_bullshit" />
+            android:text="@string/start_static_quiz" />
     </LinearLayout>
 
 </LinearLayout>
